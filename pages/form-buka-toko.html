@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Form Buka Toko &mdash; Stisla</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="/node_modules/select2/dist/css/select2.min.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body class="layout-3">
+  <div id="app">
+    <div class="main-wrapper container">
+      <div class="navbar-bg"></div>
+      <nav-element class="navbar navbar-expand-lg main-navbar"></nav-element>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Form Buka Toko</h1>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="card">
+                  <form id="buka-toko">
+                    <div class="card-body">
+                      <div class="alert alert-info">
+                        <b>Catatan!</b> <br>* Wajib diisi.
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Nama Toko *</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="namaToko"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Deskripsi Toko</label
+                          >
+                          <textarea class="form-control" name="deskripsi" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Alamat</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="alamat"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Kota *</label
+                          >
+                          <select class="form-control select2" id="list-kota" name="kota">
+                            
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >No Telp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="telp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Whatsapp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="whatsapp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Email Toko</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="emailToko"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Website</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">www.</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="website"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Instagram</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">@</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="instagram"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right">Domain *</label>
+                          <small class="text-muted">
+                            (Karakter yang diizinkan hanya alpabet, angka dan (-) strip).
+                          </small>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">www.zonart.com/</span>
+                            </div>
+                            <input type="text" class="form-control" name="slug">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer text-right">
+                      <button class="btn btn-primary">Buka Toko</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+  <script src="/assets/js/general/main.js" type="module"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="/node_modules/select2/dist/js/select2.full.min.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/form-buka-toko.js" type="module"></script>
+
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+</body>
+</html>

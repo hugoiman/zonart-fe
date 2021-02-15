@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Pengaturan Toko &mdash; ZonArt</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="/node_modules/select2/dist/css/select2.min.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
+
+      <div class="main-sidebar">
+        <asidestore-element id="sidebar-wrapper"></asidestore-element>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Pengaturan Toko &mdash; <span class="namaToko"></span></h1>
+          </div>
+          <form>
+            <div class="section-body">
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Profil Toko</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Nama Toko *</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="namaToko"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Foto Profil Toko</label
+                          >
+                          <div class="form-group row">
+                            <img alt="image" class="col-sm-3 col-md-3 col-6 rounded-circle col-form-label" src="https://res.cloudinary.com/dbddhr9rz/image/upload/v1612894274/zonart/toko/toko_jhecxf.png">
+                            <div class="col-sm-9 col-md-9 col-12">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="linkFoto"
+                                hidden
+                              />
+                              <input
+                                type="file"
+                                class="form-control"
+                                id="foto"
+                                name="foto"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Deskripsi Toko</label
+                          >
+                          <textarea class="form-control" name="deskripsi" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Alamat</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="alamat"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Kota *</label
+                          >
+                          <select class="form-control select2" id="list-kota" name="kota">
+                            
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >No Telp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="telp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Whatsapp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="whatsapp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Email Toko *</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="emailToko"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Website</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">www.</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="website"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Instagram</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">@</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="instagram"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right">Domain *</label>
+                          <small class="text-muted">
+                            (Karakter yang diizinkan hanya alpabet, angka dan (-) strip).
+                          </small>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">www.zonart.com/</span>
+                            </div>
+                            <input type="text" class="form-control" name="slug">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Pengiriman Toko</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Kurir</label
+                          >
+                          <div id="list-kurir"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-12 col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h4>Rekening</h4>
+                      <button type="button" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#addRekening"><i class="fas fa-plus"></i> Tambah Rekening</button>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-row">
+                        <div class="form-group col-md-3 col-3 col-lg-3">
+                          <label>Bank</label>
+                        </div>
+                        <div class="form-group col-md-4 col-4 col-lg-4">
+                          <label>No Rekening</label>
+                        </div>
+                        <div class="form-group col-md-4 col-4 col-lg-4">
+                          <label>Nama Pemilik</label>
+                        </div>
+                      </div>
+                      <div id="data-rekening"></div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <button type="button" class="btn btn-primary" onclick="updateDataToko()">Simpan</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="addRekening">
+          <div class="modal-dialog" role="document">
+            <form>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Tambah Daftar Rekening</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-row">
+                    <div class="form-group col-md-4 col-4 col-lg-4">
+                      <select class="form-control select2" id="bank">
+                        <option value=""></option>
+                        <option value="BCA">BCA</option>
+                        <option value="BNI">BNI</option>
+                        <option value="BRI">BRI</option>
+                        <option value="Mandiri">Mandiri</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4 col-4 col-lg-4">
+                        <input type="text" class="form-control" id="norek" placeholder="No Rekening">
+                    </div>
+                    <div class="form-group col-md-4 col-4 col-lg-4">
+                        <input type="text" class="form-control" id="pemilik" placeholder="Pemilik">
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" class="btn btn-primary" onclick="tambahRekening()">OK</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+  <script src="/assets/js/general/mainStore.js" type="module"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="/node_modules/select2/dist/js/select2.full.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko/pengaturan.js" type="module"></script>
+
+</body>
+</html>

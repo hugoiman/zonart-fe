@@ -2980,3 +2980,12 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   100% {
     -webkit-transform: scale(1.2, 1.2);
     opacity: 0.0; } }
+
+/* custom css style */
+body.layout-3 .navbar-bg {
+  z-index: 889;
+  height: 70px; }
+
+body.layout-3 .main-content {
+  padding-top: 107px;
+}
