@@ -9,7 +9,7 @@ const resetPass = async (email, newPassword) => {
         document.getElementsByName("confirmPassword")[0].value = "";
         alertSuccess(result.message);
     } catch(error) {
-        alertFailed(error.responseText);
+        alertFailed(error);
     }
 }
 

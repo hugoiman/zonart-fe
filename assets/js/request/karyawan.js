@@ -11,7 +11,7 @@ function getKaryawan(toko, idKaryawan) {
     return result;
 }
 
-function getAllKaryawan(toko) {
+function getDaftarKaryawan(toko) {
     let result = $.ajax({
         url: `${baseURL}/api/karyawan/${toko}`,
         type: "GET",
@@ -22,4 +22,17 @@ function getAllKaryawan(toko) {
     return result;
 }
 
-export {getKaryawan, getAllKaryawan};
+function undangKaryawan(toko, jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/undangan/${toko}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        data: jsonData,
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+export {getKaryawan, getDaftarKaryawan, undangKaryawan};

@@ -1,8 +1,10 @@
+import loadMain from "../general/main.js";
 import getToko from "../data-dummy/toko.js";
 import {alertFailed} from "../general/swalert.js";
 
 const loadMyToko = async () => {
     try {
+        const loadmain = await loadMain();
         const data = await getToko();
         let html = ``;
         data.forEach(element => {

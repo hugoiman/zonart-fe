@@ -1,9 +1,11 @@
+import loadMain from "../general/main.js";
 import getAllCity from "../request/rajaOngkir.js";
 import {alertFailed, alertSuccess} from "../general/swalert.js";
 import {createToko} from "../request/toko.js";
 
 const loadForm = async () => {
     try {
+        const loadmain = await loadMain();
         const data = await getAllCity();
         let html = `<option value=""></option>`;
         data.rajaongkir.results.forEach(element => {
@@ -11,7 +13,7 @@ const loadForm = async () => {
         })
         document.getElementById("list-kota").innerHTML= html;      
     } catch(error) {
-        alertFailed(error.responseText);
+        alertFailed(error);
     }
 }
 loadForm();
@@ -50,6 +52,6 @@ const loadCreateToko = async () => {
             window.location.href = "/dashboard/"+slug;
         }, 3000)
     } catch(error) {
-        alertFailed(error.responseText, false);
+        alertFailed(error, false);
     }
 }

@@ -19,9 +19,9 @@ const getUrlParameter = function getUrlParameter(sParam) {
 };
 
 const getUrlPath = function getUrlPath(index) {
-    const pageURL = window.location.pathname;
-    const path = pageURL.split('/');
-    return path[index];
+  const pageURL = window.location.pathname;
+  const path = pageURL.split('/');
+  return path[index];
 };
 
 export {logout, getUrlParameter, getUrlPath};

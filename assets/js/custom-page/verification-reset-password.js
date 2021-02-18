@@ -8,7 +8,7 @@ const verificationResetPass = async () => {
         const result = await verificationResetPassword(token);
         await alertSuccess(result.message);
     } catch(error) {
-        await alertFailed(error.responseText);
+        await alertFailed(error);
     }
 
     setTimeout(() => {

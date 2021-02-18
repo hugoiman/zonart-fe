@@ -19,12 +19,15 @@ app.get('/profil', function(req, res) { res.sendFile('./pages/profil.html', { ro
 app.get('/password', function(req, res) { res.sendFile('./pages/password.html', { root: __dirname });})
 app.get('/mytoko', function(req, res) { res.sendFile('./pages/mytoko.html', { root: __dirname });})
 app.get('/form-buka-toko', function(req, res) { res.sendFile('./pages/form-buka-toko.html', { root: __dirname });})
+app.get('/undangan-rekrut/:idUndangan', function(req, res) { res.sendFile('./pages/undangan.html', { root: __dirname });})
+app.get('/notifikasi/', function(req, res) { res.sendFile('./pages/notifikasi.html', { root: __dirname });})
 
 // toko
-app.get('/dashboard/:toko', function(req, res) { 
-    res.sendFile('./pages/toko/blank.html', { root: __dirname });
-})
+app.get('/dashboard/:toko', function(req, res) { res.sendFile('./pages/toko/blank.html', { root: __dirname });})
 app.get('/pengaturan/:toko', function(req, res) { res.sendFile('./pages/toko/pengaturan.html', { root: __dirname });})
+
+// karyawan
+app.get('/karyawan/:toko', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})
 
 app.listen(5000, () => {
     console.log('Server connected at:',5000);

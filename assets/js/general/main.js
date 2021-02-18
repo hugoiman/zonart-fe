@@ -4,7 +4,7 @@ import {getCustomer} from "../request/customer.js";
 import {alertFailed} from "./swalert.js";
 import {logout} from "./general.js";
 
-const getData = async () => {
+const loadMain = async () => {
     try {
         const data = await getCustomer();
         const dataUser = await document.createElement("link-user-element");
@@ -21,4 +21,4 @@ const getData = async () => {
     }
 }
 
-getData();
+export default loadMain;

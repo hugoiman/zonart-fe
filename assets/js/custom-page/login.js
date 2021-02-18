@@ -32,7 +32,7 @@ document.getElementById("login").onsubmit = function(event) {
             window.location.href = "/pengaturan";
         },
         error: function (error) {
-            alertFailed(error.responseText, false);
+            alertFailed(error, false);
         },
     });
 

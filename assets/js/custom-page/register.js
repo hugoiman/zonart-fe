@@ -12,7 +12,7 @@ const registerCustomer = async (username, email, nama, password) => {
         alertSuccess(result.message, 3000);
         window.location.href = "/login";
     } catch(error) {
-        alertFailed(error.responseText);
+        alertFailed(error);
     }
 }
 

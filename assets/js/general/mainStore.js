@@ -5,10 +5,10 @@ import {getCustomer} from "../request/customer.js";
 import {alertFailed} from "./swalert.js";
 import {logout, getUrlPath} from "./general.js";
 import {getToko} from "../request/toko.js";
-import {getAllKaryawan} from "../request/karyawan.js";
-import menu from "../components/aside-store/asideStore-element.js";
+import {getDaftarKaryawan} from "../request/karyawan.js";
+import menues from "../components/aside-store/asideStore-element.js";
 
-const getData = async () => {
+const loadMainStore = async () => {
     try {
         const dataCustomer = await getCustomer();
         const dataUser = await document.createElement("link-user-element");
@@ -20,11 +20,12 @@ const getData = async () => {
         // console.log(dataToko);
         // cek if owner
         if (dataToko.idOwner == dataCustomer.idCustomer) {
+            const menu = menues(slugToko);
             document.getElementById("sidebar-menu").innerHTML = menu.dashboard + menu.pesanan + menu.produk + 
             menu.grupOpsi + menu.pengaturan + menu.galeri + menu.faq + menu.karyawan;
         } else {
-            const dataAllKaryawan = getAllKaryawan(dataToko.idToko);
-            const dataKaryawan = dataAllKaryawan.find( ({idCustomer}) => idCustomer === dataCustomer.idCustomer);
+            const dataDaftarKaryawan = getDaftarKaryawan(dataToko.idToko);
+            const dataKaryawan = dataDaftarKaryawan.find( ({idCustomer}) => idCustomer === dataCustomer.idCustomer);
             // cek if admin
             if (dataKaryawan.posisi === "admin" && dataKaryawan.status == "aktif") {
                 document.getElementById("sidebar-menu").innerHTML = menu.dashboard + menu.pesanan + menu.produk + 
@@ -50,4 +51,4 @@ const getData = async () => {
     }
 }
 
-getData();
+export default loadMainStore;

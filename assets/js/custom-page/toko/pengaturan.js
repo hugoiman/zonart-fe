@@ -1,3 +1,4 @@
+import loadMainStore from "../../general/mainStore.js";
 import getAllCity from "../../request/rajaOngkir.js";
 import {getToko, updateToko} from "../../request/toko.js";
 import uploadFile from "../../request/cloudinary.js";
@@ -9,6 +10,7 @@ import deleteRekening from "../../request/rekening.js";
 
 const loadPengaturanToko = async () => {
     try {
+        let loadMain = await loadMainStore();
         const data = await getAllCity();
         $(".nav-pengaturan").addClass("active");
         let dataKota = `<option value=""></option>`;

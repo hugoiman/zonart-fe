@@ -12,6 +12,9 @@ function alertSuccess(message = "Berhasil.", expired = 5000) {
 }
 
 function alertFailed(message = "Terjadi kesalahan.", expired = 5000) {
+    if (message.responseText != undefined) {
+        message = message.responseText;
+    } 
     Swal.fire({
         toast:true,
         position: 'top-end',
@@ -33,7 +36,8 @@ async function alertConfirm(message = "Ingin menghapus permanen data ini?") {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Ya!',
+        cancelButtonText: 'Batal'
     })
     .then((result) => {
         if (result.isConfirmed) {

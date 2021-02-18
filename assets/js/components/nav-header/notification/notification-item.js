@@ -5,12 +5,10 @@ class NotificationItem extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `<a href="${this._notification.id}" class="dropdown-item dropdown-item-unread">
-      <div class="dropdown-item-icon bg-primary text-white">
-        <i class="fas fa-code"></i>
-      </div>
+    this.innerHTML = `<a href="${this._notification.idNotifikasi}" class="dropdown-item dropdown-item-unread">
       <div class="dropdown-item-desc">
-      ${this._notification.message}
+      <b>${this._notification.judul}</b> &mdash;
+      ${this._notification.pesan}
         <div class="time text-primary">${this._notification.createdAt}</div>
       </div>
     </a>`;
