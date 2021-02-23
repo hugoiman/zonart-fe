@@ -2,9 +2,17 @@ import loadMain from "../general/main.js";
 import {changePassword} from "../request/customer.js";
 import {alertSuccess, alertFailed} from "../general/swalert.js";
 
-const gantiPassword = async (oldPassword, newPassword) => {
+const loadPassword = async () => {
     try {
         const loadmain = await loadMain();
+    } catch(error) {
+        alertFailed(error);
+    }
+}
+loadPassword();
+
+const gantiPassword = async (oldPassword, newPassword) => {
+    try {
         const result = await changePassword(oldPassword, newPassword);
         document.getElementsByName("oldPassword")[0].value = "";
         document.getElementsByName("newPassword")[0].value = "";

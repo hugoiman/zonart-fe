@@ -26,8 +26,17 @@ app.get('/notifikasi/', function(req, res) { res.sendFile('./pages/notifikasi.ht
 app.get('/dashboard/:toko', function(req, res) { res.sendFile('./pages/toko/blank.html', { root: __dirname });})
 app.get('/pengaturan/:toko', function(req, res) { res.sendFile('./pages/toko/pengaturan.html', { root: __dirname });})
 
+// produk
+app.get('/produk/:toko', function(req, res) { res.sendFile('./pages/toko/produk.html', { root: __dirname });})
+app.get('/form-produk/:toko', function(req, res) { res.sendFile('./pages/toko/produk-create.html', { root: __dirname });})
+app.get('/produk/:toko/:produk', function(req, res) { res.sendFile('./pages/toko/produk-edit.html', { root: __dirname });})
+
 // karyawan
 app.get('/karyawan/:toko', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})
+
+// faq
+app.get('/faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq.html', { root: __dirname });})
+app.get('/form-faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq-create.html', { root: __dirname });})
 
 app.listen(5000, () => {
     console.log('Server connected at:',5000);

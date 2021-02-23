@@ -21,12 +21,21 @@ function displayDatanotifikasi(dataJson) {
         "searching": false,
         "pageLength": 25,
         "lengthChange": false,
+        "columnDefs": [
+            { "className": "text-right", "targets": [1,2] }
+        ],
         columns: [
             { data: function (data, type, dataToSet) {
-                return `${data.judul} - ${data.pesan}`;
+                return `<b>${data.judul}</b> - ${data.pesan}`;
                 }
             },
-            { data: "createdAt"}
+            { data: "createdAt"},
+            { data: "link",
+                render: function (link) {
+                    return (link != "#" ? `<a href="${link}" class="btn btn-default"><i class="fas fa-eye"></i></a>`
+                    : '');
+                }
+            }
         ],
     });
 }

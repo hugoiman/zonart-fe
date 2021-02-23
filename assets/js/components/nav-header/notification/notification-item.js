@@ -5,7 +5,7 @@ class NotificationItem extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `<a href="${this._notification.idNotifikasi}" class="dropdown-item dropdown-item-unread">
+    this.innerHTML = `<a href="${this._notification.link}" class="dropdown-item dropdown-item-unread">
       <div class="dropdown-item-desc">
       <b>${this._notification.judul}</b> &mdash;
       ${this._notification.pesan}

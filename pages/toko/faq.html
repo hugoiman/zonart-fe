@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Pengaturan &mdash; ZonArt</title>
+  <title>FAQ &mdash; ZonArt</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -16,45 +16,31 @@
   <link rel="stylesheet" href="/assets/css/components.css">
 </head>
 
-<body class="layout-3">
+<body>
   <div id="app">
-    <div class="main-wrapper container">
+    <div class="main-wrapper">
       <div class="navbar-bg"></div>
-      <nav-element class="navbar navbar-expand-lg main-navbar"></nav-element>
+      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
+
+      <div class="main-sidebar">
+        <asidestore-element id="sidebar-wrapper"></asidestore-element>
+      </div>
 
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>Pengaturan</h1>
+            <h1>FAQ &mdash; <span class="namaToko"></span></h1>
+            <div class="section-header-button">
+              <a class="btn btn-icon btn-primary" id="btn-form-faq">
+                <i class="fas fa-plus"></i> FAQ
+              </a>
+            </div>
           </div>
 
           <div class="section-body">
-            <div class="row">
-              <div class="col-6 col-md-6 col-sm-6">
-                <div class="card card-large-icons">
-                  <div class="card-icon bg-primary text-white">
-                    <i class="fas fa-lock"></i>
-                  </div>
-                  <div class="card-body">
-                    <h4>Password</h4>
-                    <p></p>
-                    <a href="/password" class="card-cta">Ganti Passw <i class="fas fa-chevron-right"></i></a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-6 col-md-6 col-sm-6">
-                <div class="card card-large-icons">
-                  <div class="card-icon bg-primary text-white">
-                    <i class="fas fa-user-edit"></i>
-                  </div>
-                  <div class="card-body">
-                    <h4>Profil</h4>
-                    <p></p>
-                    <a href="/profil" class="card-cta text-primary">Update Profil <i class="fas fa-chevron-right"></i></a>
-                  </div>
-                </div>
-              </div>
+            <div class="row" id="daftar-faq">
+
             </div>
           </div>
         </section>
@@ -75,11 +61,11 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-  <!-- Page Specific JS File -->
-  <script src="/assets/js/custom-page/pengaturan.js" type="module"></script>  
-
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>
   <script src="/assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko/faq.js" type="module"></script>
 </body>
 </html>

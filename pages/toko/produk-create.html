@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Form Produk &mdash; ZonArt</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
+
+      <div class="main-sidebar">
+        <asidestore-element id="sidebar-wrapper"></asidestore-element>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <div class="section-header-back">
+              <a href="#" onclick="history.go(-1)" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Form Produk &mdash; <span class="namaToko"></span></h1>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Produk *</label>
+                      <div class="col-sm-12 col-md-7">
+                        <input type="text" class="form-control" id="namaProduk">
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jenis Pemesanan</label>
+                      <div class="col-sm-12 col-md-7">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="status-cetak" onclick="toggleCetak()">
+                          <label class="form-check-label">
+                            Cetak
+                          </label>
+                          <div class="form-row" id="form-cetak" style="display: none;">
+                            <div class="form-group col-md-6">
+                              <label>Harga</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">Rp</span>
+                                </div>
+                                <input type="text" class="form-control currency" id="harga-cetak" value="0">
+                              </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Berat</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control currency" id="berat-cetak" value="0">
+                                <div class="input-group-append">
+                                  <span class="input-group-text">gram</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="status-softcopy" onclick="toggleSoftCopy()">
+                          <label class="form-check-label">
+                            Soft Copy
+                          </label>
+                          <div class="form-row" id="form-softcopy" style="display: none;">
+                            <div class="form-group col-md-6">
+                              <label>Harga</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">Rp</span>
+                                </div>
+                                <input type="text" class="form-control currency" id="harga-softcopy" value="0">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga tambahan wajah <br><small>(jika ada)</small></label>
+                      <div class="col-sm-12 col-md-7">
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                          </div>
+                          <input type="text" class="form-control currency" id="hargaWajah" value="0">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto Produk *</label>
+                      <div class="col-sm-12 col-md-7">
+                        <div id="image-preview" class="image-preview">
+                          <label id="image-label">Pilih File</label>
+                          <input type="file" name="image" id="foto" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Deskripsi</label>
+                      <div class="col-sm-12 col-md-7">
+                        <textarea class="summernote-simple" id="deskripsi"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Catatan</label>
+                      <div class="col-sm-12 col-md-7">
+                        <textarea class="summernote-simple" id="catatan"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                      <div class="col-sm-12 col-md-7">
+                        <button class="btn btn-primary" onclick="buatProduk()">Simpan</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+  <script src="/node_modules/cleave.js/dist/cleave.min.js"></script>
+  <script src="/node_modules/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko/produk-create.js" type="module"></script>
+</body>
+</html>

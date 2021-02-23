@@ -6,6 +6,7 @@ import {alertSuccess, alertFailed, alertConfirm} from "../../general/swalert.js"
 const loadUndangan = async () => {
     try {
         let loadMain = await loadMainStore();
+        $(".nav-karyawan").addClass("active");
         let idToko = document.getElementById("idToko").value;
         let dataKaryawan = await getDaftarKaryawan(idToko)
         let dataUndangan = await getDaftarUndangan(idToko);
