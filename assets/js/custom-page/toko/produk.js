@@ -35,7 +35,7 @@ const loadProduk = async () => {
         });
         document.getElementById("daftar-produk").innerHTML = htmlProduk;
     } catch(error) {
-        alertFailed(error);
+        alertFailed(error, false);
     }
 }
 loadProduk();

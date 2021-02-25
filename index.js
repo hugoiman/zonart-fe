@@ -34,6 +34,10 @@ app.get('/produk/:toko/:produk', function(req, res) { res.sendFile('./pages/toko
 // karyawan
 app.get('/karyawan/:toko', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})
 
+// galeri
+app.get('/galeri/:toko', function(req, res) { res.sendFile('./pages/toko/galeri.html', { root: __dirname });})
+app.get('/form-galeri/:toko', function(req, res) { res.sendFile('./pages/toko/galeri-create.html', { root: __dirname });})
+
 // faq
 app.get('/faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq.html', { root: __dirname });})
 app.get('/form-faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq-create.html', { root: __dirname });})

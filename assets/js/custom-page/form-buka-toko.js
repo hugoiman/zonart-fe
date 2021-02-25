@@ -31,8 +31,8 @@ const loadCreateToko = async () => {
         let telp = document.getElementsByName("telp")[0].value;
         let whatsapp = document.getElementsByName("whatsapp")[0].value;
         let emailToko = document.getElementsByName("emailToko")[0].value;
-        let website = "www." + document.getElementsByName("website")[0].value;
-        let instagram = "@" + document.getElementsByName("instagram")[0].value;
+        let website = document.getElementsByName("website")[0].value;
+        let instagram = document.getElementsByName("instagram")[0].value;
         let slug = document.getElementsByName("slug")[0].value;
 
         if (instagram != "") {

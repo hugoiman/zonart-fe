@@ -1,6 +1,5 @@
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dbddhr9rz/upload";
-const CLOUDINARY_UPLOAD_PRESET = "storage_upload_prese";
-
+const CLOUDINARY_UPLOAD_PRESET = "abc";
 
 function uploadFile(formData) {
     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
@@ -15,4 +14,10 @@ function uploadFile(formData) {
     return result;
 }
 
-export default uploadFile;
+const cloudinary = {
+    CLOUDINARY_URL,
+    CLOUDINARY_UPLOAD_PRESET,
+    uploadFile,
+}
+
+export default cloudinary;

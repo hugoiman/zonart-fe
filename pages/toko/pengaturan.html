@@ -11,6 +11,7 @@
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="/node_modules/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -60,7 +61,7 @@
                             >Foto Profil Toko</label
                           >
                           <div class="form-group row">
-                            <img alt="image" class="col-sm-3 col-md-3 col-6 rounded-circle col-form-label" src="https://res.cloudinary.com/dbddhr9rz/image/upload/v1612894274/zonart/toko/toko_jhecxf.png">
+                            <img alt="image" class="col-sm-3 col-md-3 col-6 rounded-circle col-form-label" id="logo">
                             <div class="col-sm-9 col-md-9 col-12">
                               <input
                                 type="text"
@@ -80,10 +81,8 @@
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Deskripsi Toko</label
-                          >
-                          <textarea class="form-control" name="deskripsi" rows="3"></textarea>
+                          <label class="col-form-label text-md-right">Deskripsi Toko</label>
+                          <textarea class="summernote-simple" id="deskripsi" name="deskripsi"></textarea>
                         </div>
                       </div>
                       <div class="row">
@@ -299,6 +298,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="/node_modules/select2/dist/js/select2.full.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>
   <script src="/assets/js/custom.js"></script>

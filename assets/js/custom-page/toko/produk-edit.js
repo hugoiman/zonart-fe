@@ -1,7 +1,7 @@
 import loadMainStore from "../../general/mainStore.js";
 import {alertSuccess, alertFailed} from "../../general/swalert.js";
 import {getProduk, updateProduk} from "../../request/produk.js";
-import uploadFile from "../../request/cloudinary.js";
+import cloudinary from "../../request/cloudinary.js";
 import validateFile from "../../general/validateFile.js";
 import {getUrlPath} from "../../general/general.js";
 
@@ -96,7 +96,7 @@ const ubahProduk = async () => {
             formData.append("folder", "zonart/produk");
             var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
             let validasiGambar = await validateFile(document.getElementById("gambar"), allowedExtensions);
-            let resultUpload = await uploadFile(formData);
+            let resultUpload = await cloudinary.uploadFile(formData);
             gambar = resultUpload.data["secure_url"];
         } else {
             gambar = $('#image').attr('src');

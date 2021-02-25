@@ -1,7 +1,7 @@
 import loadMainStore from "../../general/mainStore.js";
 import getAllCity from "../../request/rajaOngkir.js";
 import {getToko, updateToko} from "../../request/toko.js";
-import uploadFile from "../../request/cloudinary.js";
+import cloudinary from "../../request/cloudinary.js";
 import getAllKurir from "../../request/jasaPengiriman.js";
 import {getUrlPath} from "../../general/general.js";
 import {alertSuccess, alertFailed, alertConfirm} from "../../general/swalert.js";
@@ -18,6 +18,21 @@ const loadPengaturanToko = async () => {
             dataKota += `<option value="${element.city_name}">${element.city_name}</option>`;
         })
         document.getElementById("list-kota").innerHTML = dataKota;
+
+        const slugToko = await getUrlPath(2);
+        const dataToko = await getToko(slugToko);
+        document.getElementsByName("namaToko")[0].value = dataToko.namaToko;
+        document.getElementById("logo").src = dataToko.foto;
+        document.getElementsByName("linkFoto")[0].value = dataToko.foto;
+        $('#deskripsi').summernote('code',dataToko.deskripsi);
+        document.getElementsByName("alamat")[0].value = dataToko.alamat;
+        $("#list-kota").val(dataToko.kota).trigger('change');
+        document.getElementsByName("telp")[0].value = dataToko.telp;
+        document.getElementsByName("whatsapp")[0].value = dataToko.whatsapp;
+        document.getElementsByName("emailToko")[0].value = dataToko.emailToko
+        document.getElementsByName("website")[0].value = dataToko.website.replace("www.", "");
+        document.getElementsByName("instagram")[0].value = dataToko.instagram.replace("@", "");
+        document.getElementsByName("slug")[0].value = dataToko.slug;
         
         const dataKurir = await getAllKurir();
         let dataKurirHTML = ``;
@@ -30,20 +45,6 @@ const loadPengaturanToko = async () => {
                                 </div>`;
         })
         document.getElementById("list-kurir").innerHTML = dataKurirHTML;
-
-        const slugToko = await getUrlPath(2);
-        const dataToko = await getToko(slugToko);
-        document.getElementsByName("namaToko")[0].value = dataToko.namaToko;
-        document.getElementsByName("linkFoto")[0].value = dataToko.foto;
-        document.getElementsByName("deskripsi")[0].value = dataToko.deskripsi;
-        document.getElementsByName("alamat")[0].value = dataToko.alamat;
-        $("#list-kota").val(dataToko.kota).trigger('change');
-        document.getElementsByName("telp")[0].value = dataToko.telp;
-        document.getElementsByName("whatsapp")[0].value = dataToko.whatsapp;
-        document.getElementsByName("emailToko")[0].value = dataToko.emailToko
-        document.getElementsByName("website")[0].value = dataToko.website.replace("www.", "");
-        document.getElementsByName("instagram")[0].value = dataToko.instagram.replace("@", "");
-        document.getElementsByName("slug")[0].value = dataToko.slug;
 
         dataToko.jasaPengirimanToko.forEach(element => {
             if (element.status == true) {
@@ -82,7 +83,7 @@ const loadPengaturanToko = async () => {
             $(`#bank-rekening-${element.idRekening}`).val(`${element.bank}`).trigger('change');
         })
     } catch(error) {
-        alertFailed(error, false);
+        console.log(error);
     }
 }
 loadPengaturanToko();
@@ -158,7 +159,7 @@ const updateDataToko = async () => {
             formData.append("folder", "zonart/toko");
             var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
             await validateFile(document.getElementById("foto"), allowedExtensions);
-            let result = await uploadFile(formData);
+            let result = await cloudinary.uploadFile(formData);
             foto = result.data["secure_url"];
         } else {
             foto = document.getElementsByName("linkFoto")[0].value;

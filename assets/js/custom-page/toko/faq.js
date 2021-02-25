@@ -50,7 +50,7 @@ const loadFaq = async () => {
         });
         
     } catch(error) {
-        alertFailed(error);
+        alertFailed(error, false);
     }
 }
 loadFaq();
