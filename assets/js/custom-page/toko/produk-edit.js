@@ -75,7 +75,7 @@ function toggleSoftCopy() {
 const ubahProduk = async () => {
     try {
         let idToko = document.getElementById("idToko").value;
-        let slugToko = await getUrlPath(2);
+        let slugToko = await getUrlPath(1);
         let idProduk = document.getElementById("idProduk").value;
         let namaProduk = document.getElementById("namaProduk").value;
         let berat = parseInt(document.getElementById("berat-cetak").value.replace(".", ""));
@@ -109,7 +109,7 @@ const ubahProduk = async () => {
         alertSuccess(result.message);
         
         await setTimeout(() => {
-            window.location.href = `/produk/${slugToko}/${result.produk}`
+            window.location.href = `/${slugToko}/produk/${result.produk}`
         }, 4000);
         
     } catch(error) {

@@ -7,14 +7,17 @@ const loadFaq = async () => {
     try {
         let loadMain = await loadMainStore();
         $(".nav-faq").addClass("active");
-        const slugToko = await getUrlPath(2);
-        document.getElementById('btn-form-faq').href = `/form-faq/${slugToko}`
+        const slugToko = await getUrlPath(1);
+        document.getElementById('btn-form-faq').href = `/${slugToko}/form-faq`
         let idToko = document.getElementById("idToko").value;
         let result = await getDaftarFaq(idToko);
         let htmlKategori = '';
         let dataKategori = [];
 
         // get nama kategori but without duplicate
+        if (result.faq === null) {
+            return;
+        }
         result.faq.forEach(element => {
             dataKategori.indexOf(element.kategori) === -1 ? dataKategori.push(element.kategori) : '';
         });

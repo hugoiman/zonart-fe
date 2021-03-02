@@ -24,24 +24,29 @@ app.get('/notifikasi/', function(req, res) { res.sendFile('./pages/notifikasi.ht
 
 // toko
 app.get('/dashboard/:toko', function(req, res) { res.sendFile('./pages/toko/blank.html', { root: __dirname });})
-app.get('/pengaturan/:toko', function(req, res) { res.sendFile('./pages/toko/pengaturan.html', { root: __dirname });})
+app.get('/:toko/pengaturan', function(req, res) { res.sendFile('./pages/toko/pengaturan.html', { root: __dirname });})
 
 // produk
-app.get('/produk/:toko', function(req, res) { res.sendFile('./pages/toko/produk.html', { root: __dirname });})
-app.get('/form-produk/:toko', function(req, res) { res.sendFile('./pages/toko/produk-create.html', { root: __dirname });})
-app.get('/produk/:toko/:produk', function(req, res) { res.sendFile('./pages/toko/produk-edit.html', { root: __dirname });})
+app.get('/:toko/produk', function(req, res) { res.sendFile('./pages/toko/produk.html', { root: __dirname });})
+app.get('/:toko/form-produk', function(req, res) { res.sendFile('./pages/toko/produk-create.html', { root: __dirname });})
+app.get('/:toko/produk/:produk', function(req, res) { res.sendFile('./pages/toko/produk-edit.html', { root: __dirname });})
 
 // karyawan
-app.get('/karyawan/:toko', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})
+app.get('/:toko/karyawan', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})
 
 // galeri
-app.get('/galeri/:toko', function(req, res) { res.sendFile('./pages/toko/galeri.html', { root: __dirname });})
-app.get('/form-galeri/:toko', function(req, res) { res.sendFile('./pages/toko/galeri-create.html', { root: __dirname });})
+app.get('/:toko/galeri', function(req, res) { res.sendFile('./pages/toko/galeri.html', { root: __dirname });})
+app.get('/:toko/form-galeri', function(req, res) { res.sendFile('./pages/toko/galeri-create.html', { root: __dirname });})
+
+// grup opsi
+app.get('/:toko/grup-opsi/:idGrupOpsi', function(req, res) { res.sendFile('./pages/toko/grupopsi-edit.html', { root: __dirname });})
+app.get('/:toko/grup-opsi', function(req, res) { res.sendFile('./pages/toko/grupopsi.html', { root: __dirname });})
+app.get('/:toko/form-grup-opsi', function(req, res) { res.sendFile('./pages/toko/grupopsi-create.html', { root: __dirname });})
 
 // faq
-app.get('/faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq.html', { root: __dirname });})
-app.get('/form-faq/:toko', function(req, res) { res.sendFile('./pages/toko/faq-create.html', { root: __dirname });})
+app.get('/:toko/faq', function(req, res) { res.sendFile('./pages/toko/faq.html', { root: __dirname });})
+app.get('/:toko/form-faq', function(req, res) { res.sendFile('./pages/toko/faq-create.html', { root: __dirname });})
 
 app.listen(5000, () => {
-    console.log('Server connected at:',5000);
+    console.log('Server connected at:', 5000);
 })

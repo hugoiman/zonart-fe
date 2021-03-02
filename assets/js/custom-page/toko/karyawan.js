@@ -94,7 +94,7 @@ const rekrutKaryawan = async () => {
         $('#rekrutKaryawan').modal('hide');
         await setTimeout(() => {
             window.location.reload();
-        }, 3000);
+        }, 4000);
     } catch(error) {
         alertFailed(error, false);
     }

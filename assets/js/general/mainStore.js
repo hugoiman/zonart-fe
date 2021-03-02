@@ -14,7 +14,7 @@ const loadMainStore = async () => {
         const dataUser = await document.createElement("link-user-element");
         dataUser.customer = dataCustomer;
         document.getElementsByClassName("navbar-right")[0].appendChild(dataUser);
-        const slugToko = await getUrlPath(2);
+        const slugToko = await getUrlPath(1);
         const dataToko = await getToko(slugToko);
         document.getElementById("idToko").value = dataToko.idToko;
         // console.log(dataToko);

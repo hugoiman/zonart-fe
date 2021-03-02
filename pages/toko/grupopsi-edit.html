@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Grup Opsi &mdash; ZonArt</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
+
+      <div class="main-sidebar">
+        <asidestore-element id="sidebar-wrapper"></asidestore-element>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <div class="section-header-back">
+              <a class="btn btn-icon" id="goback"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <h1>Grup Opsi &mdash; <span class="namaToko"></span></h1>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="form-group col-md-6 col-12">
+                        <input type="text" class="form-control" id="idGrupOpsi" hidden/>
+                        <label class="col-form-label text-md-right">Nama Grup Opsi * <small>(maksimal 50 karakter)</small></label>
+                        <input type="text" class="form-control" id="namaGrup"/>
+                      </div>
+                      <div class="form-group col-md-4 col-12 col-lg-4">
+                        <label class="col-form-label text-md-right">Terapkan untuk jenis pemesanan <small>(pilih setidaknya 1)</small></label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="hardcopy">
+                            <label class="form-check-label" for="inlineCheckbox1">Cetak</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="softcopy">
+                            <label class="form-check-label" for="inlineCheckbox2">Soft Copy</label>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12 col-12">
+                        <label class="col-form-label text-md-right">Deskripsi/Keterangan/Contoh <small>(maksimal 250 karakter)</small></label>
+                        <input type="text" class="form-control" id="deskripsi"/>
+                      </div>
+                    </div>
+                    <div class="section-title mt-0">Opsi</div>
+                    <div id="data-opsi">
+                      
+                    </div>
+                    <div class="form-group row">
+                      <div class="col-sm-12 col-md-12">
+                        <button class="btn btn-sm btn-primary" onclick="tambahOpsi()"><i class="fas fa-plus"></i> Tambah Opsi</button>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-md-4 col-6">
+                        <label class="col-form-label text-md-right">Pembeli harus mengisi opsi setidaknya 1?</label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="required">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Ya
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 col-6">
+                        <label class="col-form-label text-md-right">Pembeli dapat memberikan input lain diluar opsi?</label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="spesificRequest">
+                          <label class="form-check-label" for="defaultCheck1">
+                            Ya
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-4 col-6">
+                        <label class="col-form-label text-md-right">Minimal memilih <sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Jumlah minimal opsi yang harus diisi pembeli"><i class="fas fa-info-circle"></i></a></sup></label>
+                        <input type="text" class="form-control currency" id="min" value="0"/>
+                      </div>
+                      <div class="form-group col-md-4 col-6">
+                        <label class="col-form-label text-md-right">Maksimal memilih <sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="Jumlah maksimal opsi yang dapat diisi pembeli"><i class="fas fa-info-circle"></i></a></sup></label>
+                        <input type="text" class="form-control currency" id="max" value="0"/>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                      <div class="col-sm-12 col-md-12">
+                        <button class="btn btn-primary col-sm-12 col-md-12" onclick="ubahGrupOpsi()">Simpan Perubahan</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="/node_modules/cleave.js/dist/cleave.min.js"></script>
+
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko/grupopsi-edit.js" type="module"></script>
+</body>
+</html>

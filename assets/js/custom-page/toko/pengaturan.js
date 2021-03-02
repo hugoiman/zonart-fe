@@ -19,7 +19,7 @@ const loadPengaturanToko = async () => {
         })
         document.getElementById("list-kota").innerHTML = dataKota;
 
-        const slugToko = await getUrlPath(2);
+        const slugToko = await getUrlPath(1);
         const dataToko = await getToko(slugToko);
         document.getElementsByName("namaToko")[0].value = dataToko.namaToko;
         document.getElementById("logo").src = dataToko.foto;
@@ -46,12 +46,18 @@ const loadPengaturanToko = async () => {
         })
         document.getElementById("list-kurir").innerHTML = dataKurirHTML;
 
+        if (dataToko.jasaPengirimanToko === null) {
+            return;
+        }
         dataToko.jasaPengirimanToko.forEach(element => {
             if (element.status == true) {
                 document.getElementById(`kurir${element.idJasaPengiriman}`).checked = true;
             }
         })
 
+        if (dataToko.rekening === null) {
+            return;
+        }
         let dataBank = ``;
         dataToko.rekening.forEach(element => {
             dataBank += `<div class="form-row rekening" id="rekening-${element.idRekening}">
@@ -66,7 +72,7 @@ const loadPengaturanToko = async () => {
                                 </select>
                             </div>
                             <div class="form-group col-md-4 col-4 col-lg-4">
-                                <input type="text" class="form-control norek" value="${element.norek}">
+                                <input type="text" class="form-control norek creditcard" value="${element.norek}">
                             </div>
                             <div class="form-group col-md-4 col-4 col-lg-4">
                                 <input type="text" class="form-control pemilik" value="${element.pemilik}">
@@ -98,9 +104,8 @@ const tambahRekening = async () => {
          "Mohon lengkapi isi formulir.";
         }
 
-
-        let dataBank = ``;
-        dataBank += `<div class="form-row rekening" id="rekening-${id}">
+        let htmlRekening = document.createElement('div');
+        htmlRekening.innerHTML = `<div class="form-row rekening" id="rekening-${id}">
                         <input type="text" class="idRekening" value="0" hidden>
                         <div class="form-group col-md-3 col-3 col-lg-3">
                             <select class="form-control select2 bank" id="bank-rekening-${id}">
@@ -112,7 +117,7 @@ const tambahRekening = async () => {
                             </select>
                         </div>
                         <div class="form-group col-md-4 col-4 col-lg-4">
-                            <input type="text" class="form-control norek" value="${norek}">
+                            <input type="text" class="form-control norek creditcard" value="${norek}">
                         </div>
                         <div class="form-group col-md-4 col-4 col-lg-4">
                             <input type="text" class="form-control pemilik" value="${pemilik}">
@@ -121,7 +126,8 @@ const tambahRekening = async () => {
                         <a href="#" class="btn btn-icon btn-sm btn-danger mt-1" onclick="hapusRekening(${id})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
                         </div>
                     </div>`;
-        document.getElementById("data-rekening").insertAdjacentHTML("afterend", dataBank);
+
+        document.getElementById('data-rekening').appendChild(htmlRekening);
         $('.bank').select2();
         $('#addRekening').modal('hide');
         $(`#bank-rekening-${id}`).val(`${bank}`).trigger('change');
@@ -148,8 +154,6 @@ const updateDataToko = async () => {
         let website = document.getElementsByName("website")[0].value;
         let instagram = document.getElementsByName("instagram")[0].value;
         let slug = document.getElementsByName("slug")[0].value;
-        let rekening = [];
-        let jasaPengirimanToko = [];
         let foto = "";
 
         if(document.getElementById("foto").files.length != 0) {
@@ -172,7 +176,8 @@ const updateDataToko = async () => {
         if (website != "") {
             website = "www." + website;
         }
-
+        
+        let jasaPengirimanToko = [];
         for (let i = 0; i < document.querySelectorAll('.kurir').length; i++) {
             let idJasaPengiriman =  parseInt(document.getElementsByClassName("kurir")[i].value);
             let status = document.getElementsByClassName("kurir")[i].checked;
@@ -182,6 +187,7 @@ const updateDataToko = async () => {
             jasaPengirimanToko.push(jsonDataKurir);
         }
         
+        let rekening = [];
         for (let i = 0; i < document.querySelectorAll('.rekening').length; i++) {
             let idRekening =  parseInt(document.getElementsByClassName("idRekening")[i].value);
             let bank = document.getElementsByClassName("bank")[i].value;
@@ -215,9 +221,10 @@ const hapusRekening = async (idRekening) => {
             let result = await deleteRekening(idToko, idRekening);
             alertSuccess(result.message);
             $("#rekening-" + idRekening).fadeOut(1000);
+            $("#rekening-" + idRekening).remove();
         } 
     } catch(error) {
-        alertFailed(error.responseText, false);
+        alertFailed(error, false);
     }
 }
 

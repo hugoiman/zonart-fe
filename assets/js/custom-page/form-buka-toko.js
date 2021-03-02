@@ -49,7 +49,7 @@ const loadCreateToko = async () => {
         const result = await createToko(jsonData);
         alertSuccess(result.message, 3000);
         setTimeout(() => {
-            window.location.href = "/dashboard/"+slug;
+            window.location.href = `/${slug}/dashboard`;
         }, 3000)
     } catch(error) {
         alertFailed(error, false);

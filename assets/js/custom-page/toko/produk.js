@@ -7,8 +7,8 @@ const loadProduk = async () => {
     try {
         let loadMain = await loadMainStore();
         $(".nav-produk").addClass("active");
-        const slugToko = await getUrlPath(2);
-        document.getElementById('btn-form-produk').href = `/form-produk/${slugToko}`
+        const slugToko = await getUrlPath(1);
+        document.getElementById('btn-form-produk').href = `/${slugToko}/form-produk`
         let idToko = await document.getElementById("idToko").value;
         let result = await getDaftarProduk(idToko);
         let htmlProduk = ``;
@@ -18,7 +18,7 @@ const loadProduk = async () => {
               <div class="article-header">
                 <img class="article-image" src="${v.gambar}">
                 <div class="article-title">
-                <h2><a href="/produk/${slugToko}/${v.slug}">${v.namaProduk}</a></h2>
+                <h2><a href="/${slugToko}/produk/${v.slug}">${v.namaProduk}</a></h2>
                 </div>
               </div>
               <div class="article-details">
@@ -26,7 +26,7 @@ const loadProduk = async () => {
                 <div class="article-cta">
                     <div class="buttons">
                         <a href="#" class="btn btn-icon btn-secondary" onclick="hapusProduk(${v.idProduk})"><i class="far fa-trash-alt"></i></a>
-                        <a href="/produk/${slugToko}/${v.slug}" class="btn btn-icon btn-primary"><i class="far fa-eye"></i></a>
+                        <a href="/${slugToko}/produk/${v.slug}" class="btn btn-icon btn-primary"><i class="far fa-eye"></i></a>
                     </div>
                 </div>
               </div>

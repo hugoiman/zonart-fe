@@ -6,7 +6,7 @@ import {getUndangan, tolakUndangan, terimaUndangan} from "../request/undangan.js
 const loadUndangan = async () => {
     try {
         const loadmain = await loadMain();
-        const idUndangan = await getUrlPath(2);
+        const idUndangan = await getUrlPath(1);
         const result = await getUndangan(idUndangan);
         let htmlUndangan = document.createElement('div');
 

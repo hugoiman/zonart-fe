@@ -9,8 +9,8 @@ const loadGaleri = async () => {
     try {
         let loadMain = await loadMainStore();
         $(".nav-galeri").addClass("active");
-        const slugToko = await getUrlPath(2);
-        document.getElementById('btn-form-galeri').href = `/form-galeri/${slugToko}`;
+        const slugToko = await getUrlPath(1);
+        document.getElementById('btn-form-galeri').href = `/${slugToko}/form-galeri`;
         let idToko = await document.getElementById("idToko").value;
 
         const produks = await getDaftarProduk(idToko);
@@ -45,7 +45,9 @@ loadGaleri();
 function displayKategori() {
     let kategori = $("#select-kategori").val();
     let htmlGaleri = ``;
-    
+    if (galeri.galeri === null) {
+        return;
+    }
     galeri.galeri.forEach(v => {
         if (v.idProduk == kategori || kategori == "semua") {
             htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
