@@ -11,6 +11,17 @@ function getSambunganGrupOpsi(idToko, idGrupOpsi) {
     return result;
 }
 
+function getSambunganGrupOpsiByProduk(idToko, idProduk) {
+    let result = $.ajax({
+        url: `${baseURL}/api/grup-opsi-produk-by-produk/${idToko}/${idProduk}`,
+        type: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 function hubungkanGrupOpsi(idToko, idGrupOpsi, idProduk) {
     let result = $.ajax({
         url: `${baseURL}/api/grup-opsi/${idToko}/${idGrupOpsi}/${idProduk}`,
@@ -37,6 +48,7 @@ function putusSambunganGrupOpsi(idToko, idGrupOpsi, idProduk) {
 
 const grupOpsiProduk = {
     getSambunganGrupOpsi,
+    getSambunganGrupOpsiByProduk,
     hubungkanGrupOpsi,
     putusSambunganGrupOpsi,
 }

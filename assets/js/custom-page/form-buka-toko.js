@@ -35,14 +35,6 @@ const loadCreateToko = async () => {
         let instagram = document.getElementsByName("instagram")[0].value;
         let slug = document.getElementsByName("slug")[0].value;
 
-        if (instagram != "") {
-            instagram = "@" + instagram;
-        }
-
-        if (website != "") {
-            website = "www." + website;
-        }
-
         let jsonData = JSON.stringify({
             namaToko, deskripsi, alamat, kota, telp, whatsapp, emailToko, website, instagram, slug,
         });

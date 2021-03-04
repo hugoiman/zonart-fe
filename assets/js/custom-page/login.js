@@ -1,6 +1,6 @@
 import {getCustomer} from "../request/customer.js";
-import {baseURL} from "../general/env.js";
 import {alertFailed} from "../general/swalert.js";
+import {login} from "../request/auth.js";
 
 const getData = async () => {
     try {
@@ -13,28 +13,22 @@ const getData = async () => {
 
 getData();
 
-document.getElementById("login").onsubmit = function(event) {
-    let username = document.getElementsByName("username")[0].value;
-    let password = document.getElementsByName("password")[0].value;
+const signin = async () => {
+    try {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
 
-    let jsonData = JSON.stringify({
-        username,
-        password,
-    });
+        let jsonData = JSON.stringify({
+            username,
+            password,
+        });
 
-    $.ajax({
-        url: `${baseURL}/api/login`,
-        type: "POST",
-        data: jsonData,
-        contentType: "application/json",
-        success: function (resp) {
-            Cookies.set("token", resp.token, { expires: 7, path: "/" });
-            window.location.href = "/pengaturan";
-        },
-        error: function (error) {
-            alertFailed(error, false);
-        },
-    });
-
-    event.preventDefault();
+        let result = await login(jsonData);
+        Cookies.set("token", result.token, { expires: 7, path: "/" });
+        window.location.href = "/pengaturan";
+    } catch(error) {
+        alertFailed(error, false);
+    }
 }
+
+window.signin = signin;

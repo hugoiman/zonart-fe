@@ -24,7 +24,7 @@ const loadPengaturanToko = async () => {
         document.getElementsByName("namaToko")[0].value = dataToko.namaToko;
         document.getElementById("logo").src = dataToko.foto;
         document.getElementsByName("linkFoto")[0].value = dataToko.foto;
-        $('#deskripsi').summernote('code',dataToko.deskripsi);
+        $('#deskripsi').text(dataToko.deskripsi);
         document.getElementsByName("alamat")[0].value = dataToko.alamat;
         $("#list-kota").val(dataToko.kota).trigger('change');
         document.getElementsByName("telp")[0].value = dataToko.telp;
@@ -78,7 +78,7 @@ const loadPengaturanToko = async () => {
                                 <input type="text" class="form-control pemilik" value="${element.pemilik}">
                             </div>
                             <div class="form-group col-md-1 col-1 col-lg-1">
-                                <a href="#" class="btn btn-icon btn-sm btn-danger mt-1" onclick="hapusRekening(${element.idRekening})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
+                                <a href="#" class="btn btn-icon btn-sm btn-outline-danger mt-1" onclick="hapusRekening(${element.idRekening})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
                             </div>
                         </div>`;
         })
@@ -167,14 +167,6 @@ const updateDataToko = async () => {
             foto = result.data["secure_url"];
         } else {
             foto = document.getElementsByName("linkFoto")[0].value;
-        }
-
-        if (instagram != "") {
-            instagram = "@" + instagram;
-        }
-
-        if (website != "") {
-            website = "www." + website;
         }
         
         let jasaPengirimanToko = [];

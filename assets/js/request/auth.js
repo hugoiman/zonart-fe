@@ -1,5 +1,18 @@
 import {baseURL} from "../general/env.js";
 
+function login(jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/login`,
+        type: "POST",
+        data: jsonData,
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+
+    return result;
+}
+
 function register(username, email, nama, password) {
     let jsonData = JSON.stringify({
         username,
@@ -49,4 +62,4 @@ function verificationResetPassword(token) {
     return result;
 }
 
-export {register, resetPassword, verificationResetPassword};
+export {login, register, resetPassword, verificationResetPassword};

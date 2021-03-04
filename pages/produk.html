@@ -3,61 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Galeri &mdash; ZonArt</title>
+  <title>Blank &mdash; ZonArt</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/css/lightgallery.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/components.css">
 </head>
 
-<body>
+<body class="layout-3">
   <div id="app">
-    <div class="main-wrapper">
+    <div class="main-wrapper container">
       <div class="navbar-bg"></div>
-      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
-
-      <div class="main-sidebar">
-        <asidestore-element id="sidebar-wrapper"></asidestore-element>
-      </div>
+      <nav-element class="navbar navbar-expand-lg main-navbar"></nav-element>
 
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
-          <div class="section-header">
-            <h1>Galeri &mdash; <span class="namaToko"></span></h1>
-            <div class="section-header-button">
-              <a class="btn btn-icon btn-primary" id="btn-form-galeri">
-                <i class="fas fa-plus"></i> Galeri
-              </a>
-            </div>
-          </div>
-
           <div class="section-body">
-            <div class="form-group row mb-4">
-              <div class="col-sm-12 col-md-3">
-                <select class="form-control" id="select-kategori" onchange="displayGaleri()"></select>
-              </div>
-              <div class="col-sm-12 col-md-9" id="galeri-tools" style="display:none;">
-                <div class="buttons">
-                  <a href="#" class="btn btn-icon btn-sm btn-outline-danger" onclick="hapusGaleri()"><i class="far fa-trash-alt"></i></a>
-                  <a href="#" class="btn btn-icon btn-outline-info" onclick="check()"><i class="far fa-check-circle"></i> Pilih Semua</a>
-                  <a href="#" class="btn btn-icon btn-outline-success" onclick="uncheck()"><i class="far fa-times-circle"></i> Bersihkan</a>
-                </div>
-              </div>
-            </div>
             <div class="row">
-              <div class="col-12 col-sm-6 col-lg-12">
-                <div class="card">
+              <div class="col-12 col-sm-12 col-lg-12">
+                <div class="card author-box card-primary">
                   <div class="card-body">
-                    <div class="form-group">
-                      <div class="row gutters-sm" id="daftar-galeri">
-
+                    <div class="media">
+                      <div class="col-6 col-sm-6 col-lg-6" id="animated-thumbnials">
+                        <a href="/assets/img/avatar/avatar-1.png">
+                          <img class="mr-3 img-fluid" src="/assets/img/avatar/avatar-1.png" alt="Generic placeholder image">
+                        </a>
+                        <div class="clearfix"></div>
+                        <!-- <a href="#" class="btn btn-primary mt-3 follow-btn"">Follow</a> -->
+                      </div>
+                      <div class="media-body">
+                        <h5 class="mt-0">Media heading</h5>
+                        <p class="mb-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
                       </div>
                     </div>
                   </div>
@@ -82,13 +66,20 @@
   <!-- JS Libraies -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/js/lightgallery.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-pager.js/master/dist/lg-pager.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-autoplay.js/master/dist/lg-autoplay.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-share.js/master/dist/lg-share.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-fullscreen.js/master/dist/lg-fullscreen.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-zoom.js/master/dist/lg-zoom.js"></script>
+  <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lg-hash.js/master/dist/lg-hash.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/produk.js" type="module"></script>
 
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>
   <script src="/assets/js/custom.js"></script>
-
-  <!-- Page Specific JS File -->
-  <script src="/assets/js/custom-page/toko/galeri.js" type="module"></script>
 </body>
 </html>

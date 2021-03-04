@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Blank &mdash; ZonArt</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/css/lightgallery.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body class="layout-3">
+  <div id="app">
+    <div class="main-wrapper container">
+      <div class="navbar-bg"></div>
+      <nav-element class="navbar navbar-expand-lg main-navbar"></nav-element>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12 col-md-12 col-lg-5">
+                <div class="card profile-widget">
+                  <div class="profile-widget-header">
+                    <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle profile-widget-picture border border-primary" id="logo">
+                    <div class="profile-widget-items">
+                      <div class="profile-widget-item">
+                        <div class="profile-widget-item-label"><i class="fas fa-store"></i></div>
+                        <div class="profile-widget-item-value namaToko"></div>
+                      </div>
+                      <div class="profile-widget-item">
+                        <button class="btn btn-outline-info" data-toggle="modal" data-target="#modal-infotoko">Info Toko</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-center">
+                    <a href="#" class="btn btn-outline-info mr-1" id="btn-instagram">
+                      <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-success mr-1" id="btn-whatsapp">
+                      <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-danger mr-1" id="btn-email">
+                      <i class="fab fa-google"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-12 col-lg-12">
+                <div class="card">
+                  <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="produk-tab" data-toggle="tab" href="#produk" role="tab" aria-controls="produk" aria-selected="false"><i class="fas fa-fire"></i> Produk</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="galeri-tab" data-toggle="tab" href="#galeri" role="tab" aria-controls="galeri" aria-selected="false"><i class="fas fa-images"></i> Galeri</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="faq-tab" data-toggle="tab" href="#faq" role="tab" aria-controls="faq" aria-selected="false"><i class="fas fa-question"></i> FAQ</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content tab-bordered" id="myTab3Content">
+                      <div class="tab-pane fade show active" id="produk" role="tabpanel" aria-labelledby="produk-tab">
+                        <div class="row" id="daftar-produk"></div>
+                      </div>
+                      <div class="tab-pane fade" id="galeri" role="tabpanel" aria-labelledby="galeri-tab">
+                        <div class="col-12 col-sm-12 col-lg-12">
+                          <div class="form-group row mb-4">
+                            <div class="col-sm-12 col-md-3">
+                              <select class="form-control" id="select-kategori" onchange="displayGaleri()"></select>
+                            </div>
+                          </div>
+                          <div id="animated-thumbnials"></div>
+                          <!-- <div class="gallery gallery-md" id="daftar-galeri"></div> -->
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                        <div class="row" id="daftar-faq"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="modal-infotoko">
+          <div class="modal-dialog modal-lg" role="document">
+            <form>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Info Toko</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>
+                    <b>Deskripsi</b><br>
+                    <span id="deskripsi"></span>
+                  </p>
+                  <p>
+                    <b>Kontak</b><br>
+                    <span id="kontak"></span>
+                  </p>
+                  <p>
+                    <b>Alamat Toko</b><br>
+                    <span id="alamat"></span>
+                  </p>
+                  <p>
+                    <b>Bergabung Sejak</b><br>
+                    <span id="gabung"></span>
+                  </p>
+                  <p>
+                    <b>Layanan Pengiriman</b><br>
+                    <span id="kurir"></span>
+                  </p>
+
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/js/lightgallery.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-pager.js/master/dist/lg-pager.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-autoplay.js/master/dist/lg-autoplay.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-share.js/master/dist/lg-share.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-fullscreen.js/master/dist/lg-fullscreen.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-zoom.js/master/dist/lg-zoom.js"></script>
+  <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lg-hash.js/master/dist/lg-hash.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko.js" type="module"></script>
+
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+</body>
+</html>

@@ -13,28 +13,30 @@ const loadGaleri = async () => {
         document.getElementById('btn-form-galeri').href = `/${slugToko}/form-galeri`;
         let idToko = await document.getElementById("idToko").value;
 
-        const produks = await getDaftarProduk(idToko);
-        let htmlKategori = `<option value="semua">Semua</option>`;
-        produks.produk.forEach(v => {
-            htmlKategori += `<option value="${v.idProduk}">${v.namaProduk}</option>`;
-        })
-        document.getElementById("select-kategori").innerHTML = htmlKategori;
-
         let result = await getDaftarGaleri(idToko);
         galeri = result;
         let htmlGaleri = ``;
+
+        let kategori = _.uniqBy(result.galeri, 'kategori');
+
+        let htmlKategori = `<option selected="selected" value="semua">Semua</option>`;
+        kategori.forEach(v => {
+            htmlKategori += `<option value="${v.idProduk}">${v.kategori}</option>`;
+        })
+        document.getElementById("select-kategori").innerHTML = htmlKategori;
+        await displayGaleri();
         
-        result.galeri.forEach(v => {
-            htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
-                <label class="imagecheck mb-4">
-                    <input name="imagecheck" type="checkbox" value="${v.idGaleri}" class="imagecheck-input" onclick="isChecked()"/>
-                    <figure class="imagecheck-figure">
-                        <img src="${v.gambar}" alt="${v.kategori}" class="imagecheck-image" data-toggle="tooltip" data-placement="top" title="${v.kategori}">
-                    </figure>
-                </label>
-            </div>`
-        });
-        document.getElementById("daftar-galeri").innerHTML = htmlGaleri;
+        // result.galeri.forEach(v => {
+        //     htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
+        //         <label class="imagecheck mb-4">
+        //             <input name="imagecheck" type="checkbox" value="${v.idGaleri}" class="imagecheck-input" onclick="isChecked()"/>
+        //             <figure class="imagecheck-figure">
+        //                 <img src="${v.gambar}" alt="${v.kategori}" class="imagecheck-image" data-toggle="tooltip" data-placement="top" title="${v.kategori}">
+        //             </figure>
+        //         </label>
+        //     </div>`
+        // });
+        // document.getElementById("daftar-galeri").innerHTML = htmlGaleri;
     } catch(error) {
         alertFailed(error, false)
     }
@@ -42,7 +44,7 @@ const loadGaleri = async () => {
 
 loadGaleri();
 
-function displayKategori() {
+function displayGaleri() {
     let kategori = $("#select-kategori").val();
     let htmlGaleri = ``;
     if (galeri.galeri === null) {
@@ -50,8 +52,8 @@ function displayKategori() {
     }
     galeri.galeri.forEach(v => {
         if (v.idProduk == kategori || kategori == "semua") {
-            htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
-                <label class="imagecheck mb-4">
+            htmlGaleri += `<div class="col-4 col-md-3 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
+                <label class="imagecheck mb-2">
                     <input name="imagecheck" type="checkbox" value="${v.idGaleri}" class="imagecheck-input" onclick="isChecked()"/>
                     <figure class="imagecheck-figure">
                         <img src="${v.gambar}" alt="${v.kategori}" class="imagecheck-image" data-toggle="tooltip" data-placement="top" title="${v.kategori}">
@@ -109,7 +111,7 @@ function isChecked() {
     }
 }
 
-window.displayKategori = displayKategori;
+window.displayGaleri = displayGaleri;
 window.hapusGaleri = hapusGaleri;
 window.check = check;
 window.uncheck = uncheck;

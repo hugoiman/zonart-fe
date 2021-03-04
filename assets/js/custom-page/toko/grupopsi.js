@@ -48,9 +48,9 @@ function displayGrupOpsi(slugToko, dataJson) {
             },  
             { data: function (data, type, dataToSet) {
                 return `<buttons>
-                            <a href="#" class="btn btn-sm btn-icon btn-default" onclick="showKoneksi(${data.idGrupOpsi}, '${data.namaGrup}')"><i class="fas fa-sitemap"></i></a>
-                            <a href="/${slugToko}/grup-opsi/${data.idGrupOpsi}" class="btn btn-sm btn-icon btn-default"><i class="far fa-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-icon btn-default" onclick="hapusGrupOpsi(${data.idToko},${data.idGrupOpsi})"><i class="far fa-trash-alt"></i></a>
+                            <a href="#" class="btn btn-sm btn-icon btn-outline-info" onclick="showKoneksi(${data.idGrupOpsi}, '${data.namaGrup}')" data-toggle="tooltip" data-placement="top" title="Koneksi"><i class="fas fa-sitemap"></i></a>
+                            <a href="/${slugToko}/grup-opsi/${data.idGrupOpsi}" class="btn btn-sm btn-icon btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Edit"><i class="far fa-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusGrupOpsi(${data.idToko},${data.idGrupOpsi})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
                         </buttons>`;
                 }
             },  
@@ -79,7 +79,7 @@ const loadSambunganGrupOpsi = async (idToko, idGrupOpsi) => {
             htmlDataSambungkan += `<tr>
                 <th scope="row">${idx+1}</th>
                 <td>${val.namaProduk}</td>
-                <td><a href="#" class="btn btn-sm btn-icon btn-default" onclick="putusSambungan(${idToko},${val.idGrupOpsi},${val.idProduk})"><i class="far fa-trash-alt"></i></a></td>
+                <td><a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="putusSambungan(${idToko},${val.idGrupOpsi},${val.idProduk})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a></td>
             </tr>`;
         });
         document.getElementById("daftar-produk").innerHTML = htmlDataSambungkan;

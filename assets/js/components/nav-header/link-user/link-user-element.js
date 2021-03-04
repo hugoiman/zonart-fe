@@ -20,7 +20,7 @@ class LinkUserElement extends HTMLElement {
                     <i class="fas fa-cog"></i> Pengaturan
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" id="logout" class="dropdown-item has-icon text-danger">
+                <a href="#" id="logout" class="dropdown-item has-icon text-danger" onclick="signout()">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
