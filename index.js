@@ -24,13 +24,16 @@ app.get('/notifikasi/', function(req, res) { res.sendFile('./pages/notifikasi.ht
 app.get('/:toko', function(req, res) { res.sendFile('./pages/toko.html', { root: __dirname });})
 
 // toko
-app.get('/dashboard/:toko', function(req, res) { res.sendFile('./pages/toko/blank.html', { root: __dirname });})
+app.get('/:toko/dashboard', function(req, res) { res.sendFile('./pages/toko/dashboard.html', { root: __dirname });})
 app.get('/:toko/pengaturan', function(req, res) { res.sendFile('./pages/toko/pengaturan.html', { root: __dirname });})
 
 // produk
 app.get('/:toko/produk', function(req, res) { res.sendFile('./pages/toko/produk.html', { root: __dirname });})
 app.get('/:toko/form-produk', function(req, res) { res.sendFile('./pages/toko/produk-create.html', { root: __dirname });})
 app.get('/:toko/produk/:produk', function(req, res) { res.sendFile('./pages/toko/produk-edit.html', { root: __dirname });})
+
+// pesanan
+app.get('/:toko/pesanan', function(req, res) { res.sendFile('./pages/toko/pesanan.html', { root: __dirname });})
 
 // karyawan
 app.get('/:toko/karyawan', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})

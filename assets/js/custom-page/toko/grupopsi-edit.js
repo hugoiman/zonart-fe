@@ -163,15 +163,15 @@ const ubahGrupOpsi = async () => {
         let spesificRequest = document.getElementById("spesificRequest").checked;
         let hardcopy = document.getElementById("hardcopy").checked;
         let softcopy = document.getElementById("softcopy").checked;
-        let min = parseInt(document.getElementById("min").value.replace(".", ""));
-        let max = parseInt(document.getElementById("max").value.replace(".", ""));
+        let min = parseInt(document.getElementById("min").value.replaceAll(".", ""));
+        let max = parseInt(document.getElementById("max").value.replaceAll(".", ""));
 
         let opsi = [];
         for (let i = 0; i < document.querySelectorAll('.opsi').length; i++) {
             let idOpsi =  parseInt(document.getElementsByClassName('idOpsi')[i].value);
             let namaOpsi = document.getElementsByClassName('namaOpsi')[i].value;
-            let harga = parseInt(document.getElementsByClassName('harga')[i].value.replace('.', ''));
-            let berat = parseInt(document.getElementsByClassName('berat')[i].value.replace('.', ''));
+            let harga = parseInt(document.getElementsByClassName('harga')[i].value.replaceAll('.', ''));
+            let berat = parseInt(document.getElementsByClassName('berat')[i].value.replaceAll('.', ''));
             let perProduk = document.getElementsByClassName('perProduk')[i].checked;
             let status = document.getElementsByClassName('status')[i].value;
             if(status == 'true') { status = true } 

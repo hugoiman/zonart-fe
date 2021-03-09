@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Pesanan &mdash; ZonArt</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <navstore-element class="navbar navbar-expand-lg main-navbar"></navstore-element>
+
+      <div class="main-sidebar">
+        <asidestore-element id="sidebar-wrapper"></asidestore-element>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Pesanan &mdash; <span class="namaToko"></span></h1>
+          </div>
+
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card mb-0">
+                  <div class="card-body">
+                    <ul class="nav nav-pills" id="myTab3" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Semua 
+                          <span class="badge badge-white">21</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Menunggu 
+                          <span class="badge badge-white">2</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Proses 
+                          <span class="badge badge-white">7</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Selesai 
+                          <span class="badge badge-white">10</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Batal 
+                          <span class="badge badge-white">2</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="tab-content" id="myTabContent2">
+                      <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
+                        <div class="table-responsive">
+                          <table class="table table-striped" id="table-semua">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th>Tgl</th>
+                                <th>Inv</th>
+                                <th>Produk</th>
+                                <th>Total</th>
+                                <th>Tagihan</th>
+                                <th>Status</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>20 Dec 2020</td>
+                                <td>4516354</td>
+                                <td>Karikatur Full Body</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 0</td>
+                                <td class="text-center"><span class="badge badge-warning">Menunggu</span></td>
+                                <td>
+                                  <div class="buttons">
+                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>21 Dec 2020</td>
+                                <td>8126721</td>
+                                <td>Karikatur Half Body</td>
+                                <td>Rp 250.000</td>
+                                <td>0</td>
+                                <td class="text-center"><span class="badge badge-secondary">Batal</span></td>
+                                <td>
+                                  <div class="buttons">
+                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>20 Dec 2020</td>
+                                <td>6482266</td>
+                                <td>Vexel Art</td>
+                                <td>Rp 350.000</td>
+                                <td>Rp 250.000</td>
+                                <td class="text-center"><span class="badge badge-primary">Proses</span></td>
+                                <td>
+                                  <div class="buttons">
+                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>20 Dec 2020</td>
+                                <td>6549884</td>
+                                <td>Mozaik</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 0</td>
+                                <td class="text-center"><span class="badge badge-success">Selesai</span></td>
+                                <td>
+                                  <div class="buttons">
+                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
+                                  </div>
+                                </td>
+                              </tr>                              
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
+                        Sed sed metus vel lacus hendrerit tempus. Sed efficitur velit tortor, ac efficitur est lobortis quis. Nullam lacinia metus erat, sed fermentum justo rutrum ultrices. Proin quis iaculis tellus. Etiam ac vehicula eros, pharetra consectetur dui.
+                      </div>
+                      <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
+                        Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </section>
+      </div>
+      <footer-element class="main-footer"></footer-element>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+  <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
+
+  <!-- Template JS File -->
+  <script src="/assets/js/scripts.js"></script>
+  <script src="/assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
+  <script src="/assets/js/custom-page/toko/pesanan.js" type="module"></script>
+</body>
+</html>

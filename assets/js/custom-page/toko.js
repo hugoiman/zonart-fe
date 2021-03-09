@@ -15,9 +15,28 @@ const loadPage = async () => {
     document.getElementById("logo").src = dataToko.foto;
     $('.namaToko').text(dataToko.namaToko);
     $('.kota').text(dataToko.kota);
-    displayProduk(dataToko.idToko, slugToko);
+
+    let htmlSosmed = ``;
+    if(dataToko.instagram != '') {
+        htmlSosmed +=   `<a href="https://www.instagram.com/${dataToko.instagram}" class="btn btn-outline-info mr-1">
+                            <i class="fab fa-instagram"></i>
+                        </a>`;
+    }
+    if(dataToko.whatsapp != '') {
+        htmlSosmed +=   `<a href="https://wa.me/${dataToko.whatsapp}?text=" class="btn btn-outline-success mr-1" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>`;
+    }
+    if(dataToko.emailToko != '') {
+        htmlSosmed +=   `<a href="mailto:${dataToko.emailToko}" class="btn btn-outline-danger mr-1">
+                            <i class="fab fa-google"></i>
+                        </a>`;
+    }
+    document.getElementById('info-sosmed').innerHTML = htmlSosmed;
+
     displayInfoToko(dataToko);
     displayFaq(dataToko.idToko);
+    displayProduk(dataToko.idToko, slugToko);
 
     let result = await getDaftarGaleri(dataToko.idToko);
     galeri = result;
@@ -27,6 +46,10 @@ const loadPage = async () => {
         htmlKategori += `<option value="${v.idProduk}">${v.kategori}</option>`;
     })
     document.getElementById("select-kategori").innerHTML = htmlKategori;
+
+    lightGallery(document.getElementById('animated-thumbnials'), {
+        thumbnail:true,
+    });
     await displayGaleri();
 }
 loadPage();
@@ -45,15 +68,16 @@ const displayProduk = async (idToko, slugToko) => {
                 <div class="article-title">
                     <h2><a href="/${slugToko}/${v.slug}">${v.namaProduk}</a></h2>
                 </div>
-                <p><b>Rp ${v.jenisPemesanan[1].harga} - Rp ${v.jenisPemesanan[0].harga}</b></p>
+                <p><b> Rp ` + (v.jenisPemesanan[1].harga < v.jenisPemesanan[0].harga ? (v.jenisPemesanan[1].status == true ? `<span class="nominal">${v.jenisPemesanan[1].harga}</span>` : ``) + `` + (v.jenisPemesanan[0].status == true ? ` - <span class="nominal">${v.jenisPemesanan[0].harga}</span>` : ``) :
+                                                                                       (v.jenisPemesanan[0].status == true ? `<span class="nominal">${v.jenisPemesanan[0].harga}</span>` : ``) + `` + (v.jenisPemesanan[1].status == true ? ` - <span class="nominal">${v.jenisPemesanan[1].harga}</span>` : ``) )+ `</b></p>
               </div>
             </article>
           </div>`;
-
         });
         document.getElementById("daftar-produk").innerHTML = htmlProduk;
+        $(".nominal").mask('000.000.000', {reverse: true});
     } catch(error) {
-
+        console.log(error)
     }
 }
 

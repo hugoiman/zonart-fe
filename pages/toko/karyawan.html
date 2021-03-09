@@ -12,6 +12,7 @@
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -33,11 +34,6 @@
         <section class="section">
           <div class="section-header">
             <h1>Karyawan &mdash; <span class="namaToko"></span></h1>
-            <div class="section-header-button">
-              <a href="#" class="btn btn-icon btn-primary" data-toggle="modal" data-target="#rekrutKaryawan">
-                <i class="fas fa-plus"></i> Rekrut
-              </a>
-            </div>
           </div>
 
           <div class="section-body">
@@ -50,11 +46,19 @@
                         <a class="nav-link active" id="karyawan-tab" data-toggle="tab" href="#karyawan" role="tab" aria-controls="karyawan" aria-selected="true">Karyawan</a>
                       </li>
                       <li class="nav-item">
+                        <a class="nav-link" id="penggajian-tab" data-toggle="tab" href="#penggajian" role="tab" aria-controls="penggajian" aria-selected="false">Penggajian</a>
+                      </li>
+                      <li class="nav-item">
                         <a class="nav-link" id="undangan-tab" data-toggle="tab" href="#undangan" role="tab" aria-controls="undangan" aria-selected="false">Undangan</a>
                       </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="karyawan" role="tabpanel" aria-labelledby="karyawan-tab">
+                        <div class="row">
+                          <a href="#" class="btn btn-icon btn-primary ml-3 mb-2" data-toggle="modal" data-target="#rekrutKaryawan">
+                            <i class="fas fa-plus"></i> Rekrut
+                          </a>
+                        </div>
                         <div class="table-responsive">
                           <table class="table table-striped" id="table-karyawan">
                             <thead>
@@ -66,6 +70,30 @@
                                 <th>Posisi</th>
                                 <th>Status</th>
                                 <th>Bergabung</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="penggajian" role="tabpanel" aria-labelledby="penggajian-tab">
+                        <div class="row">
+                          <a href="#" class="btn btn-icon btn-primary ml-3 mb-2" data-toggle="modal" data-target="#tambahPenggajian">
+                            <i class="fas fa-plus"></i> Penggajian
+                          </a>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table table-striped" id="table-gaji">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th>Nama</th>
+                                <th id="nominal">Nominal</th>
+                                <th>Tgl Transaksi</th>
+                                <th></th>
                               </tr>
                             </thead>
                             <tbody>
@@ -148,6 +176,107 @@
             </form>
           </div>
         </div>
+
+        <!-- Modal penggajian -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="tambahPenggajian">
+          <div class="modal-dialog" role="document">
+            <form>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Penggajian</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Pilih Karyawan</label>
+                      <select class="form-control" id="daftar-karyawan"></select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Nominal <small>(rupiah)</small></label>
+                      <input class="form-control currency" id="nominal"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Tanggal Transaksi</label>
+                      <input type="text" class="form-control datepicker" id="tglTransaksi">
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" class="btn btn-primary" onclick="tambahGaji()">OK</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="modal-data-karyawan">
+          <div class="modal-dialog" role="document">
+            <form>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Data Karyawan</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Nama</label>
+                      <input type="text" id="idKaryawan" hidden>
+                      <input type="text" class="form-control" id="namaKaryawan">
+                    </div>
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">HP</label>
+                      <input type="text" class="form-control" id="hp">
+                    </div>
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Email</label>
+                      <input type="text" class="form-control" id="emailKaryawan">
+                    </div>
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Alamat</label>
+                      <input type="text" class="form-control" id="alamat">
+                    </div>
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Posisi</label>
+                      <div class="form-group">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input input-posisi" type="radio" name="posisi2" id="admin" value="admin">
+                          <label class="form-check-label">Admin</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input input-posisi" type="radio" name="posisi2" id="editor" value="editor">
+                          <label class="form-check-label">Editor</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12 col-12">
+                      <label class="col-form-label text-md-right">Status</label>
+                      <select class="form-control" id="status">
+                        <option value="aktif">Aktif</option>
+                        <option value="tidak aktif">Tidak Aktif</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <button type="button" class="btn btn-primary" onclick="editKaryawan()">Perbarui</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
       </div>
       <footer-element class="main-footer"></footer-element>
     </div>
@@ -167,6 +296,9 @@
   <script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
   <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+  <script src="/node_modules/cleave.js/dist/cleave.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
 
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>

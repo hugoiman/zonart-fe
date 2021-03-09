@@ -78,15 +78,15 @@ const ubahProduk = async () => {
         let slugToko = await getUrlPath(1);
         let idProduk = document.getElementById("idProduk").value;
         let namaProduk = document.getElementById("namaProduk").value;
-        let berat = parseInt(document.getElementById("berat-cetak").value.replace(".", ""));
-        let hargaWajah = parseInt(document.getElementById("hargaWajah").value.replace(".", ""));
+        let berat = parseInt(document.getElementById("berat-cetak").value.replaceAll(".", ""));
+        let hargaWajah = parseInt(document.getElementById("hargaWajah").value.replaceAll(".", ""));
         let deskripsi = document.getElementById("deskripsi").value;
         let catatan = document.getElementById("catatan").value;
         let status = document.getElementById("status").value;
         let gambar = "";
         let jenisPemesanan = [
-            {"idJenisPemesanan" : 1, "harga" : parseInt(document.getElementById("harga-cetak").value.replace(".", "")), "status" : document.getElementById("status-cetak").checked},
-            {"idJenisPemesanan" : 2, "harga" : parseInt(document.getElementById("harga-softcopy").value.replace(".", "")), "status" : document.getElementById("status-softcopy").checked}
+            {"idJenisPemesanan" : 1, "harga" : parseInt(document.getElementById("harga-cetak").value.replaceAll(".", "")), "status" : document.getElementById("status-cetak").checked},
+            {"idJenisPemesanan" : 2, "harga" : parseInt(document.getElementById("harga-softcopy").value.replaceAll(".", "")), "status" : document.getElementById("status-softcopy").checked}
         ]
 
         if(document.getElementById("gambar").files.length != 0) {

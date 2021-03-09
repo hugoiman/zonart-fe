@@ -35,4 +35,17 @@ function undangKaryawan(toko, jsonData) {
     return result;
 }
 
-export {getKaryawan, getDaftarKaryawan, undangKaryawan};
+function updateKaryawan(idToko, idKaryawan, jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/karyawan/${idToko}/${idKaryawan}`,
+        type: "PUT",
+        headers: { Authorization: `Bearer ${token}`},
+        data: jsonData,
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+export {getKaryawan, getDaftarKaryawan, undangKaryawan, updateKaryawan};
