@@ -20,7 +20,10 @@ app.get('/password', function(req, res) { res.sendFile('./pages/password.html', 
 app.get('/mytoko', function(req, res) { res.sendFile('./pages/mytoko.html', { root: __dirname });})
 app.get('/form-buka-toko', function(req, res) { res.sendFile('./pages/form-buka-toko.html', { root: __dirname });})
 app.get('/undangan-rekrut/:idUndangan', function(req, res) { res.sendFile('./pages/undangan.html', { root: __dirname });})
-app.get('/notifikasi/', function(req, res) { res.sendFile('./pages/notifikasi.html', { root: __dirname });})
+app.get('/notifikasi', function(req, res) { res.sendFile('./pages/notifikasi.html', { root: __dirname });})
+app.get('/transaksi', function(req, res) { res.sendFile('./pages/transaksi.html', { root: __dirname });})
+app.get('/order', function(req, res) { res.sendFile('./pages/pesanan.html', { root: __dirname });})
+app.get('/invoice', function(req, res) { res.sendFile('./pages/invoice.html', { root: __dirname });})
 app.get('/:toko', function(req, res) { res.sendFile('./pages/toko.html', { root: __dirname });})
 
 // toko
@@ -34,6 +37,7 @@ app.get('/:toko/produk/:produk', function(req, res) { res.sendFile('./pages/toko
 
 // pesanan
 app.get('/:toko/pesanan', function(req, res) { res.sendFile('./pages/toko/pesanan.html', { root: __dirname });})
+app.get('/:toko/pesanan/:idOrder', function(req, res) { res.sendFile('./pages/toko/detail-pesanan.html', { root: __dirname });})
 
 // karyawan
 app.get('/:toko/karyawan', function(req, res) { res.sendFile('./pages/toko/karyawan.html', { root: __dirname });})

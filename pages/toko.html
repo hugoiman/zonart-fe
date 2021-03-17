@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/css/lightgallery.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/dist/css/lightgallery.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -31,14 +31,14 @@
               <div class="col-12 col-md-12 col-lg-5">
                 <div class="card profile-widget">
                   <div class="profile-widget-header">
-                    <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle profile-widget-picture border border-primary" id="logo">
+                    <img alt="image" src="https://res.cloudinary.com/dbddhr9rz/image/upload/v1612894274/zonart/toko/toko_jhecxf.png" class="rounded-circle profile-widget-picture border border-primary" id="logo">
                     <div class="profile-widget-items">
                       <div class="profile-widget-item">
                         <div class="profile-widget-item-label"><i class="fas fa-store"></i></div>
                         <div class="profile-widget-item-value namaToko"></div>
                       </div>
                       <div class="profile-widget-item">
-                        <button class="btn btn-outline-info" data-toggle="modal" data-target="#modal-infotoko">Info Toko</button>
+                        <button class="btn btn-outline-info" onclick="modalInfoToko()">Info Toko</button>
                       </div>
                     </div>
                   </div>
@@ -86,44 +86,6 @@
             </div>
           </div>
         </section>
-
-        <div class="modal fade" tabindex="-1" role="dialog" id="modal-infotoko">
-          <div class="modal-dialog modal-lg" role="document">
-            <form>
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Info Toko</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>
-                    <b>Deskripsi</b><br>
-                    <span id="deskripsi"></span>
-                  </p>
-                  <p>
-                    <b>Kontak</b><br>
-                    <span id="kontak"></span>
-                  </p>
-                  <p>
-                    <b>Alamat Toko</b><br>
-                    <span id="alamat"></span>
-                  </p>
-                  <p>
-                    <b>Bergabung Sejak</b><br>
-                    <span id="gabung"></span>
-                  </p>
-                  <p>
-                    <b>Layanan Pengiriman</b><br>
-                    <span id="kurir"></span>
-                  </p>
-
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
       </div>
       <footer-element class="main-footer"></footer-element>
     </div>
@@ -142,14 +104,20 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/js/lightgallery.js"></script>
-  <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lg-pager.js/master/dist/lg-pager.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-fullscreen.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-autoplay.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-pager.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-thumbnail.min.js"></script>
+  <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/js/lightgallery.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-pager.js/master/dist/lg-pager.js"></script>
   <script src="https://cdn.rawgit.com/sachinchoolur/lg-autoplay.js/master/dist/lg-autoplay.js"></script>
   <script src="https://cdn.rawgit.com/sachinchoolur/lg-share.js/master/dist/lg-share.js"></script>
   <script src="https://cdn.rawgit.com/sachinchoolur/lg-fullscreen.js/master/dist/lg-fullscreen.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-zoom.js/master/dist/lg-zoom.js"></script>
+  <script src="https://cdn.rawgit.com/sachinchoolur/lg-zoom.js/master/dist/lg-zoom.js"></script> -->
   <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lg-hash.js/master/dist/lg-hash.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script> -->
 
   <!-- Page Specific JS File -->
   <script src="/assets/js/custom-page/toko.js" type="module"></script>

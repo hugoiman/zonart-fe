@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/css/lightgallery.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/dist/css/lightgallery.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -28,26 +28,215 @@
         <section class="section">
           <div class="section-body">
             <div class="row">
-              <div class="col-12 col-sm-12 col-lg-12">
-                <div class="card author-box card-primary">
-                  <div class="card-body">
-                    <div class="media">
-                      <div class="col-6 col-sm-6 col-lg-6" id="animated-thumbnials">
-                        <a href="/assets/img/avatar/avatar-1.png">
-                          <img class="mr-3 img-fluid" src="/assets/img/avatar/avatar-1.png" alt="Generic placeholder image">
-                        </a>
-                        <div class="clearfix"></div>
-                        <!-- <a href="#" class="btn btn-primary mt-3 follow-btn"">Follow</a> -->
-                      </div>
-                      <div class="media-body">
-                        <h5 class="mt-0">Media heading</h5>
-                        <p class="mb-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+              <div class="col-md-6">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active" id="cover-produk"> 
+                      <a href="/assets/img/news/img01.jpg">
+                        <img class="d-block w-100" src="/assets/img/news/img01.jpg" alt="First slide"> 
+                      </a>
+                    </div>
+                    <!-- <div class="carousel-item"> <img class="d-block w-100" src="https://res.cloudinary.com/dbddhr9rz/image/upload/v1614223644/zonart/produk/WhatsApp_Image_2020-07-06_at_12.49.57_vpudbu.jpg" alt="Second slide"> </div> -->
+                  </div>
+                  <div class="clearfix mb-2"></div>
+                  <div class="gallery gallery-md d-flex justify-content-center" id="gallery-produk">
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mt-3">
+                <div class="ml-3" id="info-produk"></div>
+
+                <div class="row">
+                  <div class="col-12 col-md-12">
+                    <div class="card profile-widget">
+                      <div class="profile-widget-header">
+                        <img alt="image" src="https://res.cloudinary.com/dbddhr9rz/image/upload/v1612894274/zonart/toko/toko_jhecxf.png" class="rounded-circle profile-widget-picture border border-primary" id="logo">
+                        <div class="profile-widget-items">
+                          <div class="profile-widget-item">
+                            <div class="profile-widget-item-label"><i class="fas fa-store"></i></div>
+                            <div class="profile-widget-item-value namaToko"></div>
+                          </div>
+                          <div class="profile-widget-item">
+                            <button class="btn btn-outline-info" onclick="modalInfoToko()">Info Toko</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <a href="#" class="btn btn-block btn-lg btn-primary">Pesan Sekarang</a>
               </div>
             </div>
+            
+            <div class="row mt-2">
+              <div class="card">
+                <div class="card-body">
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="deskripsi-tab" data-toggle="tab" href="#deskripsi" role="tab" aria-controls="deskripsi" aria-selected="true">Deskripsi</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="catatan-tab" data-toggle="tab" href="#catatan" role="tab" aria-controls="catatan" aria-selected="false">Catatan</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content tab-bordered" id="myTabContent">
+                    <div class="tab-pane fade show active" id="deskripsi" role="tabpanel" aria-labelledby="deskripsi-tab"></div>
+                    <div class="tab-pane fade" id="catatan" role="tabpanel" aria-labelledby="catatan-tab"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-content-md-center">
+              <div class="col-12 col-md-6 col-sm-12">
+                <div class="card">
+                  <form id="buka-toko">
+                    <div class="card-header">
+                      <h4>Form Pemesanan</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right">Nama Produk</label>
+                          <input type="text" class="form-control"/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-9 col-9">
+                          <label class="col-form-label text-md-right">Tambahan Wajah</label>
+                          <input type="text" class="form-control"/>
+                          +Rp 50.000
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-9 col-9">
+                          <label class="col-form-label text-md-right">Jumlah Pesanan (Pcs)</label>
+                          <input type="text" class="form-control"/>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right">Deskripsi Toko</label>
+                          <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Alamat</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="alamat"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Kota *</label
+                          >
+                          <select class="form-control select2" id="list-kota" name="kota">
+                            
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >No Telp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="telp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Whatsapp</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="whatsapp"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Email Toko</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="emailToko"
+                          />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Website</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">www.</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="website"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right"
+                            >Instagram</label
+                          >
+                          <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                              <div class="input-group-text">@</div>
+                            </div>
+                            <input
+                              type="text"
+                              class="form-control"
+                              name="instagram"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-12 col-12">
+                          <label class="col-form-label text-md-right">Domain *</label>
+                          <small class="text-muted">
+                            (Karakter yang diizinkan hanya alpabet, angka dan (-) strip).
+                          </small>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">www.zonart.com/</span>
+                            </div>
+                            <input type="text" class="form-control" name="slug">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer text-right">
+                      <button class="btn btn-primary">Buka Toko</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
       </div>
@@ -66,15 +255,15 @@
   <!-- JS Libraies -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lightgallery.js/master/dist/js/lightgallery.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-pager.js/master/dist/lg-pager.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-autoplay.js/master/dist/lg-autoplay.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-share.js/master/dist/lg-share.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-fullscreen.js/master/dist/lg-fullscreen.js"></script>
-  <script src="https://cdn.rawgit.com/sachinchoolur/lg-zoom.js/master/dist/lg-zoom.js"></script>
-  <!-- <script src="https://cdn.rawgit.com/sachinchoolur/lg-hash.js/master/dist/lg-hash.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/picturefill/2.3.1/picturefill.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-fullscreen.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-autoplay.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/modules/lg-pager.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-thumbnail.min.js"></script>
+  
   <!-- Page Specific JS File -->
   <script src="/assets/js/custom-page/produk.js" type="module"></script>
 
