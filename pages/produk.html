@@ -11,6 +11,8 @@
 
   <!-- CSS Libraries -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/dist/css/lightgallery.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/node_modules/dropzone/dist/min/dropzone.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -65,7 +67,7 @@
                     </div>
                   </div>
                 </div>
-                <a href="#" class="btn btn-block btn-lg btn-primary">Pesan Sekarang</a>
+                <a href="#" class="btn btn-block btn-lg btn-primary" onclick="showForm()">Buat Pesan</a>
               </div>
             </div>
             
@@ -88,151 +90,15 @@
               </div>
             </div>
 
-            <div class="row justify-content-md-center">
-              <div class="col-12 col-md-6 col-sm-12">
-                <div class="card">
-                  <form id="buka-toko">
-                    <div class="card-header">
-                      <h4>Form Pemesanan</h4>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right">Nama Produk</label>
-                          <input type="text" class="form-control"/>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-9 col-9">
-                          <label class="col-form-label text-md-right">Tambahan Wajah</label>
-                          <input type="text" class="form-control"/>
-                          +Rp 50.000
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-9 col-9">
-                          <label class="col-form-label text-md-right">Jumlah Pesanan (Pcs)</label>
-                          <input type="text" class="form-control"/>
-                        </div>
-                      </div>
+            <div class="row justify-content-md-center" id="form-pemesanan"></div>
 
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right">Deskripsi Toko</label>
-                          <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Alamat</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="alamat"
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Kota *</label
-                          >
-                          <select class="form-control select2" id="list-kota" name="kota">
-                            
-                          </select>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >No Telp</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="telp"
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Whatsapp</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="whatsapp"
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Email Toko</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="emailToko"
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Website</label
-                          >
-                          <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">www.</div>
-                            </div>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="website"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Instagram</label
-                          >
-                          <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">@</div>
-                            </div>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="instagram"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right">Domain *</label>
-                          <small class="text-muted">
-                            (Karakter yang diizinkan hanya alpabet, angka dan (-) strip).
-                          </small>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">www.zonart.com/</span>
-                            </div>
-                            <input type="text" class="form-control" name="slug">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-footer text-right">
-                      <button class="btn btn-primary">Buka Toko</button>
-                    </div>
-                  </form>
+            <div class="row justify-content-md-center" id="total-payment" style="display: none;">
+              <div class="col-12 col-md-6 col-sm-12 d-flex justify-content-center">
+                <div class="alert alert-light alert-has-icon shadow p-3 mb-5 bg-white rounded mw-100" style="position: fixed; bottom: -30px;">
+                  <div class="alert-body">
+                    <div class="alert-title">Total Belanja: Rp 1.150.000 <small class="float-right"></small></div>
+                    <button class="btn btn-block btn-primary">Pesan Sekarang</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -256,6 +122,9 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+  <script src="/node_modules/cleave.js/dist/cleave.min.js"></script>
+  <script src="/node_modules/dropzone/dist/min/dropzone.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.12/modules/lg-fullscreen.min.js"></script>
@@ -266,6 +135,7 @@
   
   <!-- Page Specific JS File -->
   <script src="/assets/js/custom-page/produk.js" type="module"></script>
+  <script src="/assets/js/custom-page/form-order.js"></script>
 
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>

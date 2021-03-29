@@ -12,6 +12,8 @@ const loadPage = async () => {
         let idToko = document.getElementById("idToko").value;
         let result = await pembukuan.getDaftarPembukuan(idToko)
         dataPembukuan = result;
+        let a = document.getElementById('user-position').value;
+        console.log(a);
 
         $(".datepicker").val(moment().format("MMM YYYY"));
         $(".datepicker").datepicker({

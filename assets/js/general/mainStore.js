@@ -5,7 +5,7 @@ import {getCustomer} from "../request/customer.js";
 import {alertFailed} from "./swalert.js";
 import {logout, getUrlPath} from "./general.js";
 import {getToko} from "../request/toko.js";
-import {getDaftarKaryawan} from "../request/karyawan.js";
+import {getKaryawanByIDCustomer} from "../request/karyawan.js";
 import menues from "../components/aside-store/asideStore-element.js";
 
 const loadMainStore = async () => {
@@ -17,31 +17,36 @@ const loadMainStore = async () => {
         const slugToko = await getUrlPath(1);
         const dataToko = await getToko(slugToko);
         document.getElementById("idToko").value = dataToko.idToko;
-        // console.log(dataToko);
+        
+        const menu = menues(slugToko);
+        let userPosition;
         // cek if owner
         if (dataToko.idOwner == dataCustomer.idCustomer) {
-            const menu = menues(slugToko);
+            userPosition = "owner";
             document.getElementById("sidebar-menu").innerHTML = menu.dashboard + menu.pesanan + menu.produk + 
             menu.grupOpsi + menu.pengaturan + menu.galeri + menu.faq + menu.karyawan;
         } else {
-            const dataDaftarKaryawan = getDaftarKaryawan(dataToko.idToko);
-            const dataKaryawan = dataDaftarKaryawan.find( ({idCustomer}) => idCustomer === dataCustomer.idCustomer);
+            const dataKaryawan = await getKaryawanByIDCustomer(dataToko.idToko);
             // cek if admin
-            if (dataKaryawan.posisi === "admin" && dataKaryawan.status == "aktif") {
+            if (dataKaryawan.posisi === "admin" && dataKaryawan.status === "aktif") {
+                userPosition = dataKaryawan.posisi;
                 document.getElementById("sidebar-menu").innerHTML = menu.dashboard + menu.pesanan + menu.produk + 
                 menu.grupOpsi + menu.galeri + menu.faq;
-            } else if (dataKaryawan.posisi === "editor" && dataKaryawan.status == "aktif") {
+            } else if (dataKaryawan.posisi === "editor" && dataKaryawan.status === "aktif") {
+                userPosition = dataKaryawan.posisi;
                 document.getElementById("sidebar-menu").innerHTML = menu.pesanan;
             } else {
                 alertFailed("Anda tidak memiliki otoritas untuk mengelola toko ini", false);
             }
         }
 
+        $(".main-content").append(`<input id="user-position" value="${userPosition}" hidden/>`);
+
         [].slice.call(document.getElementsByClassName("namaToko")).forEach(function (div) {
             div.innerHTML = dataToko.namaToko;
         });
     } catch(error) {
-        alertFailed(error.responseText, false);
+        console.log(error);
     }
     
     document.getElementById("logout").onclick = function(event) {

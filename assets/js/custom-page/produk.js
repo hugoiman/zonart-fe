@@ -4,6 +4,7 @@ import {getUrlPath} from "../general/general.js";
 import {getToko} from "../request/toko.js";
 import { getProduk } from "../request/produk.js";
 import { getDaftarGaleri } from "../request/galeri.js";
+import cloudinary from "../request/cloudinary.js";
 
 let dataToko;
 const loadPage = async () => {
@@ -18,6 +19,17 @@ const loadPage = async () => {
     displayProduk(dataProduk);
     const dataGaleri = await getDaftarGaleri(dataToko.idToko)
     displayGaleriProduk(dataGaleri, dataProduk.idProduk);
+    addFormPemesanan(dataProduk);
+
+    $(".rupiah").mask('000.000.000', {reverse: true});
+    $("#rencana-pakai").datepicker();
+    $('.currency').toArray().forEach(function(field){
+        new Cleave(field, {
+            numeral: true,
+            numeralDecimalMark: 'thousand',
+            delimiter: '.',
+        })
+    });
 }
 loadPage();
 
@@ -85,6 +97,8 @@ function displayGaleriProduk(dataGaleri, idProduk){
     $("#gallery-produk").lightGallery({
         thumbnail:true,
     }); 
+
+    modalContohGambar(galeriProduk);
 }
 
 function modalInfoToko() {
@@ -124,4 +138,61 @@ function modalInfoToko() {
     $('#modal-infotoko').modal('show');
 }
 
+function addFormPemesanan(data) {
+    let form = `<div class="col-12 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Form Pemesanan</h4>
+            </div>
+            <div class="card-body">
+                ${jenisPesanan(data)}
+                ${jumlahCetak(data)}
+                ${tambahanWajah(data)}
+                ${rencanaPakai()}
+                ${catatan()}
+                ${fotoUser()}
+                ${contohGambar()}
+            </div>
+        </div>
+    </div>`;
+    $('#form-pemesanan').append(form);
+}
+
+function showForm() {
+    // $('#form-pemesanan').fadeIn("slow");
+    $('#total-payment').fadeIn("slow");
+    setTimeout(() => {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#form-pemesanan").offset().top
+        }, 1000);
+    }, 1000);
+
+
+    let dropzone = new Dropzone("#mydropzone", {
+        autoProcessQueue: false,
+        maxFilesize: 10,
+        maxFiles: 8,
+        parallelUploads: 8,
+        acceptedFiles: "image/*",
+        url: cloudinary.CLOUDINARY_URL,
+    });
+    
+    dropzone.on('sending', function (file, xhr, formData) {
+        formData.append("folder", "zonart/order");
+        formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
+    });
+    
+    let fileOrder = [];
+    dropzone.on('success', function (file, response) {
+        let link = response.secure_url;
+        fileOrder.push({link})
+    });
+    
+    dropzone.on('error', function (file, response) {
+        $(file.previewElement).find('.dz-error-message').text(response.error.message);
+        alertFailed(response.error.message);
+    });
+}
+
 window.modalInfoToko = modalInfoToko;
+window.showForm = showForm;

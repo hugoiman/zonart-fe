@@ -11,6 +11,17 @@ function getKaryawan(toko, idKaryawan) {
     return result;
 }
 
+function getKaryawanByIDCustomer(toko) {
+    let result = $.ajax({
+        url: `${baseURL}/api/karyawan-customer/${toko}`,
+        type: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 function getDaftarKaryawan(toko) {
     let result = $.ajax({
         url: `${baseURL}/api/karyawan/${toko}`,
@@ -48,4 +59,4 @@ function updateKaryawan(idToko, idKaryawan, jsonData) {
     return result;
 }
 
-export {getKaryawan, getDaftarKaryawan, undangKaryawan, updateKaryawan};
+export {getKaryawan, getDaftarKaryawan, getKaryawanByIDCustomer, undangKaryawan, updateKaryawan};

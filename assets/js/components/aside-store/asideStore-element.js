@@ -25,7 +25,7 @@ const menues = (slugToko) => {
         pesanan : `<li class="nav-pesanan"><a class="nav-link" href="/${slugToko}/pesanan"><i class="fas fa-shopping-basket"></i></i> <span>Pesanan</span></a></li>`,
         produk : `<li class="nav-produk"><a class="nav-link" href="/${slugToko}/produk"><i class="fas fa-fire"></i> <span>Produk</span></a></li>`,
         grupOpsi : `<li class="nav-grupopsi"><a class="nav-link" href="/${slugToko}/grup-opsi"><i class="fas fa-sitemap"></i> <span>Grup Opsi</span></a></li>`,
-        pengaturan : `<li class="nav-pengaturan"><a class="nav-link" href="/${slugToko}/pengaturan"><i class="fas fa-cogs"></i> <span>Pengaturan Toko</span></a></li>`,
+        pengaturan : `<li class="nav-pengaturan"><a class="nav-link" href="/${slugToko}/pengaturan"><i class="fas fa-cogs"></i> <span>Pengaturan</span></a></li>`,
         galeri : `<li class="nav-galeri"><a class="nav-link" href="/${slugToko}/galeri"><i class="fas fa-images"></i> <span>Galeri</span></a></li>`,
         faq : `<li class="nav-faq"><a class="nav-link" href="/${slugToko}/faq"><i class="fas fa-question"></i> <span>FAQ</span></a></li>`,
         karyawan : `<li class="nav-karyawan"><a class="nav-link" href="/${slugToko}/karyawan"><i class="fas fa-users"></i> <span>Karyawan</span></a></li>`

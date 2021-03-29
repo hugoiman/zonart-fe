@@ -1,11 +1,11 @@
 import loadMainStore from "../../general/mainStore.js";
-import {alertSuccess, alertFailed} from "../../general/swalert.js";
-import {getUrlPath} from "../../general/general.js";
+import {alertSuccess, alertFailed, alertConfirm} from "../../general/swalert.js";
+import {getUrlPath, formatRupiah, capitalFirst} from "../../general/general.js";
 import order from "../../request/order.js";
-import { getProduk } from "../../request/produk.js";
 import cloudinary from "../../request/cloudinary.js";
 import validateFile from "../../general/validateFile.js";
 import {getDaftarKaryawan} from "../../request/karyawan.js";
+import bt from "../../request/biayaTambahan.js";
 
 const loadPage = async () => {
     try {
@@ -16,26 +16,23 @@ const loadPage = async () => {
 
         const idOrder = await getUrlPath(3);
         const dataOrder = await order.getOrderToko(idToko, idOrder);
-        const dataProduk = await getProduk(dataOrder.idToko, dataOrder.idProduk);
         displayInvoice(dataOrder);
-        displayDaftarProduk(dataOrder, dataProduk);
-        displayRingkasanPembelian(dataOrder);
-        displayTotal(dataOrder);
-
         displayHasilOrder(dataOrder);
-        let hasil = `<a href="${dataOrder.hasilOrder.replace('upload/', 'upload/fl_attachment/')}" id="a-hasil">
-            <img alt="image" class="rounded" id="image" width="150" src="${dataOrder.hasilOrder}">
-        </a>`;
-        document.getElementById("display-image").innerHTML = hasil;
+        displayDaftarProduk(dataOrder);
+        displayRingkasanPembelian(dataOrder);
+        modalBiayaTambahan(idOrder);
+        displayBiayaTambahan(dataOrder);
+        displayPengiriman(dataOrder);
+        displayTotal(dataOrder);
+        modalResi(idToko, idOrder);
+        displayPembayaran(dataOrder.pembayaran);
+        modalStatusPesanan(dataOrder);
+        modalWaktuPengerjaan(dataOrder);
+        modalPenangan(dataOrder);
+        modalListRevisi(dataOrder.revisi);
 
-        if(dataOrder.biayaTambahan != null) {
-            displayBiayaTambahan(dataOrder.biayaTambahan);
-        } else if(dataOrder.biayaTambahan == null) {
-            document.getElementById("biaya-tambahan").remove();
-        }
-
-        if(dataOrder.jenisPesanan === "cetak") {
-            displayPengiriman(dataOrder.pengiriman);
+        if (dataOrder.invoice.statusPesanan === "selesai") {
+            $('.el-show').hide();
         }
 
         if(dataOrder.invoice.statusPembayaran === "-") {
@@ -43,110 +40,49 @@ const loadPage = async () => {
         }
 
         $(".rupiah").mask('000.000.000', {reverse: true});
-
-        $("#display-image").lightGallery({
-            thumbnail:true,
-            getCaptionFromTitleOrAlt: false,
-        }); 
-
-        $("#fileUser").lightGallery({
-            thumbnail:true,
-            getCaptionFromTitleOrAlt: false,
-        }); 
-
-        $("#contohGambar").lightGallery({
-            thumbnail:true,
-            getCaptionFromTitleOrAlt: false,
-        }); 
         
         $('.currency').toArray().forEach(function(field){
             new Cleave(field, {
-            numeral: true,
-            numeralDecimalMark: 'thousand',
-            delimiter: '.',
-        })
-    });
+                numeral: true,
+                numeralDecimalMark: 'thousand',
+                delimiter: '.',
+            })
+        });
     } catch(error) {
-        console.log(error)
+        alertFailed(error, false);
     }
 }
 
 loadPage();
 
 function displayInvoice(data) {
-    let optionStatus = ``;
-    if (data.invoice.statusPesanan == "menunggu konfirmasi") {
-        optionStatus = `<option selected disabled>Menunggu Konfirmasi</option>
-                        <option value="diproses">Diproses</option>`;
-    } else if (data.invoice.statusPesanan == "diproses") {
-        optionStatus = `<option selected disabled>Diproses</option>
-                        <option value="selesai">Selesai</option>`;
-    }
-
     let htmlInv =  `<address>
-                        <strong>Nomor Invoice: </strong>${data.idInvoice}<br>
-                        <strong>Status Pesanan: </strong>
-                        <div class="form-row">
-                            <div class="form-group col-md-5 col-10 ml-1">
-                                <select class="form-control form-control-sm" id="statusPesanan">
-                                    ${optionStatus}
-                                </select>
-                            </div>
-                            <div class="form-group col-md-1 col-1">
-                                <button type="button" class="btn btn-sm btn-primary ml-1 mt-2" onclick="prosesStatus('${data.idOrder}')">OK</button>
-                            </div>
-                        </div>
-                        <strong>Penjual: </strong>${data.invoice.namaToko}<br>
+                        <strong>Nomor Invoice: ${data.idInvoice}</strong><br>
+                        <strong>Status Pesanan: ${data.invoice.statusPesanan.charAt(0).toUpperCase() + data.invoice.statusPesanan.slice(1)}</strong>
+                        <a class="el-show" href="#" data-toggle="modal" data-target="#modal-status-pesanan"> <i class="far fa-edit"></i></a><br><br>
+                        
                         <strong>Tanggal Pemesanan: </strong>${data.tglOrder}<br>
                         <strong>Rencana Pakai: </strong>${data.rencanaPakai}<br>
-                        <strong>Waktu Pengerjaan: </strong>
-                        <div class="form-row">
-                            <div class="form-group col-md-5 col-10 ml-1">
-                                <input class="form-control form-control-sm" id="waktuPengerjaan" placeholder="cont. 4 hari, 3-5 hari" value="${data.waktuPengerjaan}">
-                            </div>
-                            <div class="form-group col-md-1 col-1">
-                                <button type="button" class="btn btn-sm btn-primary ml-1" onclick="waktuPengerjaan('${data.idOrder}')">OK</button>
-                            </div>
+                        <strong>Waktu Pengerjaan: </strong><span id="waktu-pengerjaan">${data.waktuPengerjaan}</span>
+                        <a class="el-show" href="#" data-toggle="modal" data-target="#modal-waktu-pengerjaan"> <i class="far fa-edit"></i></a><br>
+                        <strong>Penangan Pesanan: </strong><span id=karyawan-penangan></span>
+                        <a class="el-show" href="#" data-toggle="modal" data-target="#modal-penangan"> <i class="far fa-edit"></i></a><br><br>
+                        
+                        <strong>Total: </strong>Rp <span class="rupiah rupiah-update total-pembelian">${data.invoice.totalPembelian}</span><br>
+                        <strong>Telah Dibayar: </strong>Rp <span class="badge badge-danger rupiah" id="dibayar">${data.invoice.totalBayar}</span><br>
+                        <div class="buttons mt-1" id="btn-daftar-revisi">
+                            <a href="#" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modal-daftar-revisi">Daftar Revisi</a>
                         </div>
-                        <strong>Total: </strong>Rp <span class="rupiah">${data.invoice.totalPembelian}</span><br>
-                        <strong>Telah Dibayar: </strong>Rp <span class="badge badge-danger rupiah">${data.invoice.totalBayar}</span><br>
                     </address>`;
     document.getElementById("info-invoice").innerHTML = htmlInv;
 }
 
-
-const getListKaryawan = async (data) => {
-    try {
-        let result = await getDaftarKaryawan(data.invoice.idToko);
-        let listKaryawan = `<option value=""></option>`;
-        result.karyawan.forEach(v => {
-            if (v.posisi != 'editor' || v.status != 'aktif') {} 
-            else if (v.status == 'aktif') {
-                listKaryawan += `<option ` + (data.penangan.idKaryawan == v.idKaryawan ? 'selected' : '') + ` value="${v.idKaryawan}">${v.namaKaryawan}</option>`;
-            }
-        });
-
-        document.getElementById("karyawan").innerHTML = listKaryawan;
-    } catch(error) {
-        alertFailed(error, false);
-    }
-}
-
 function displayHasilOrder(data) {
     const htmlHasil = `<address>
-                    <strong>Penangan Pesanan: </strong>
-                    <div class="form-row">
-                        <div class="form-group col-md-5 col-10 ml-1">
-                            <select class="form-control form-control-sm selectric" id="karyawan">
-                            </select>
-                        </div>
-                        <div class="form-group col-md-1 col-1">
-                            <button type="button" class="btn btn-sm btn-primary ml-1 mt-2" onclick="setPenangan('${data.idOrder}')">OK</button>
-                        </div>
-                    </div>
+                    <strong>Hasil Pesanan: <span id="hasil-pesanan">${capitalFirst(data.hasilOrder.status)}</span></strong>
 
                     <div id="display-image"></div>
-                    <div class="row">
+                    <div class="row el-show">
                         <div class="col-sm-6 col-md-12 mt-2">
                             <input type="file" class="form-control" id="hasil" onchange="loadImage(event)"/>
                         </div>
@@ -156,33 +92,44 @@ function displayHasilOrder(data) {
                     </div>
                 </address>`;
     document.getElementById("info-hasil").innerHTML = htmlHasil;
-    getListKaryawan(data);
+
+    let hasil = `
+    <a href="${data.hasilOrder.hasil.replace('upload/', 'upload/fl_attachment/')}" id="a-hasil">
+        <img alt="image" class="rounded" id="image" width="150" src="${data.hasilOrder.hasil}">
+        <input id="idHasilOrder" value="${data.hasilOrder.idHasilOrder}" hidden/>
+    </a>`;
+    document.getElementById("display-image").innerHTML = hasil;
+
+    $("#display-image").lightGallery({
+        thumbnail:true,
+        getCaptionFromTitleOrAlt: false,
+    }); 
 }
 
-function displayDaftarProduk(data, produk) {
+function displayDaftarProduk(data) {
     let fotoUser = ``;
     $.each(data.fileOrder, function(idx, v) {
         if(idx < 2 || data.fileOrder.length == 3) {
-            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}">
+            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}" class="file-user">
                             <img class="gallery-item" src="${v.foto}">
                         </a>`;
         } else if(idx == 2) {
-            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}">
+            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}" class="file-user">
                             <div class="gallery-item gallery-more" src="${v.foto}">
                                 <div id="galeri-sisa"></div>
                             </div>
                         </a>`;
         } else {
-            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}">
+            fotoUser += `<a href="${v.foto.replace('upload/', 'upload/fl_attachment/')}" class="file-user">
                             <img class="gallery-item gallery-hide" src="${v.foto}">
                         </a>`
         }
     });
 
     const htmlProduk = `<li class="media">
-    <img alt="image" class="rounded mr-3" width="100" src="${produk.gambar}">
+    <img alt="image" class="rounded mr-3" width="100" src="${data.produkOrder.fotoProduk}">
     <div class="media-body mr-3 ">
-      <div class="media-title"><a href="/${data.invoice.slugToko}/${produk.slug}">${data.produkOrder.namaProduk}</a></div>
+      <div class="media-title"><a href="/${data.invoice.slugToko}/${data.produkOrder.slugProduk}">${data.produkOrder.namaProduk}</a></div>
       <div class="text-time">${data.pcs} Pcs (${data.produkOrder.beratProduk * data.pcs} gr), tambahan wajah: ${data.tambahanWajah}</div> 
       <div class="media-description text-muted">${data.catatan}</div>
     </div>
@@ -200,15 +147,27 @@ function displayDaftarProduk(data, produk) {
         ${fotoUser}
       </div>
       <div class="buttons text-center">
-        <a href="#" class="btn btn-sm btn-secondary">Download Semua File</a>
+        <a href="#" class="btn btn-sm btn-secondary" onclick="downloadFileUser('${data.idInvoice}')">Download Semua File</a>
       </div>
     </div>
   </li>`;
-  document.getElementById("info-produk").innerHTML = htmlProduk;
+
+    document.getElementById("info-produk").innerHTML = htmlProduk;
 
     if (data.fileOrder.length > 3) {
         $('#galeri-sisa').text(`+${data.fileOrder.length-2}`);
     }
+
+    $("#fileUser").lightGallery({
+        thumbnail:true,
+        getCaptionFromTitleOrAlt: false,
+    }); 
+
+    $("#contohGambar").lightGallery({
+        thumbnail:true,
+        getCaptionFromTitleOrAlt: false,
+    }); 
+
 }
 
 function displayRingkasanPembelian(data) {
@@ -226,7 +185,7 @@ function displayRingkasanPembelian(data) {
                     <td class="text-center">${data.tambahanWajah} wajah</td>
                     <td class="text-center">-</td>
                     <td class="text-center">Rp <span class="rupiah">${data.produkOrder.hargaSatuanWajah}</span></td>
-                    <td class="text-right">Rp <span class="rupiah">${(data.produkOrder.hargaSatuanWajah * data.tambahanWajah) * data.pcs}</span></td>
+                    <td class="text-right">Rp <span class="rupiah">${(data.produkOrder.hargaSatuanWajah * data.tambahanWajah)}</span></td>
                 </tr>`;
 
     let count = 3;
@@ -250,16 +209,16 @@ function displayTotal(data) {
     <div class="col-lg-12 text-right">
       <div class="invoice-detail-item">
         <div class="invoice-detail-name">Subtotal</div>
-        <div class="invoice-detail-value">Rp <span class="rupiah">${data.invoice.totalPembelian - data.pengiriman.ongkir}</span></div>
+        <div class="invoice-detail-value">Rp <span class="rupiah rupiah-update subtotal">${data.invoice.totalPembelian - data.pengiriman.ongkir}</span></div>
       </div>
       <div class="invoice-detail-item">
-        <div class="invoice-detail-name">Ongkir (${data.pengiriman.kurir} - ${data.pengiriman.service} : <span class="rupiah">${data.pengiriman.berat}</span> gr)</div>
-        <div class="invoice-detail-value">Rp <span class="rupiah">${data.pengiriman.ongkir}</span></div>
+        <div class="invoice-detail-name">Ongkir (${data.pengiriman.kurir} - ${data.pengiriman.service} : <span class="rupiah total-berat">${data.pengiriman.berat}</span> (gr)</div>
+        <div class="invoice-detail-value">Rp <span class="rupiah rupiah-update total-ongkir">${data.pengiriman.ongkir}</span></div>
       </div>
       <hr class="mt-2 mb-2">
       <div class="invoice-detail-item">
         <div class="invoice-detail-name">Total</div>
-        <div class="invoice-detail-value invoice-detail-value-lg">Rp <span class="rupiah">${data.invoice.totalPembelian}</span></div>
+        <div class="invoice-detail-value invoice-detail-value-lg">Rp <span class="rupiah rupiah-update total-pembelian">${data.invoice.totalPembelian}</span></div>
       </div>
     </div>
   </div>`;
@@ -267,16 +226,20 @@ function displayTotal(data) {
 }
 
 function displayPengiriman(data) {
+    if(data.jenisPesanan !== "cetak") {
+        return;
+    }
     const htmlPengiriman = `<div class="section-title">Pengiriman</div>
     <div class="row">
       <div class="col-md-12">
         <address>
-          <strong>${data.kurir} - ${data.service}</strong><br>
-          No. Resi: ${data.resi}<br>
-          Dikirim kepada <strong>${data.penerima}</strong><br>
-          ${data.alamat}<br>
-          ${data.kota}<br>
-          ${data.telp}
+          <strong>${data.pengiriman.kurir} - ${data.pengiriman.service}</strong><br>
+          No. Resi: <span id="no-resi">${data.pengiriman.resi} </span>
+          <a class="el-show" href="#" data-toggle="modal" data-target="#modal-resi"> <i class="far fa-edit"></i></a><br>
+          Dikirim kepada <strong>${data.pengiriman.penerima}</strong><br>
+          ${data.pengiriman.alamat}<br>
+          ${data.pengiriman.kota}<br>
+          ${data.pengiriman.telp}
         </address>
       </div>
     </div>`;
@@ -284,15 +247,20 @@ function displayPengiriman(data) {
 }
 
 function displayBiayaTambahan(data) {
+    if(data.biayaTambahan == null) {
+        return;
+    }
     let count = 1;
     let tbody = ``;
-    data.forEach(v => {
-        tbody += `<tr>
+    data.biayaTambahan.forEach(v => {
+        tbody += `<tr id="row-${v.idBiayaTambahan}">
                     <td>${count}</td>
-                    <td>${data.item}</td>
-                    <td class="text-center rupiah">${data.berat}</td>
-                    <td class="text-right rupiah">Rp ${data.total}</td>
+                    <td>${v.item}</td>
+                    <td class="text-center ` + (v.berat == 0 ? `` : `rupiah rupiah-update`) + `">` + (v.berat == 0 ? `-` : `${v.berat}`) + `</td>
+                    <td class="text-right rupiah rupiah-update">Rp ${v.total}</td>
+                    <td class="text-right"><a href="#" class="btn btn-sm btn-icon btn-outline-danger el-show" onclick="hapusBiayaTambahan('${data.idToko}', '${v.idOrder}', '${v.idBiayaTambahan}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a></td>
                 </tr>`;
+                count++;
     });
     document.getElementById("info-tambahan").innerHTML = tbody;
 }
@@ -305,9 +273,15 @@ const prosesStatus = async (idOrder) => {
         if (statusPesanan == 'diproses') {
             let result = await order.prosesPesanan(idToko, idOrder)
             alertSuccess(result.message);
+            await setTimeout(() => {
+                window.location.reload();
+            }, 4000);
         } else if (statusPesanan == 'selesai') {
             let result = await order.selesaikanPesanan(idToko, idOrder)
             alertSuccess(result.message);
+            await setTimeout(() => {
+                window.location.reload();
+            }, 4000);
         } else {}
     }
     catch(error) {
@@ -315,7 +289,7 @@ const prosesStatus = async (idOrder) => {
     }
 }
 
-const waktuPengerjaan = async (idOrder) => {
+const setWaktuPengerjaan = async (idOrder) => {
     try {
         let waktuPengerjaan = document.getElementById('waktuPengerjaan').value;
         let idToko = document.getElementById('idToko').value;
@@ -323,6 +297,8 @@ const waktuPengerjaan = async (idOrder) => {
             waktuPengerjaan,
         });
         let result = await order.setWaktuPengerjaan(idToko, idOrder, jsonData);
+        $("#waktu-pengerjaan").text(waktuPengerjaan);
+        $('#modal-tambahan').modal('modal-waktu-pengerjaan');
         alertSuccess(result.message);
     }
     catch(error) {
@@ -344,15 +320,16 @@ const uploadHasil = async (idOrder) => {
         var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
         let validasiGambar = await validateFile(document.getElementById("hasil"), allowedExtensions);
         let resultUpload = await cloudinary.uploadFile(formData);
-        let hasilOrder = resultUpload.data["secure_url"];
-
+        let hasil = resultUpload.data["secure_url"];
+        let idHasilOrder = parseInt(document.getElementById('idHasilOrder').value);
         let jsonData = JSON.stringify({
-            hasilOrder, 
+            idHasilOrder, hasil, 
         });
 
         let result = await order.uploadHasilOrder(idOrder, jsonData);
         alertSuccess(result.message)
-        document.getElementById("a-hasil").href = hasilOrder.replace('upload/', 'upload/fl_attachment/');
+        document.getElementById("a-hasil").href = hasil.replace('upload/', 'upload/fl_attachment/');
+        $('#hasil-pesanan').text("Menunggu Persetujuan");
         document.getElementById('hasil').value = "";
     }
     catch(error) {
@@ -369,14 +346,391 @@ const setPenangan = async (idOrder) => {
         });
         let result = await order.setPenanganOrder(idToko, idOrder, jsonData);
         alertSuccess(result.message);
+        await setTimeout(() => {
+            window.location.reload();
+        }, 4000);
     }
     catch(error) {
         alertFailed(error, false);
     }
 }
 
+function displayPembayaran(data) {
+    if(data == null) {
+        return;
+    }
+    let tbody = ``;
+    data.forEach(v => {
+        tbody += `<tr>
+                    <td>${v.createdAt}</td>
+                    <td class="text-center rupiah">${v.nominal}</td>
+                    <td class="text-center img-bukti">
+                      <a href="${v.bukti}">
+                        <img alt="image" src="${v.bukti}" class="rounded" width="35">
+                      </a>
+                    </td>
+                    <td class="text-center">${v.status}</td>
+                    <td class="text-right">` + 
+                        (v.status == 'Menunggu Konfirmasi' ? `<a href="#" class="btn btn-sm btn-icon btn-outline-primary" onclick="konfirmasiPembayaran('${v.idOrder}','${v.idPembayaran}')" data-toggle="tooltip" data-placement="top" title="Terima Pembayaran">Terima</a>` : ``) +
+                    `</td>
+                  </tr>`;
+    });
+    document.getElementById("data-pembayaran").innerHTML = tbody;
+    $(".img-bukti").lightGallery({
+        thumbnail:true,
+        getCaptionFromTitleOrAlt: false,
+    }); 
+}
+
+const konfirmasiPembayaran = async (idOrder, idPembayaran) => {
+    try {
+        let idToko = document.getElementById('idToko').value;
+        let result = await order.konfirmasiPembayaranOrder(idToko, idOrder, idPembayaran);
+        alertSuccess(result.message);
+        await setTimeout(() => {
+            window.location.reload();
+        }, 4000);
+    }
+    catch(error) {
+        console.log(error);
+    }
+}
+
+function modalBiayaTambahan(idOrder) {
+    let idToko = document.getElementById("idToko").value;
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-tambahan">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Biaya Tambahan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-12">
+                    <label class="col-form-label text-md-right">Nama Item</label>
+                    <input type="text" class="form-control" id="item">
+                </div>
+                <div class="form-group col-12">
+                    <label class="col-form-label text-md-right">Harga</label>
+                    <input type="text" class="form-control currency" id="total" value="0">
+                </div>
+                <div class="form-group col-12">
+                    <label class="col-form-label text-md-right">Berat <small>(gram)</smal></label>
+                    <input type="text" class="form-control currency" id="berat" value="0">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" onclick="buatBiayaTambahan('${idToko}', '${idOrder}')">Kirim</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('body').append(modal);
+}
+
+const buatBiayaTambahan = async (idToko, idOrder) => {
+    try {
+        let item = document.getElementById("item").value;
+        let berat = parseInt(document.getElementById("berat").value.replaceAll('.', ''));
+        let total = parseInt(document.getElementById("total").value.replaceAll('.', ''));
+        let jsonData = JSON.stringify({
+            item, berat, total,
+        });
+        let result = await bt.createBiayaTambahan(idToko, idOrder, jsonData);
+        $('#modal-tambahan').modal('hide');
+        alertSuccess(result.message);
+
+        document.getElementById("item").value = "";
+        document.getElementById("berat").value = "0";
+        document.getElementById("total").value = "0";
+
+        updateBiayaTambahan(idToko, idOrder);
+    }
+    catch(error) {
+        alertFailed(error);
+    }
+}
+
+const updateBiayaTambahan = async (idToko, idOrder) => {
+    try {
+        const dataOrder = await order.getOrderToko(idToko, idOrder);
+        displayBiayaTambahan(dataOrder);
+        
+        $(".total-pembelian").text(formatRupiah(dataOrder.invoice.totalPembelian));
+        $(".total-berat").text(formatRupiah(dataOrder.pengiriman.berat));
+        $(".total-ongkir").text(formatRupiah(dataOrder.pengiriman.ongkir));
+        $(".subtotal").text(formatRupiah(dataOrder.invoice.totalPembelian-dataOrder.pengiriman.ongkir));
+        $(".rupiah-update").mask('000.000.000', {reverse: true});
+    } catch(error) {
+        alertFailed(error, false)
+    }
+}
+
+const hapusBiayaTambahan = async (idToko, idOrder, idBiayaTambahan) => {
+    try {
+        let confirm = await alertConfirm('Ingin menghapus biaya tambahan ini?');
+        if (confirm) {
+            let result = await bt.deleteBiayaTambahan(idToko, idOrder, idBiayaTambahan);
+            alertSuccess(result.message);
+            $(`row-${idBiayaTambahan}`).fadeOut(1000);
+            updateBiayaTambahan(idToko, idOrder)
+        }
+    } catch(error) {
+        alertFailed(error, false);
+    }
+}
+
+function modalResi(idToko, idOrder) {
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-resi">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Input Nomor Resi</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-12">
+                    <label class="col-form-label text-md-right">Nomor Resi</label>
+                    <input type="text" class="form-control" id="resi">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" onclick="inputResi('${idToko}', '${idOrder}')">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('body').append(modal);
+}
+
+const inputResi = async (idToko, idOrder) => {
+    try {
+        let resi = document.getElementById("resi").value;
+        let jsonData = JSON.stringify({
+            resi,
+        });
+        const result = await order.inputResi(idToko, idOrder, jsonData);
+        $('#modal-resi').modal('hide');
+        $("#no-resi").text(resi);
+        alertSuccess(result.message);
+    } catch(error) {
+        alertFailed(error, false)
+    }
+}
+
+function modalStatusPesanan(data) {
+    let optionStatus = ``;
+    if (data.invoice.statusPesanan == "menunggu konfirmasi") {
+        optionStatus = `<option selected disabled>Menunggu Konfirmasi</option>
+                        <option value="diproses">Diproses</option>`;
+    } else if (data.invoice.statusPesanan == "diproses") {
+        optionStatus = `<option selected disabled>Diproses</option>
+                        <option value="selesai">Selesai</option>`;
+    }
+
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-status-pesanan">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Status Pesanan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <select class="form-control form-control-sm" id="statusPesanan">
+                            ${optionStatus}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" onclick="prosesStatus('${data.idOrder}')">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('body').append(modal);
+}
+
+function modalWaktuPengerjaan(data) {
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-waktu-pengerjaan">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Waktu Pengerjaan</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <input class="form-control form-control-sm" id="waktuPengerjaan" placeholder="cont. 4 hari, 3-5 hari">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" onclick="setWaktuPengerjaan('${data.idOrder}')">Simpan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('body').append(modal);
+}
+
+const modalPenangan = async (data) => {
+    try {
+        let result = await getDaftarKaryawan(data.invoice.idToko);
+        let listKaryawan = `<option value=""></option>`;
+        result.karyawan.forEach(v => {
+            if (v.posisi != 'editor' || v.status != 'aktif') {} 
+            else if (v.status == 'aktif' && data.penangan.idKaryawan == v.idKaryawan ) {
+                listKaryawan += `<option selected value="${v.idKaryawan}">${v.namaKaryawan}</option>`;
+                $("#karyawan-penangan").text(v.namaKaryawan);
+            } else if (v.status == 'aktif') {
+                listKaryawan += `<option value="${v.idKaryawan}">${v.namaKaryawan}</option>`;
+            }
+        });
+
+        let modal = `
+        <div class="modal fade" tabindex="-1" role="dialog" id="modal-penangan">
+            <div class="modal-dialog" role="document">
+                <form>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Penangan Pesanan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="form-group col-12">
+                                    <select class="form-control form-control-sm selectric" id="karyawan">
+                                        ${listKaryawan}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-whitesmoke br">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-primary" onclick="setPenangan('${data.idOrder}')">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>`;
+        $('body').append(modal);
+    } catch(error) {
+        alertFailed(error, false);
+    }
+}
+
+function modalListRevisi(data) {
+    if(data == null) {
+      document.getElementById("btn-daftar-revisi").remove();
+      return;
+    }
+    let revisi = ``;
+    $.each(data, function(idx, v) {
+      revisi = `<div class="form-group col-12">
+                  <label class="col-form-label text-md-right">Revisi ke-${idx+1} (${v.createdAt})</label><br>
+                  <ul>
+                    <li>${v.catatan}</li>
+                  </ul>
+                </div>`;
+    });
+  
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-daftar-revisi">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Daftar Revisi</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                ${revisi}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+  
+    $('body').append(modal);
+}
+
+function downloadFileUser(idInvoice) {
+    var zip = new JSZip();
+    var count = 1;
+    var zipFilename = `order_${idInvoice}.zip`;
+    var urls = [
+        'https://res.cloudinary.com/dbddhr9rz/image/upload/fl_attachment/v1616138117/zonart/order/avatar-1_oaxb6w.png',
+        'https://res.cloudinary.com/dbddhr9rz/image/upload/fl_attachment/v1616138117/zonart/order/avatar-2_tasym3.png',
+        'https://res.cloudinary.com/dbddhr9rz/image/upload/fl_attachment/v1615968816/zonart/order/avatar-2_wphqzg.png',
+    ];
+
+    urls.forEach(function(url){
+        // loading a file and add it in a zip file
+        JSZipUtils.getBinaryContent(url, function (err, data) {
+            if(err) {
+                throw err; // or handle the error
+            }
+            try {
+                zip.file("file_" + count + ".jpg", data, {binary:true});
+                count++;
+                if (count == urls.length) {
+                    zip.generateAsync({type:"blob"}).then(function (blob) {
+                        saveAs(blob, zipFilename);
+                    });
+                }
+            } catch(error) {
+                alertFailed(error, false);
+            }
+        });
+    });
+}
+
 window.prosesStatus = prosesStatus;
-window.waktuPengerjaan = waktuPengerjaan;
+window.setWaktuPengerjaan = setWaktuPengerjaan;
 window.loadImage = loadImage;
 window.uploadHasil = uploadHasil;
 window.setPenangan = setPenangan;
+window.konfirmasiPembayaran = konfirmasiPembayaran;
+window.buatBiayaTambahan = buatBiayaTambahan;
+window.hapusBiayaTambahan = hapusBiayaTambahan;
+window.updateBiayaTambahan = updateBiayaTambahan;
+window.inputResi = inputResi;
+window.downloadFileUser = downloadFileUser;

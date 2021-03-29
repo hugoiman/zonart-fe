@@ -24,4 +24,22 @@ const getUrlPath = function getUrlPath(index) {
   return path[index];
 };
 
-export {logout, getUrlParameter, getUrlPath};
+const formatRupiah = function formatRupiah(nominal) {
+	var rupiah = '';
+	var nominalrev = nominal.toString().split('').reverse().join('');
+	for(var i = 0; i < nominalrev.length; i++) if(i%3 == 0) rupiah += nominalrev.substr(i,3)+'.';
+	return rupiah.split('',rupiah.length-1).reverse().join('');
+}
+
+const capitalFirst = function capitalFirst(str) {
+  var splitStr = str.toLowerCase().split(' ');
+  for (var i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);  
+  }
+  // Directly return the joined string
+  return splitStr.join(' '); 
+}
+
+export {logout, getUrlParameter, getUrlPath, formatRupiah, capitalFirst};

@@ -1,6 +1,6 @@
 import loadMain from "../general/main.js";
 import {alertSuccess, alertFailed} from "../general/swalert.js";
-import {getUrlParameter} from "../general/general.js";
+import {getUrlParameter, capitalFirst} from "../general/general.js";
 import invoice from "../request/invoice.js";
 
 const loadPage = async () => {
@@ -31,12 +31,12 @@ const loadPage = async () => {
 loadPage();
 
 function displayInvoice(data) {
-    const htmlInv = `<h5>Invoice #${data.idInvoice} - 
-        ` + (data.invoice.statusPembayaran === 'lunas' ? '<span class="badge badge-success">Lunas</span>' : '') + `
-    </h5>
+    const htmlInv = `<h5>Invoice #${data.idInvoice}</h5>
     <address>
       <strong>Penjual: </strong>${data.invoice.namaToko}<br>
-      <strong>Tanggal: </strong>${data.tglOrder}
+      <strong>Tanggal: </strong>${data.tglOrder}<br>
+      <strong>Status Pesanan: ${capitalFirst(data.invoice.statusPesanan)}</strong><br>
+      <strong>Status Pembayaran: ${capitalFirst(data.invoice.statusPembayaran)}</strong>
     </address>`;
     document.getElementById("info-invoice").innerHTML = htmlInv;
 }
@@ -67,7 +67,7 @@ function displayRingkasanPembelian(data) {
                     <td class="text-center">${data.tambahanWajah} wajah</td>
                     <td class="text-center">-</td>
                     <td class="text-center">Rp <span class="rupiah">${data.produkOrder.hargaSatuanWajah}</span></td>
-                    <td class="text-right">Rp <span class="rupiah">${(data.produkOrder.hargaSatuanWajah * data.tambahanWajah) * data.pcs}</span></td>
+                    <td class="text-right">Rp <span class="rupiah">${(data.produkOrder.hargaSatuanWajah * data.tambahanWajah)}</span></td>
                 </tr>`;
 
     let count = 3;
@@ -92,9 +92,9 @@ function displayBiayaTambahan(data) {
     data.forEach(v => {
         tbody += `<tr>
                     <td>${count}</td>
-                    <td>${data.item}</td>
-                    <td class="text-center rupiah">${data.berat}</td>
-                    <td class="text-right rupiah">Rp ${data.total}</td>
+                    <td>${v.item}</td>
+                    <td class="text-center rupiah">${v.berat}</td>
+                    <td class="text-right rupiah">Rp ${v.total}</td>
                 </tr>`;
     });
     document.getElementById("info-tambahan").innerHTML = tbody;

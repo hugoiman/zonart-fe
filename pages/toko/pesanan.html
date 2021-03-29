@@ -42,28 +42,28 @@
                   <div class="card-body">
                     <ul class="nav nav-pills" id="myTab3" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">Semua 
-                          <span class="badge badge-white">21</span>
+                        <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">Semua 
+                          <span class="badge badge-white" id="total-order-all">0</span>
+                        </a>
+                      </li>
+                      <li class="nav-item hide">
+                        <a class="nav-link" data-toggle="tab" href="#menunggu" role="tab" aria-controls="menunggu" aria-selected="false">Menunggu 
+                          <span class="badge badge-white" id="total-order-menunggu">0</span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">Menunggu 
-                          <span class="badge badge-white">2</span>
+                        <a class="nav-link" data-toggle="tab" href="#proses" role="tab" aria-controls="proses" aria-selected="false">Proses 
+                          <span class="badge badge-white" id="total-order-proses">0</span>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Proses 
-                          <span class="badge badge-white">7</span>
+                        <a class="nav-link" data-toggle="tab" href="#selesai" role="tab" aria-controls="selesai" aria-selected="false">Selesai 
+                          <span class="badge badge-white" id="total-order-selesai">0</span>
                         </a>
                       </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Selesai 
-                          <span class="badge badge-white">10</span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">Batal 
-                          <span class="badge badge-white">2</span>
+                      <li class="nav-item hide">
+                        <a class="nav-link" data-toggle="tab" href="#batal" role="tab" aria-controls="batal" aria-selected="false">Batal 
+                          <span class="badge badge-white" id="total-order-batal">0</span>
                         </a>
                       </li>
                     </ul>
@@ -80,85 +80,30 @@
                     <div class="tab-content" id="myTabContent2">
                       <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
                         <div class="table-responsive">
-                          <table class="table table-striped" id="table-semua">
-                            <thead>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th>Tgl</th>
-                                <th>Inv</th>
-                                <th>Produk</th>
-                                <th>Total</th>
-                                <th>Tagihan</th>
-                                <th>Status</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>20 Dec 2020</td>
-                                <td>4516354</td>
-                                <td>Karikatur Full Body</td>
-                                <td>Rp 150.000</td>
-                                <td>Rp 0</td>
-                                <td class="text-center"><span class="badge badge-warning">Menunggu</span></td>
-                                <td>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>21 Dec 2020</td>
-                                <td>8126721</td>
-                                <td>Karikatur Half Body</td>
-                                <td>Rp 250.000</td>
-                                <td>0</td>
-                                <td class="text-center"><span class="badge badge-secondary">Batal</span></td>
-                                <td>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>20 Dec 2020</td>
-                                <td>6482266</td>
-                                <td>Vexel Art</td>
-                                <td>Rp 350.000</td>
-                                <td>Rp 250.000</td>
-                                <td class="text-center"><span class="badge badge-primary">Proses</span></td>
-                                <td>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>4</td>
-                                <td>20 Dec 2020</td>
-                                <td>6549884</td>
-                                <td>Mozaik</td>
-                                <td>Rp 150.000</td>
-                                <td>Rp 0</td>
-                                <td class="text-center"><span class="badge badge-success">Selesai</span></td>
-                                <td>
-                                  <div class="buttons">
-                                    <a href="#" class="btn btn-sm btn-icon btn-outline-info" data-toggle="tooltip" data-placement="top" title="Lihat"><i class="fas fa-eye"></i></a>
-                                  </div>
-                                </td>
-                              </tr>                              
-                            </tbody>
+                          <table class="table table-striped" id="order-all">
+                            <tbody></tbody>
                           </table>
                         </div>
                       </div>
-                      <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3">
-                        Sed sed metus vel lacus hendrerit tempus. Sed efficitur velit tortor, ac efficitur est lobortis quis. Nullam lacinia metus erat, sed fermentum justo rutrum ultrices. Proin quis iaculis tellus. Etiam ac vehicula eros, pharetra consectetur dui.
+                      <div class="tab-pane fade hide" id="menunggu" role="tabpanel" aria-labelledby="menunggu">
+                        <table class="table table-striped" id="order-menunggu">
+                          <tbody></tbody>
+                        </table>                        
                       </div>
-                      <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3">
-                        Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor.
+                      <div class="tab-pane fade" id="proses" role="tabpanel" aria-labelledby="proses">
+                        <table class="table table-striped" id="order-proses">
+                          <tbody></tbody>
+                        </table> 
+                      </div>
+                      <div class="tab-pane fade" id="selesai" role="tabpanel" aria-labelledby="selesai">
+                        <table class="table table-striped" id="order-selesai">
+                          <tbody></tbody>
+                        </table> 
+                      </div>
+                      <div class="tab-pane fade hide" id="batal" role="tabpanel" aria-labelledby="batal">
+                        <table class="table table-striped" id="order-batal">
+                          <tbody></tbody>
+                        </table> 
                       </div>
                     </div>
                   </div>
@@ -188,6 +133,8 @@
   <script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
   <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="/node_modules/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+  
 
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>

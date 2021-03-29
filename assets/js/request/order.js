@@ -11,9 +11,31 @@ function getOrder(idOrder) {
     return result;
 }
 
+function getOrders() {
+    let result = $.ajax({
+        url: `${baseURL}/api/order`,
+        type: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 function getOrderToko(idToko, idOrder) {
     let result = $.ajax({
         url: `${baseURL}/api/order-toko/${idToko}/${idOrder}`,
+        type: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+function getOrdersToko(idToko) {
+    let result = $.ajax({
+        url: `${baseURL}/api/order-toko/${idToko}`,
         type: "GET",
         headers: { Authorization: `Bearer ${token}`},
         success: function (resp) {},
@@ -36,6 +58,17 @@ function prosesPesanan(idToko, idOrder) {
 function selesaikanPesanan(idToko, idOrder) {
     let result = $.ajax({
         url: `${baseURL}/api/order-selesai/${idToko}/${idOrder}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+function setujuiHasilOrder(idOrder) {
+    let result = $.ajax({
+        url: `${baseURL}/api/order-setujui/${idOrder}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
         success: function (resp) {},
@@ -96,9 +129,44 @@ function sendRevisi(idOrder, jsonData) {
     return result;
 }
 
+function konfirmasiPembayaranOrder(idToko, idOrder, idPembayaran) {
+    let result = $.ajax({
+        url: `${baseURL}/api/pembayaran-konfirmasi/${idToko}/${idOrder}/${idPembayaran}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+function cancelOrder(idOrder) {
+    let result = $.ajax({
+        url: `${baseURL}/api/order-batal/${idOrder}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+function inputResi(idToko, idOrder, jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/resi/${idToko}/${idOrder}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        data: jsonData,
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 const order = {
-    getOrder, getOrderToko, prosesPesanan, selesaikanPesanan, setWaktuPengerjaan, uploadHasilOrder,
-    setPenanganOrder, sendRevisi,
+    getOrder, getOrders, getOrderToko, getOrdersToko, prosesPesanan, selesaikanPesanan, setujuiHasilOrder, setWaktuPengerjaan, 
+    uploadHasilOrder, setPenanganOrder, sendRevisi, konfirmasiPembayaranOrder, cancelOrder, inputResi,
 }
 
 export default order;
