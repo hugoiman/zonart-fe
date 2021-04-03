@@ -1,12 +1,16 @@
 import loadMain from "../general/main.js";
 import {alertSuccess, alertFailed} from "../general/swalert.js";
-import {getUrlPath} from "../general/general.js";
+import {formatRupiah, getUrlPath} from "../general/general.js";
 import {getToko} from "../request/toko.js";
 import { getProduk } from "../request/produk.js";
 import { getDaftarGaleri } from "../request/galeri.js";
 import cloudinary from "../request/cloudinary.js";
+import rajaOngkir from "../request/rajaOngkir.js";
 
 let dataToko;
+let dataProduk;
+let listKota;
+
 const loadPage = async () => {
     const loadmain = await loadMain();
     const slugToko = await getUrlPath(1);
@@ -15,11 +19,15 @@ const loadPage = async () => {
     document.getElementById('logo').src = dataToko.foto;
     document.getElementsByClassName('namaToko')[0].innerHTML = `<a href="/${dataToko.slug}">${dataToko.namaToko}</a>`
 
-    const dataProduk = await getProduk(dataToko.idToko, slugProduk);
+    dataProduk = await getProduk(dataToko.idToko, slugProduk);
     displayProduk(dataProduk);
     const dataGaleri = await getDaftarGaleri(dataToko.idToko)
-    displayGaleriProduk(dataGaleri, dataProduk.idProduk);
-    addFormPemesanan(dataProduk);
+    let galeriProduk = dataGaleri.galeri.filter(v => v.idProduk == dataProduk.idProduk);
+    displayGaleriProduk(galeriProduk);
+    addFormPemesanan(dataProduk, galeriProduk);
+
+    listKota = await rajaOngkir.getAllCity();
+    addFormPengiriman(dataToko, listKota);
 
     $(".rupiah").mask('000.000.000', {reverse: true});
     $("#rencana-pakai").datepicker();
@@ -62,10 +70,7 @@ function displayProduk(dataProduk) {
     document.getElementById('catatan').innerHTML = dataProduk.catatan;
 }
 
-function displayGaleriProduk(dataGaleri, idProduk){
-    let galeriProduk = _.remove(dataGaleri.galeri, function(n) {
-        return n.idProduk == idProduk;
-    });
+function displayGaleriProduk(galeriProduk){
     let el = document.getElementById("gallery-produk");
     let htmlGaleri = ``;
     $.each(galeriProduk, function(idx, v) {
@@ -97,8 +102,6 @@ function displayGaleriProduk(dataGaleri, idProduk){
     $("#gallery-produk").lightGallery({
         thumbnail:true,
     }); 
-
-    modalContohGambar(galeriProduk);
 }
 
 function modalInfoToko() {
@@ -138,29 +141,48 @@ function modalInfoToko() {
     $('#modal-infotoko').modal('show');
 }
 
-function addFormPemesanan(data) {
+function addFormPemesanan(dataProduk, dataGaleri) {
     let form = `<div class="col-12 col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <h4>Form Pemesanan</h4>
             </div>
             <div class="card-body">
-                ${jenisPesanan(data)}
-                ${jumlahCetak(data)}
-                ${tambahanWajah(data)}
+                ${jenisPesanan(dataProduk)}
+                ${jumlahCetak(dataProduk)}
+                ${tambahanWajah(dataProduk)}
                 ${rencanaPakai()}
-                ${catatan()}
                 ${fotoUser()}
-                ${contohGambar()}
+                ${contohGambar(dataGaleri)}
+                ${catatan()}
+                ${grupOpsi(dataProduk.grupOpsi)}
             </div>
         </div>
     </div>`;
     $('#form-pemesanan').append(form);
 }
 
+function addFormPengiriman(dataToko, listKota) {
+    let form = `<div class="col-12 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Pengiriman</h4>
+            </div>
+            <div class="card-body">
+                ${kota(listKota)}
+                ${jenisPengirimanToko(dataToko)}
+            </div>
+        </div>
+    </div>`;
+    $('#form-pengiriman').append(form);
+    $('#kota').select2();
+}
+
 function showForm() {
-    // $('#form-pemesanan').fadeIn("slow");
-    $('#total-payment').fadeIn("slow");
+    $('#form-pemesanan').fadeIn("slow");
+    $('#form-pengiriman').fadeIn("slow");
+    hitungTotalPembelian();
+    $('#card-total-payment').fadeIn("slow");
     setTimeout(() => {
         $([document.documentElement, document.body]).animate({
             scrollTop: $("#form-pemesanan").offset().top
@@ -194,5 +216,99 @@ function showForm() {
     });
 }
 
+function setSpesificRequest(idGrupOpsi) {
+    document.getElementsByClassName(`spesific-request-${idGrupOpsi}`)[0].value = document.getElementById(`input-request-${idGrupOpsi}`).value;
+}
+
+let berat = 0;
+function hitungTotalPembelian() {
+    let jenisPesanan = $("input[name='jenis-pesanan']:checked").val(); // cetak/soft copy
+    let hargaProduk = dataProduk.jenisPemesanan.find(item => item.jenis === jenisPesanan).harga;
+    let pcs = parseInt(document.getElementById('pcs').value);
+    let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
+    let total = (hargaProduk * pcs) + (tambahanWajah * dataProduk.hargaWajah);
+
+    $.each(dataProduk.grupOpsi, function(idx, data) {
+        data.opsi.forEach(v => {
+            let opsi = $(`#opsi-${v.idOpsi}`);
+            if(opsi.is(":checked")){
+                let hargaItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).harga;
+                let beratItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).berat;
+                if(v.perProduk){
+                    total += hargaItem * pcs;
+                    berat += beratItem * pcs;
+                } else {
+                    total += hargaItem;
+                    berat += beratItem;
+                }
+            }
+        })
+    });
+
+    if(jenisPesanan == "cetak") {
+        berat += dataProduk.berat;
+    }
+    $('#total-payment').text(formatRupiah(total));
+}
+
+const getOngkir = async () => {
+    try {
+        let origin = listKota.rajaongkir.results.find(item => item.city_name === dataToko.kota).city_id;
+        let destination = document.getElementById('kota').value;
+        let weight = berat.toString();
+        let courier = $("input[name='kurir']");
+
+        if(destination == "" || !courier.is(":checked")){
+            return;
+        }
+
+        courier = $("input[name='kurir']:checked").val();
+        let jsonData = JSON.stringify({
+            origin, destination, weight, courier,
+        });
+        let costs = await rajaOngkir.getCost(jsonData);
+        costPengiriman(costs)
+    } catch(error) {
+        alertFailed(error, false);
+    }
+}
+
+function checkout() {
+    let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
+    let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
+    let catatan = document.getElementById('catatan-penjual').value;
+    let pcs = parseInt(document.getElementById('pcs').value);
+    let rencanaPakai = document.getElementById('rencana-pakai').value;
+    let contohGambar = document.getElementById('contoh-gambar').value;
+
+    let opsiOrder = [];
+    $.each(dataProduk.grupOpsi, function(idx, data) {
+        if (data.spesificRequest) {
+            data.opsi.push({idOpsi:0});
+        }
+        data.opsi.forEach(v => {
+            let opsi = $(`#opsi-${v.idOpsi}`);
+            if(opsi.is(":checked")){
+                if(v.idOpsi == 0) {
+                    opsi = $(`.spesific-request-${data.idGrupOpsi}`);
+                }
+                opsiOrder.push({idGrupOpsi: data.idGrupOpsi, idOpsi: v.idOpsi, opsi: opsi.val()})
+            }
+        })
+    });
+
+    let jsonData = JSON.stringify({
+        jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder,
+    })
+    console.log(jsonData);
+
+    // let opsiOrder;
+    // let berat = 0;
+}
+
 window.modalInfoToko = modalInfoToko;
 window.showForm = showForm;
+window.setSpesificRequest = setSpesificRequest;
+window.hitungTotalPembelian = hitungTotalPembelian;
+window.checkout = checkout;
+window.getOngkir = getOngkir;

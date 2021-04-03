@@ -1,12 +1,12 @@
 import loadMain from "../general/main.js";
-import getAllCity from "../request/rajaOngkir.js";
+import rajaOngkir from "../request/rajaOngkir.js";
 import {alertFailed, alertSuccess} from "../general/swalert.js";
 import {createToko} from "../request/toko.js";
 
 const loadForm = async () => {
     try {
         const loadmain = await loadMain();
-        const data = await getAllCity();
+        const data = await rajaOngkir.getAllCity();
         let html = `<option value=""></option>`;
         data.rajaongkir.results.forEach(element => {
             html += `<option value="${element.city_name}">${element.city_name}</option>`;
