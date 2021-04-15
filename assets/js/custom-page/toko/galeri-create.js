@@ -23,9 +23,9 @@ loadFormGaleri();
 
 var dropzone = new Dropzone("#mydropzone", {
     autoProcessQueue: false,
-    maxFilesize: 2,
-    maxFiles: 8,
-    parallelUploads: 8,
+    maxFilesize: 5,
+    maxFiles: 10,
+    parallelUploads: 10,
     acceptedFiles: "image/*",
     url: cloudinary.CLOUDINARY_URL,
 });
@@ -51,8 +51,8 @@ dropzone.on('success', async function (file, response) {
 });
 
 dropzone.on('error', function (file, response) {
-    $(file.previewElement).find('.dz-error-message').text(response.error.message);
-    alertFailed(response.error.message);
+    $(file.previewElement).find('.dz-error-message').text(response);
+    alertFailed(response);
 });
 
 const addGaleri = async () => {

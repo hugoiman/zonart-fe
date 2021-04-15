@@ -5,13 +5,15 @@ class NotificationList extends HTMLElement {
         this._notifications = notifications;
         this.render();
     }
-
+    
     render() {
-        this._notifications.forEach(notification => {
-            const notificationItemElement = document.createElement("notification-item");
-            notificationItemElement.notification = notification;
-            this.appendChild(notificationItemElement);
-        })
+        if (this._notifications != undefined ) {
+            this._notifications.forEach(notification => {
+                const notificationItemElement = document.createElement("notification-item");
+                notificationItemElement.notification = notification;
+                this.appendChild(notificationItemElement);
+            })
+        }
     }
 }
 

@@ -9,9 +9,9 @@ class NavElement extends HTMLElement {
 
     render() {
         this.innerHTML = `
-            <a href="#" class="navbar-brand sidebar-gone-hide"><span class="brand"></span></a>
+            <a href="#" class="navbar-brand sidebar-gone-hide"><span class="brand">ZONART</span></a>
             <div class="navbar-nav">
-                <a href="#" class="navbar-brand sidebar-gone-show"><span class="brand"></span></a>
+                <a href="#" class="navbar-brand sidebar-gone-show"><span class="brand">ZONART</span></a>
             </div>
             <form class="form-inline ml-auto">
                 <!-- <search-element></search-element> -->

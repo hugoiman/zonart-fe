@@ -1,11 +1,13 @@
 import loadMain from "../general/main.js";
-import {alertSuccess, alertFailed} from "../general/swalert.js";
+import {alertSuccess, alertFailed, alertWarning} from "../general/swalert.js";
 import {formatRupiah, getUrlPath} from "../general/general.js";
 import {getToko} from "../request/toko.js";
 import { getProduk } from "../request/produk.js";
 import { getDaftarGaleri } from "../request/galeri.js";
 import cloudinary from "../request/cloudinary.js";
 import rajaOngkir from "../request/rajaOngkir.js";
+import order from "../request/order.js";
+import { getCustomer } from "../request/customer.js";
 
 let dataToko;
 let dataProduk;
@@ -20,6 +22,8 @@ const loadPage = async () => {
     document.getElementsByClassName('namaToko')[0].innerHTML = `<a href="/${dataToko.slug}">${dataToko.namaToko}</a>`
 
     dataProduk = await getProduk(dataToko.idToko, slugProduk);
+    $('body').append(`<input type="text" id="idToko" value="${dataProduk.idToko}" hidden/><input type="text" id="idProduk" value="${dataProduk.idProduk}" hidden/>`);
+
     displayProduk(dataProduk);
     const dataGaleri = await getDaftarGaleri(dataToko.idToko)
     let galeriProduk = dataGaleri.galeri.filter(v => v.idProduk == dataProduk.idProduk);
@@ -169,16 +173,27 @@ function addFormPengiriman(dataToko, listKota) {
                 <h4>Pengiriman</h4>
             </div>
             <div class="card-body">
-                ${kota(listKota)}
-                ${jenisPengirimanToko(dataToko)}
+                <div id="form-kota-kurir">
+                    <div class="row" id="form-kota"></div>
+                    ${jenisPengirimanToko(dataToko)}
+                </div>
+                ${penerima()}
+                ${telp()}
+                <div id="alamat-pengiriman">
+                ${alamat()}
+                ${label()}
+                </div>
             </div>
         </div>
     </div>`;
     $('#form-pengiriman').append(form);
-    $('#kota').select2();
+    kota(listKota, dataToko.kota);
 }
 
-function showForm() {
+let fileOrder = [];
+let dropzone;
+
+let showForm = async () => {
     $('#form-pemesanan').fadeIn("slow");
     $('#form-pengiriman').fadeIn("slow");
     hitungTotalPembelian();
@@ -190,11 +205,11 @@ function showForm() {
     }, 1000);
 
 
-    let dropzone = new Dropzone("#mydropzone", {
+    dropzone = new Dropzone("#mydropzone", {
         autoProcessQueue: false,
-        maxFilesize: 10,
-        maxFiles: 8,
-        parallelUploads: 8,
+        maxFilesize: 5,
+        maxFiles: 50,
+        parallelUploads: 50,
         acceptedFiles: "image/*",
         url: cloudinary.CLOUDINARY_URL,
     });
@@ -204,15 +219,21 @@ function showForm() {
         formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
     });
     
-    let fileOrder = [];
-    dropzone.on('success', function (file, response) {
-        let link = response.secure_url;
-        fileOrder.push({link})
+    dropzone.on('success',  function (file, response) {
+        let foto = response.secure_url;
+        fileOrder.push({foto})
     });
     
     dropzone.on('error', function (file, response) {
-        $(file.previewElement).find('.dz-error-message').text(response.error.message);
-        alertFailed(response.error.message);
+        $(file.previewElement).find('.dz-error-message').text(response);
+        dropzone.removeFile(file);
+        alertFailed(response, false);
+    });
+
+    dropzone.on('complete',  function (file) {
+        if (dropzone.getUploadingFiles().length === 0 && dropzone.getQueuedFiles().length === 0) {
+            createOrder();
+        }
     });
 }
 
@@ -227,83 +248,164 @@ function hitungTotalPembelian() {
     let pcs = parseInt(document.getElementById('pcs').value);
     let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
     let total = (hargaProduk * pcs) + (tambahanWajah * dataProduk.hargaWajah);
+    berat = dataProduk.berat * pcs;
 
     $.each(dataProduk.grupOpsi, function(idx, data) {
-        data.opsi.forEach(v => {
-            let opsi = $(`#opsi-${v.idOpsi}`);
-            if(opsi.is(":checked")){
-                let hargaItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).harga;
-                let beratItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).berat;
-                if(v.perProduk){
-                    total += hargaItem * pcs;
-                    berat += beratItem * pcs;
-                } else {
-                    total += hargaItem;
-                    berat += beratItem;
+        if (data.opsi != null) {
+            data.opsi.forEach(v => {
+                let opsi = $(`#opsi-${v.idOpsi}`);
+                if(opsi.is(":checked")){
+                    let hargaItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).harga;
+                    let beratItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).berat;
+                    if(v.perProduk){
+                        total += hargaItem * pcs;
+                        berat += beratItem * pcs;
+                    } else {
+                        total += hargaItem;
+                        berat += beratItem;
+                    }
                 }
-            }
-        })
+            })
+        }
     });
 
-    if(jenisPesanan == "cetak") {
-        berat += dataProduk.berat;
-    }
+    let pengiriman = hitungCostPengiriman();
+    total += pengiriman.cost;
+
     $('#total-payment').text(formatRupiah(total));
+    document.getElementById('total-berat').innerHTML = `<small>(${formatRupiah(berat)} gr)</small>`;
 }
 
-const getOngkir = async () => {
+
+function hitungCostPengiriman() {
+    let pengiriman = $("input[name='cost']:checked").val();
+    let kurir = $("input[name='kurir']:checked").val();
+    if(kurir == "cod") {
+        $('#alamat-pengiriman').hide();
+        return { kurir: kurir, cost: 0, service: "", estimasi: "" }
+    } else if(kurir == undefined) {
+        $('#alamat-pengiriman').hide();
+        return { kurir: "", cost: 0, service: "", estimasi: "" }
+    } else if(pengiriman == undefined && kurir != undefined) {
+        $('#alamat-pengiriman').show();
+        return { kurir: "", cost: 0, service: "", estimasi: "" }
+    }
+
+    $('#alamat-pengiriman').show();
+    pengiriman = pengiriman.split(",");
+    return { kurir: kurir, cost: parseInt(pengiriman[0]), service: pengiriman[1], estimasi: pengiriman[2] }
+} 
+
+
+const getOngkir = async (cod = false) => {
     try {
         let origin = listKota.rajaongkir.results.find(item => item.city_name === dataToko.kota).city_id;
-        let destination = document.getElementById('kota').value;
+        let tujuan = document.getElementById('kota').value;
         let weight = berat.toString();
         let courier = $("input[name='kurir']");
+        $('#form-kota').show();
 
-        if(destination == "" || !courier.is(":checked")){
+        if(tujuan == "" || tujuan == undefined || !courier.is(":checked")){
             return;
         }
 
+        let destination = listKota.rajaongkir.results.find(item => item.city_name === tujuan).city_id;
+
         courier = $("input[name='kurir']:checked").val();
+        if(courier === "cod") {
+            $('#service-pengiriman').remove();
+            kota(listKota, dataToko.kota);
+            $('#form-kota').hide();
+            hitungTotalPembelian();
+            return;
+        }
+
         let jsonData = JSON.stringify({
             origin, destination, weight, courier,
         });
         let costs = await rajaOngkir.getCost(jsonData);
-        costPengiriman(costs)
+        costPengiriman(costs);
+        hitungTotalPembelian();
     } catch(error) {
         alertFailed(error, false);
     }
 }
 
-function checkout() {
-    let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
-    let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
-    let catatan = document.getElementById('catatan-penjual').value;
-    let pcs = parseInt(document.getElementById('pcs').value);
-    let rencanaPakai = document.getElementById('rencana-pakai').value;
-    let contohGambar = document.getElementById('contoh-gambar').value;
-
-    let opsiOrder = [];
-    $.each(dataProduk.grupOpsi, function(idx, data) {
-        if (data.spesificRequest) {
-            data.opsi.push({idOpsi:0});
+const checkout = async () => {
+    try {
+        let auth = await getCustomer();
+        if (dropzone.files.length === 0) {
+            throw "Silahkan masukan gambar.";
+        } else if (dropzone.files.some(el => el.accepted === false)) {
+            throw "Terjadi kesalahan pada foto yang kamu masukan. ";
         }
-        data.opsi.forEach(v => {
-            let opsi = $(`#opsi-${v.idOpsi}`);
-            if(opsi.is(":checked")){
-                if(v.idOpsi == 0) {
-                    opsi = $(`.spesific-request-${data.idGrupOpsi}`);
-                }
-                opsiOrder.push({idGrupOpsi: data.idGrupOpsi, idOpsi: v.idOpsi, opsi: opsi.val()})
+        dropzone.processQueue();
+    } catch(error) {
+        let regexp = /[Token invalid]/gi;
+        if (regexp.test(error)) {
+            error = "Silahkan login terlebih dahulu"
+        }
+        alertFailed(error, false);
+    }
+}
+
+const createOrder = async () => {
+    try {
+        let idToko = document.getElementById('idToko').value;
+        let idProduk = document.getElementById('idProduk').value;
+        let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
+        let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
+        let catatan = document.getElementById('catatan-penjual').value;
+        let pcs = parseInt(document.getElementById('pcs').value);
+        let rencanaPakai = document.getElementById('rencana-pakai').value;
+        let contohGambar = document.getElementById('contoh-gambar').value;
+
+        // pengiriman
+        let penerima = document.getElementById('penerima').value;
+        let telp = document.getElementById('telp').value;
+        let alamat = document.getElementById('alamat').value;
+        let kota = document.getElementById('kota').value;
+        let label = document.getElementById('label').value;
+        let kodeKurir = $("input[name='kurir']:checked").val();
+        let cost = $("input[name='cost']:checked").val();
+        let service = "";
+        if (cost != undefined && kodeKurir != "cod") {
+            cost = cost.split(",");
+            service = cost[1];
+        }
+        
+        let pengiriman = {penerima, telp, alamat, kota, label, kodeKurir, service}
+
+        let opsiOrder = [];
+        $.each(dataProduk.grupOpsi, function(idx, data) {
+            if (data.opsi == null) {
+                data.opsi = []
             }
-        })
-    });
+            if (data.spesificRequest) {
+                data.opsi.push({idOpsi:0});
+            }
+            data.opsi.forEach(v => {
+                let opsi = $(`#opsi-${v.idOpsi}`);
+                if(opsi.is(":checked")){
+                    if(v.idOpsi == 0) {
+                        opsi = $(`.spesific-request-${data.idGrupOpsi}`);
+                    }
+                    opsiOrder.push({idGrupOpsi: data.idGrupOpsi, idOpsi: v.idOpsi, opsi: opsi.val()})
+                }
+            })
+        });
 
-    let jsonData = JSON.stringify({
-        jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder,
-    })
-    console.log(jsonData);
+        let jsonData = JSON.stringify({
+            jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder, pengiriman, fileOrder,
+        }) 
+        console.log(jsonData);
 
-    // let opsiOrder;
-    // let berat = 0;
+        let result = await order.createOrder(idToko, idProduk, jsonData);
+        alertSuccess(result.message);
+    } catch(error) {
+        console.log(error);
+        alertFailed(error, false)
+    }
 }
 
 window.modalInfoToko = modalInfoToko;
@@ -312,3 +414,5 @@ window.setSpesificRequest = setSpesificRequest;
 window.hitungTotalPembelian = hitungTotalPembelian;
 window.checkout = checkout;
 window.getOngkir = getOngkir;
+window.hitungCostPengiriman = hitungCostPengiriman;
+window.createOrder = createOrder;

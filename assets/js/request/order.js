@@ -164,9 +164,22 @@ function inputResi(idToko, idOrder, jsonData) {
     return result;
 }
 
+function createOrder(idToko, idProduk, jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/order/${idToko}/${idProduk}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        data: jsonData,
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 const order = {
     getOrder, getOrders, getOrderToko, getOrdersToko, prosesPesanan, selesaikanPesanan, setujuiHasilOrder, setWaktuPengerjaan, 
-    uploadHasilOrder, setPenanganOrder, sendRevisi, konfirmasiPembayaranOrder, cancelOrder, inputResi,
+    uploadHasilOrder, setPenanganOrder, sendRevisi, konfirmasiPembayaranOrder, cancelOrder, inputResi, createOrder,
 }
 
 export default order;

@@ -1,7 +1,7 @@
 import {baseURL, token} from "../general/env.js";
 
-async function getNotifikasi() {
-    let result = await $.ajax({
+function getNotifikasi() {
+    let result = $.ajax({
         url: `${baseURL}/api/notifikasi`,
         type: "GET",
         headers: { Authorization: `Bearer ${token}`},

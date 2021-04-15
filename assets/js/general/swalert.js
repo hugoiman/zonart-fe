@@ -14,12 +14,27 @@ function alertSuccess(message = "Berhasil.", expired = 5000) {
 function alertFailed(message = "Terjadi kesalahan.", expired = 5000) {
     if (message.responseText != undefined) {
         message = message.responseText;
-    } 
+    }
     Swal.fire({
         toast:true,
         position: 'top-end',
         icon: 'error',
         title: 'Gagal!',
+        text: message,
+        timer: expired,
+        timerProgressBar: true,
+        showConfirmButton: true,
+    })
+}
+
+function alertWarning(message = "Terjadi kesalahan.", expired = 5000) {
+    if (message.responseText != undefined) {
+        message = message.responseText;
+    } 
+    Swal.fire({
+        toast:true,
+        position: 'top-end',
+        icon: 'warning',
         text: message,
         timer: expired,
         timerProgressBar: true,
@@ -50,4 +65,4 @@ async function alertConfirm(message = "Ingin menghapus permanen data ini?") {
 
 
 
-export {alertSuccess, alertFailed, alertConfirm};
+export {alertSuccess, alertFailed, alertConfirm, alertWarning};

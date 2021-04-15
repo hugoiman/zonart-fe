@@ -76,8 +76,9 @@ const buatProduk = async () => {
         let image = $("#foto")[0].files[0];
         formData.append("file", image);
         formData.append("folder", "zonart/produk");
+        let errorMsg = "File harus bertipe jpg/jpeg/png";
         var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-        let validasiGambar = await validateFile(document.getElementById("foto"), allowedExtensions);
+        let validasiGambar = await validateFile(document.getElementById("foto"), allowedExtensions, errorMsg);
         let resultUpload = await cloudinary.uploadFile(formData);
         let gambar = resultUpload.data["secure_url"];
 

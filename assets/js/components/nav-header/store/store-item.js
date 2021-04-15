@@ -5,10 +5,9 @@ class StoreItem extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `<a href="/toko/${this._store.slug}" class="dropdown-item dropdown-item-unread">
+    this.innerHTML = `<a href="${(this._store.deskripsi == "owner" ? `/${this._store.slug}/dashboard`:`/${this._store.slug}/pesanan`)}" class="dropdown-item dropdown-item-unread">
       <div class="dropdown-item-avatar">
-        <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle">
-        <div class="is-online"></div>
+        <img alt="image" src="${this._store.foto}" class="rounded-circle">
       </div>
       <div class="dropdown-item-desc">
         <b>${this._store.namaToko}</b>

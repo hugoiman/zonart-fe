@@ -9,7 +9,7 @@ const resetPass = async (email, newPassword) => {
         document.getElementsByName("confirmPassword")[0].value = "";
         alertSuccess(result.message);
     } catch(error) {
-        alertFailed(error);
+        alertFailed(error, false);
     }
 }
 
@@ -19,7 +19,7 @@ document.getElementById("reset-password").onsubmit = function(event) {
     let confirmPassword = document.getElementsByName("confirmPassword")[0].value;
 
     if (newPassword !== confirmPassword) {
-        alertFailed("Konfirmasi password tidak sama. Mohon ulangi.")
+        alertFailed("Konfirmasi password tidak sama. Mohon ulangi.", false)
     } else {
         resetPass(email, newPassword);
     }

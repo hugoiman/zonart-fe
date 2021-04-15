@@ -5,12 +5,12 @@ function jenisPesanan(data) {
                             <label class="col-form-label text-md-right">Jenis Pesanan</label>
                             ${ (data.jenisPemesanan[0].status ?
                                 `<div class="form-check">
-                                    <input class="form-check-input input-jenis-pesanan" type="radio" name="jenis-pesanan" onclick="toggleJumlahCetak('cetak')" value="${data.jenisPemesanan[0].jenis}" checked>
+                                    <input class="form-check-input input-jenis-pesanan" type="radio" name="jenis-pesanan" onclick="toggleJenisPesanan('cetak')" value="${data.jenisPemesanan[0].jenis}" checked>
                                     <label class="form-check-label">Cetak - Rp <span class="rupiah">${data.jenisPemesanan[0].harga}</span></label>
                                 </div>` : ``) +
                                 (data.jenisPemesanan[1].status ?
                                 `<div class="form-check">
-                                    <input class="form-check-input input-jenis-pesanan" type="radio" name="jenis-pesanan" onclick="toggleJumlahCetak('soft copy')" value="${data.jenisPemesanan[1].jenis}" ` + (!data.jenisPemesanan[0].status ? 'checked' : '') + `>
+                                    <input class="form-check-input input-jenis-pesanan" type="radio" name="jenis-pesanan" onclick="toggleJenisPesanan('soft copy')" value="${data.jenisPemesanan[1].jenis}" ` + (!data.jenisPemesanan[0].status ? 'checked' : '') + `>
                                     <label class="form-check-label">Soft Copy - Rp <span class="rupiah">${data.jenisPemesanan[1].harga}</span></label>
                                 </div>` : ``) 
                             }
@@ -21,13 +21,13 @@ function jenisPesanan(data) {
 
 function jumlahCetak(data) {
     let element =   (data.jenisPemesanan[0].status ? `<div class="row" id="form-jumlah-cetak">
-                        <div class="form-group col-md-4 col-sm-12">
+                        <div class="form-group col-md-12 col-sm-12">
                             <label class="col-form-label text-md-right">Jumlah Cetak (Pcs)</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text" onclick="inputpcs('-1')"><i class="fas fa-minus"></i></div>
                                 </div>
-                                <input type="text" class="form-control text-center" value="1" id="pcs" readonly/>
+                                <input type="text" class="form-control text-center col-md-2 col-sm-12" value="1" id="pcs" readonly/>
                                 <div class="input-group-append">
                                     <div class="input-group-text" onclick="inputpcs('1')"><i class="fas fa-plus"></i></div>
                                 </div>
@@ -46,20 +46,27 @@ function inputpcs(data) {
     hitungTotalPembelian();
 }
 
-function toggleJumlahCetak(status) {
+function toggleJenisPesanan(status) {
     var pcs = document.getElementById("form-jumlah-cetak");
     var grupOpsi = $(".grup-opsi");
     if (status === "cetak") {
         pcs.style.display = "block";
         grupOpsi.show();
+        $('#form-pengiriman').show();
         $('.soft-copy').hide();
         $('.soft-copy input:checkbox').prop('checked',false).attr("disabled", false);
+        $('#form-kota-kurir').show();
     } else {
         pcs.style.display = "none";
         $("#pcs").val("1");
         grupOpsi.show();
+        $('#alamat-pengiriman').hide();
         $('.cetak').hide();
         $('.cetak input:checkbox').prop('checked',false).attr("disabled", false);
+        $('input[name="kurir"]').prop('checked',false);
+        $('#service-pengiriman').remove();
+        $('#form-kota-kurir').hide();
+        $("#kota").val("").trigger('change');
     }
     hitungTotalPembelian();
 }
@@ -72,7 +79,7 @@ function tambahanWajah(data) {
                                 <div class="input-group-prepend">
                                     <div class="input-group-text" onclick="inputTambahanWajah('-1')"><i class="fas fa-minus"></i></div>
                                 </div>
-                                <input type="text" class="form-control text-center currency" id="tambahan-wajah" value="0"/ readonly>
+                                <input type="text" class="form-control text-center currency col-md-2 col-sm-12" id="tambahan-wajah" value="0"/ readonly>
                                 <div class="input-group-append">
                                     <div class="input-group-text" onclick="inputTambahanWajah('1')"><i class="fas fa-plus"></i></div>
                                 </div>
@@ -194,7 +201,7 @@ function pilihContoh(link) {
 
 function grupOpsi(data) {
     if (data == null) {
-        return '';
+        return;
     }
     let element = ``;
     let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
@@ -204,7 +211,7 @@ function grupOpsi(data) {
                         style="display:${(jenisPesanan == "cetak" && !v.hardcopy ? 'none' : (jenisPesanan == "soft copy" && !v.softcopy ? 'none' : 'block'))}">
                         <div class="form-group col-md-12 col-12">
                             <label class="col-form-label text-md-right">${v.namaGrup} <small>(${(v.required ? 
-                                `wajib diisi${(v.min == 1 ? '': `, min ${v.min}`)}`:`opsional`)}, maks ${v.max})</small></label>
+                                `wajib diisi${(v.min == 1 ? '': `, min ${v.min}`)}`:`opsional`)}, maks ${v.max})</small> ${(v.deskripsi != '' ? `<sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="${v.deskripsi}"><i class="fas fa-info-circle"></i></a></sup>`:'')}</label>
                                 ${opsi(v)}
                         </div>
                     </div>`;
@@ -214,17 +221,20 @@ function grupOpsi(data) {
 
 function opsi(data) {
     let opsi = ``;
-    data.opsi.forEach(v => {
-        opsi += `<div class="form-check">
-                    <input class="form-check-input" id="opsi-${v.idOpsi}" type="checkbox" name="opsi-${v.idGrupOpsi}" value="${v.opsi}" onclick="validateMaxOpsi('${v.idGrupOpsi}', '${data.max}')">
-                    <label class="form-check-label">${v.opsi} <small class="text-right">${(v.harga != 0 ? `- Rp <span class="rupiah">${v.harga}</span>` : '')}${(v.perProduk ? `/pcs` : '')}</small></label>
-                </div>`;
-    });
+    
+    if (data.opsi != null) {
+        data.opsi.forEach(v => {
+            opsi += `<div class="form-check">
+                        <input class="form-check-input" id="opsi-${v.idOpsi}" type="checkbox" name="opsi-${v.idGrupOpsi}" value="${v.opsi}" onclick="validateMaxOpsi('${v.idGrupOpsi}', '${data.max}')">
+                        <label class="form-check-label">${v.opsi} <small class="text-right">${(v.harga != 0 ? `- Rp <span class="rupiah">${v.harga}</span>` : '')}${(v.perProduk ? `/pcs` : '')}</small> ${(v.berat != 0 ? `<sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="${v.berat} gr${(v.perProduk ? '/pcs':'')}"><i class="fas fa-info-circle"></i></a></sup>`:'')}</label>
+                    </div>`;
+        });
+    }
     
     if(data.spesificRequest) {
         opsi += `<div class="form-check">
                     <input class="form-check-input spesific-request-${data.idGrupOpsi}" id="opsi-0" type="checkbox" name="opsi-${data.idGrupOpsi}" onclick="validateMaxOpsi('${data.idGrupOpsi}', '${data.max}')">
-                    <input type="text" class="form-control form-control-sm col-12" id="input-request-${data.idGrupOpsi}" placeholder="Punya pilihan lain? isi disini ya..." onchange="setSpesificRequest('${data.idGrupOpsi}')">
+                    <input type="text" class="form-control form-control-sm col-12" id="input-request-${data.idGrupOpsi}" placeholder="${(data.opsi != null ? 'Punya pilihan lain? isi disini ya...': 'Ketik disini...')}" onchange="setSpesificRequest('${data.idGrupOpsi}')">
                 </div>`;
     }
     return opsi;
@@ -238,18 +248,17 @@ function validateMaxOpsi(idGrupOpsi, max) {
 
 
 // Form Pengiriman
-function kota(listKota) {    
+function kota(listKota, asal) {    
     let opsi = `<option value=""></option>`;
     listKota.rajaongkir.results.forEach(v => {
-        opsi += `<option value="${v.city_id}">${v.city_name}</option>`;
+        opsi += `<option value="${v.city_name}">${v.city_name}</option>`;
     })
-    let element =   `<div class="row">
-                        <div class="form-group col-md-12 col-12">
-                            <label class="col-form-label text-md-right">Kota</label>
-                            <select class="form-control select2" id="kota" onchange="getOngkir()">${opsi}</select>
-                        </div>
+    let element =   `<div class="form-group col-md-12 col-12">
+                        <label class="col-form-label text-md-right">Dikirim dari ${asal} ke</label>
+                        <select class="form-control select2" id="kota" onchange="getOngkir()">${opsi}</select>
                     </div>`;
-    return element;
+    document.getElementById('form-kota').innerHTML = element;
+    $('#kota').select2();
 }
 
 function jenisPengirimanToko(dataToko) {
@@ -258,12 +267,12 @@ function jenisPengirimanToko(dataToko) {
         if(v.status) {
             kurir +=    `<div class="form-check">
                             <input class="form-check-input" type="radio" name="kurir" value="${v.kode}" onchange="getOngkir()">
-                            <label class="form-check-label">${v.kurir}</label>
+                            <label class="form-check-label">${v.kurir} ${(v.kode == "cod" ? '<sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="COD berlaku pada kota terdekat toko. Info lanjut? hubungi penjual."><i class="fas fa-info-circle"></i></a></sup>': '')}</label>
                         </div>`;
         }
     });
 
-    let element =  `<div class="row">
+    let element =  `<div class="row" id="form-kurir">
                         <div class="form-group col-md-12 col-12">
                             <label class="col-form-label text-md-right">Kurir</label>
                             ${kurir}
@@ -275,26 +284,79 @@ function jenisPengirimanToko(dataToko) {
 
 function costPengiriman(data) {
     let cost = ``;
+    let estimate = {
+        HARI:"hari",
+        JAM:"jam",
+        hari:"hari",
+    };
+
+    let regexp = /[HARI|JAM]/gi;
     data.rajaongkir.results.forEach(data => {
         data.costs.forEach(dt => {
             dt.cost.forEach(v => {
+                if(!regexp.test(v.etd)){
+                    v.etd += " hari";
+                }
                 cost += `<div class="form-check">
-                            <input class="form-check-input" type="radio" name="service">
-                            <label class="form-check-label">${dt.service} - ${v.value} <small>(${v.etd})</small></label>
+                            <input class="form-check-input" type="radio" name="cost" value="${v.value},${dt.service},${v.etd}" onclick="hitungTotalPembelian()">
+                            <label class="form-check-label">${dt.service} - <span class="ongkir-service">${v.value}</span> <small>(${v.etd.replace(/hari|jam/gi, function(matched){
+                                return estimate[matched];
+                              })})</small></label>
                         </div>`;
             });
         });
     });
 
-    let element =  `<div class="row">
+    let element =  `<div class="row" id="service-pengiriman">
                         <div class="form-group col-md-12 col-12">
                             <label class="col-form-label text-md-right">Layanan Kurir</label>
                             ${cost}
                         </div>
                     </div>`;
     document.getElementById('cost-pengiriman').innerHTML = element;
-    
+
+    $(".ongkir-service").mask('000.000.000', {reverse: true});
+}
+
+function penerima() {
+    let element =   `<div class="row">
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label text-md-right">Nama Penerima/Pemesan</label>
+                            <input type="text" class="form-control" id="penerima">
+                        </div>
+                    </div>`;
+    return element;
+}
+
+function telp() {
+    let element =   `<div class="row">
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label text-md-right">No HP</label>
+                            <input type="text" class="form-control" id="telp">
+                        </div>
+                    </div>`;
+    return element;
+}
+
+function alamat() {
+    let element =   `<div class="row">
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label text-md-right">Alamat Lengkap</label>
+                            <input type="text" class="form-control" id="alamat">
+                        </div>
+                    </div>`;
+    return element;
+}
+
+function label() {
+    let element =   `<div class="row">
+                        <div class="form-group col-md-12 col-12">
+                            <label class="col-form-label text-md-right">Label</label>
+                            <input type="text" class="form-control" id="label" placeholder="Rumah, kantor, kost, apartemen, dll.">
+                        </div>
+                    </div>`;
+    return element;
 }
 
 window.validateMaxOpsi = validateMaxOpsi;
-window.toggleJumlahCetak = toggleJumlahCetak;
+window.toggleJenisPesanan = toggleJenisPesanan;

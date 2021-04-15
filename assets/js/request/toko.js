@@ -36,4 +36,15 @@ function updateToko(idToko, jsonData) {
     return result;
 }
 
-export {getToko, createToko, updateToko};
+function getTokos() {
+    let result = $.ajax({
+        url: `${baseURL}/api/toko`,
+        type: "GET",
+        headers: { Authorization: `Bearer ${token}`},
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
+export {getToko, getTokos, createToko, updateToko};

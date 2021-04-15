@@ -1,8 +1,10 @@
 import "./store-list.js";
-import getToko from "../../../data-dummy/toko.js";
+import {getTokos} from "../../../request/toko.js";
 
 const storeListElement = document.createElement("store-list");
-storeListElement.stores = getToko();
+getTokos().then(dataTokos => {
+    storeListElement.stores = dataTokos.toko;
+})
 
 class StoreElement extends HTMLElement {
     connectedCallback() {

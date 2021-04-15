@@ -1,6 +1,6 @@
-function validateFile(file, allowedExtensions) {
+function validateFile(file, allowedExtensions, errorMsg) {
     if (!allowedExtensions.exec(file.value)) { 
-        throw (new Error("Invalid file type"));
+        throw (new Error(errorMsg));
     }
 }
 

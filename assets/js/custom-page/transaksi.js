@@ -16,6 +16,21 @@ const loadPage = async () => {
 loadPage();
 
 function displayOrders(data) {
+    if(data == null) {
+        let empty = `<div class="row justify-content-md-center">
+        <div class="col-12 col-md-6 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                  <div class="empty-state">
+                    <h2>Anda belum memiliki transaksi</h2>
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>`
+      document.getElementById("data-order").innerHTML = empty;
+        return;
+    }
     let orders = ``;
     data.forEach(v => {
         orders += `
@@ -32,23 +47,23 @@ function displayOrders(data) {
                         </li>
                         <li class="media">
                         <div class="media-body">
-                            <div class="media-title mt-2"><a href="#">INV #${v.invoice.idInvoice}</a></div>
+                            <div class="media-title mt-2"><a href="/order?id=${v.idOrder}">INV #${v.invoice.idInvoice}</a></div>
                             <div class="text-job text-muted"></div>
                         </div>
                         <div class="media-progressbar">
                             <div class="text-job text-muted text-center">Total</div>   
-                            <div class="media-title text-center"><span class="badge badge-primary">Rp <span class="rupiah">${v.invoice.totalPembelian}</span></span></div>                       
+                            <div class="media-title text-center"><span class="badge badge-primary"><span class="rupiah">${v.invoice.totalPembelian}</span></span></div>                       
                         </div>
                         <div class="media-progressbar">
                             <div class="text-job text-muted text-center">Tagihan</div>   
-                            <div class="media-title text-center"><span class="badge badge-danger">Rp <span class="rupiah">${v.invoice.tagihan}</span></span></div>                       
+                            <div class="media-title text-center"><span class="badge badge-danger"><span class="rupiah">${v.invoice.tagihan}</span></span></div>                       
                         </div>
                         </li>
-                        <div class="mb-2"><strong><a href="#"><i class="fas fa-store"></i> ${v.invoice.namaToko}</a></strong></div>
+                        <div class="mb-2"><strong><a href="/${v.invoice.slugToko}"><i class="fas fa-store"></i> ${v.invoice.namaToko}</a></strong></div>
                         <li class="media">
                         <img alt="image" class="rounded" width="60" src="${v.produkOrder.fotoProduk}">
                         <div class="media-body col-12">
-                            <div class="media-title"><a href="#">${v.produkOrder.namaProduk}</a></div>
+                            <div class="media-title"><a href="/${v.invoice.slugToko}/${v.produkOrder.slugProduk}">${v.produkOrder.namaProduk}</a></div>
                             <div class="text-time">${v.pcs} Pcs (<span class="rupiah">${v.pengiriman.berat}</span> gr)</div> 
                             <div class="buttons mt-2">
                             <a href="#" class="btn btn-primary">Pesan Lagi</a>

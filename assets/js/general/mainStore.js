@@ -46,7 +46,7 @@ const loadMainStore = async () => {
             div.innerHTML = dataToko.namaToko;
         });
     } catch(error) {
-        console.log(error);
+        alertFailed(error, false);
     }
     
     document.getElementById("logout").onclick = function(event) {

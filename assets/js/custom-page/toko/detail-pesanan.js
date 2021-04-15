@@ -317,8 +317,9 @@ const uploadHasil = async (idOrder) => {
         let image = $("#hasil")[0].files[0];
         formData.append("file", image);
         formData.append("folder", "zonart/order/hasil");
+        let errorMsg = "File harus bertipe jpg/jpeg/png";
         var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-        let validasiGambar = await validateFile(document.getElementById("hasil"), allowedExtensions);
+        let validasiGambar = await validateFile(document.getElementById("hasil"), allowedExtensions, errorMsg);
         let resultUpload = await cloudinary.uploadFile(formData);
         let hasil = resultUpload.data["secure_url"];
         let idHasilOrder = parseInt(document.getElementById('idHasilOrder').value);

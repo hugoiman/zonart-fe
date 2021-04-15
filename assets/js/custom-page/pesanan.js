@@ -44,6 +44,7 @@ const loadPage = async () => {
         })
     });
     } catch(error) {
+        console.log(error)
         alertFailed(error, false)
     }
 }
@@ -56,8 +57,9 @@ function displayInvoice(data) {
                         <strong>Status Pesanan: ${capitalFirst(data.invoice.statusPesanan)}</strong><br><br>
                         <strong>Penjual: </strong>${data.invoice.namaToko}<br>
                         <strong>Tanggal Pemesanan: </strong>${data.tglOrder}<br>
+                        <strong>Jenis Pesanan: </strong>${capitalFirst(data.jenisPesanan)}<br>
                         <strong>Rencana Pakai: </strong>${data.rencanaPakai}<br>
-                        <strong>Waktu Pengerjaan: </strong>${data.waktuPengerjaan}<br><br>
+                        ${(data.waktuPengerjaan != "" ? `<strong>Waktu Pengerjaan: </strong>${data.waktuPengerjaan}<br>` : '')}<br>
                         <strong>Total: </strong>Rp <span class="rupiah">${data.invoice.totalPembelian}</span><br>
                         <strong>Tagihan: </strong>Rp <span class="badge badge-danger rupiah">${data.invoice.tagihan}</span><br>
                     </address>`;
@@ -65,7 +67,7 @@ function displayInvoice(data) {
 }
 
 function displayHasilOrder(data) {
-  if(data.hasilOrder == null) {
+  if(data.hasilOrder.idHasilOrder == 0) {
     return;
   }
   const htmlHasil = `<address>
@@ -307,7 +309,8 @@ const sendPembayaran = async (idOrder) => {
     formData.append("file", image);
     formData.append("folder", "zonart/order/pembayaran");
     var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-    let validasiGambar = await validateFile(document.getElementById("bukti"), allowedExtensions);
+    let errorMsg = "File harus bertipe jpg/jpeg/png";
+    let validasiGambar = await validateFile(document.getElementById("bukti"), allowedExtensions, errorMsg);
     let resultUpload = await cloudinary.uploadFile(formData);
     let bukti = resultUpload.data["secure_url"];
     let nominal = parseInt(document.getElementById('nominal').value.replaceAll(".", ""));
@@ -413,7 +416,10 @@ const cancelOrder = async (idOrder) => {
 
 function modalListRevisi(data) {
   if(data == null) {
-    document.getElementById("btn-daftar-revisi").remove();
+    if (document.getElementById("btn-daftar-revisi")) {
+      document.getElementById("btn-daftar-revisi").remove();
+      return;
+    }
     return;
   }
   let revisi = ``;
