@@ -90,13 +90,14 @@ function setWaktuPengerjaan(idToko, idOrder, jsonData) {
     return result;
 }
 
-function uploadHasilOrder(idOrder, jsonData) {
+function uploadHasilOrder(idOrder, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/order-hasil/${idOrder}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });
@@ -164,13 +165,14 @@ function inputResi(idToko, idOrder, jsonData) {
     return result;
 }
 
-function createOrder(idToko, idProduk, jsonData) {
+function createOrder(idToko, idProduk, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/order/${idToko}/${idProduk}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,        
         success: function (resp) {},
         error: function (error) {},
     });

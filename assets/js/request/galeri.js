@@ -10,13 +10,14 @@ function getDaftarGaleri(toko) {
     return result;
 }
 
-function createGaleri(toko, jsonData) {
+function createGaleri(toko, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/galeri/${toko}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });

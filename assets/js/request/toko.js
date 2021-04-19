@@ -23,13 +23,14 @@ function createToko(jsonData) {
     return result;
 }
 
-function updateToko(idToko, jsonData) {
+function updateToko(idToko, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/toko/${idToko}`,
         type: "PUT",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });

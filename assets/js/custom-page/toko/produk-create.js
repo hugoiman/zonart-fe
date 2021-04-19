@@ -57,8 +57,10 @@ function toggleSoftCopy() {
     $('#harga-softcopy').val(0);
 }
 
+let originalBtn = $('#btn-create-produk').html();
 const buatProduk = async () => {
     try {
+        $('#btn-create-produk').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let slugToko = await getUrlPath(1);
         let namaProduk = document.getElementById("namaProduk").value;
@@ -74,18 +76,12 @@ const buatProduk = async () => {
 
         let formData = new FormData();
         let image = $("#foto")[0].files[0];
-        formData.append("file", image);
-        formData.append("folder", "zonart/produk");
-        let errorMsg = "File harus bertipe jpg/jpeg/png";
-        var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-        let validasiGambar = await validateFile(document.getElementById("foto"), allowedExtensions, errorMsg);
-        let resultUpload = await cloudinary.uploadFile(formData);
-        let gambar = resultUpload.data["secure_url"];
+        formData.append('gambar', image);
+        formData.append('payload', JSON.stringify({
+            namaProduk, berat, deskripsi, catatan, hargaWajah, status, jenisPemesanan,
+        }));
 
-        let jsonData = JSON.stringify({
-            namaProduk, berat, gambar, deskripsi, catatan, hargaWajah, status, jenisPemesanan,
-        });
-        let result = await createProduk(idToko, jsonData);
+        let result = await createProduk(idToko, formData);
         alertSuccess(result.message);
         await setTimeout(() => {
             window.location.href = `/${slugToko}/produk/${result.produk}`
@@ -93,6 +89,8 @@ const buatProduk = async () => {
         
     } catch(error) {
         alertFailed(error, false)
+    } finally {
+        $('#btn-create-produk').html(originalBtn).prop('disabled', false)
     }
 }
 

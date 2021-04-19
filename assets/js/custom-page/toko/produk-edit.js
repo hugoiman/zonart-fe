@@ -73,7 +73,9 @@ function toggleSoftCopy() {
 }
 
 const ubahProduk = async () => {
+    let originalBtn = $('#btn-update-produk').html();
     try {
+        $('#btn-update-produk').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let slugToko = await getUrlPath(1);
         let idProduk = document.getElementById("idProduk").value;
@@ -89,24 +91,18 @@ const ubahProduk = async () => {
             {"idJenisPemesanan" : 2, "harga" : parseInt(document.getElementById("harga-softcopy").value.replaceAll(".", "")), "status" : document.getElementById("status-softcopy").checked}
         ]
 
+        let formData = new FormData();
         if(document.getElementById("gambar").files.length != 0) {
-            let formData = new FormData();
             let image = $("#gambar")[0].files[0];
-            formData.append("file", image);
-            formData.append("folder", "zonart/produk");
-            let errorMsg = "File harus bertipe jpg/jpeg/png";
-            var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-            let validasiGambar = await validateFile(document.getElementById("gambar"), allowedExtensions, errorMsg);
-            let resultUpload = await cloudinary.uploadFile(formData);
-            gambar = resultUpload.data["secure_url"];
+            formData.append('gambar', image);
         } else {
             gambar = $('#image').attr('src');
         }
-
-        let jsonData = JSON.stringify({
+        formData.append('payload', JSON.stringify({
             namaProduk, berat, gambar, deskripsi, catatan, hargaWajah, status, jenisPemesanan,
-        });
-        let result = await updateProduk(idToko, idProduk, jsonData);
+        }))
+
+        let result = await updateProduk(idToko, idProduk, formData);
         alertSuccess(result.message);
         
         await setTimeout(() => {
@@ -115,6 +111,8 @@ const ubahProduk = async () => {
         
     } catch(error) {
         alertFailed(error, false)
+    } finally {
+        $('#btn-update-produk').html(originalBtn).prop('disabled', false)
     }
 }
 

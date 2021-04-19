@@ -190,9 +190,7 @@ function addFormPengiriman(dataToko, listKota) {
     kota(listKota, dataToko.kota);
 }
 
-let fileOrder = [];
 let dropzone;
-
 let showForm = async () => {
     $('#form-pemesanan').fadeIn("slow");
     $('#form-pengiriman').fadeIn("slow");
@@ -207,34 +205,34 @@ let showForm = async () => {
 
     dropzone = new Dropzone("#mydropzone", {
         autoProcessQueue: false,
-        maxFilesize: 5,
-        maxFiles: 50,
-        parallelUploads: 50,
+        // maxFilesize: 10,
+        // maxFiles: 50,
+        // parallelUploads: 50,
         acceptedFiles: "image/*",
-        url: cloudinary.CLOUDINARY_URL,
+        // url: cloudinary.CLOUDINARY_URL,
     });
     
     dropzone.on('sending', function (file, xhr, formData) {
-        formData.append("folder", "zonart/order");
-        formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
+        // formData.append("folder", "zonart/order");
+        // formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
     });
     
-    dropzone.on('success',  function (file, response) {
-        let foto = response.secure_url;
-        fileOrder.push({foto})
-    });
+    // dropzone.on('success',  function (file, response) {
+    //     let foto = response.secure_url;
+    //     fileOrder.push({foto})
+    // });
     
-    dropzone.on('error', function (file, response) {
-        $(file.previewElement).find('.dz-error-message').text(response);
-        dropzone.removeFile(file);
-        alertFailed(response, false);
-    });
+    // dropzone.on('error', function (file, response) {
+    //     $(file.previewElement).find('.dz-error-message').text(response);
+    //     dropzone.removeFile(file);
+    //     alertFailed(response, false);
+    // });
 
-    dropzone.on('complete',  function (file) {
-        if (dropzone.getUploadingFiles().length === 0 && dropzone.getQueuedFiles().length === 0) {
-            createOrder();
-        }
-    });
+    // dropzone.on('complete',  function (file) {
+    //     if (dropzone.getUploadingFiles().length === 0 && dropzone.getQueuedFiles().length === 0) {
+    //         createOrder();
+    //     }
+    // });
 }
 
 function setSpesificRequest(idGrupOpsi) {
@@ -332,25 +330,9 @@ const getOngkir = async (cod = false) => {
 }
 
 const checkout = async () => {
+    let originalBtnCheckout = $('#btn-checkout').html();
     try {
-        let auth = await getCustomer();
-        if (dropzone.files.length === 0) {
-            throw "Silahkan masukan gambar.";
-        } else if (dropzone.files.some(el => el.accepted === false)) {
-            throw "Terjadi kesalahan pada foto yang kamu masukan. ";
-        }
-        dropzone.processQueue();
-    } catch(error) {
-        let regexp = /[Token invalid]/gi;
-        if (regexp.test(error)) {
-            error = "Silahkan login terlebih dahulu"
-        }
-        alertFailed(error, false);
-    }
-}
-
-const createOrder = async () => {
-    try {
+        $('#btn-checkout').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Tunggu, pesanan sedang diproses...`).prop("disabled", true);
         let idToko = document.getElementById('idToko').value;
         let idProduk = document.getElementById('idProduk').value;
         let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
@@ -373,7 +355,6 @@ const createOrder = async () => {
             cost = cost.split(",");
             service = cost[1];
         }
-        
         let pengiriman = {penerima, telp, alamat, kota, label, kodeKurir, service}
 
         let opsiOrder = [];
@@ -396,15 +377,29 @@ const createOrder = async () => {
         });
 
         let jsonData = JSON.stringify({
-            jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder, pengiriman, fileOrder,
+            jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder, pengiriman,
         }) 
-        console.log(jsonData);
-
-        let result = await order.createOrder(idToko, idProduk, jsonData);
+        
+        let formData = new FormData();
+        formData.append('payload', jsonData)
+        var images = dropzone.files.length;
+        for (var i = 0; i < images; i++) {
+            formData.append("fileOrder", dropzone.files[i]);
+        }
+        let result = await order.createOrder(idToko, idProduk, formData);
         alertSuccess(result.message);
+        
+        // if (dropzone.files.length === 0) {
+        //     throw "Silahkan masukan gambar.";
+        // } else if (dropzone.files.some(el => el.accepted === false)) {
+        //     throw "Terjadi kesalahan pada foto yang kamu masukan. ";
+        // }
+        // dropzone.processQueue();
     } catch(error) {
-        console.log(error);
-        alertFailed(error, false)
+        alertFailed(error, false);
+    } finally {
+        // dropzone.removeAllFiles(true)
+        $('#btn-checkout').html(originalBtnCheckout).prop('disabled', false)
     }
 }
 
@@ -415,4 +410,3 @@ window.hitungTotalPembelian = hitungTotalPembelian;
 window.checkout = checkout;
 window.getOngkir = getOngkir;
 window.hitungCostPengiriman = hitungCostPengiriman;
-window.createOrder = createOrder;

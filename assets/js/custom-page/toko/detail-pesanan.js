@@ -87,7 +87,7 @@ function displayHasilOrder(data) {
                             <input type="file" class="form-control" id="hasil" onchange="loadImage(event)"/>
                         </div>
                         <div class="col-sm-6 col-md-12 mt-2">
-                            <a href="#" class="btn btn-outline-info" onclick="uploadHasil('${data.idOrder}')">Upload Hasil</a>
+                            <a href="#" class="btn btn-outline-info" id="btn-upload-hasil" onclick="uploadHasil('${data.idOrder}')">Upload Hasil</a>
                         </div>
                     </div>
                 </address>`;
@@ -312,29 +312,28 @@ var loadImage = function(event) {
 };
 
 const uploadHasil = async (idOrder) => {
+    let originalBtnUploadHasil = $('#btn-upload-hasil').html();
     try {
+        $('#btn-upload-hasil').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading...`).prop("disabled", true);
+        let idHasilOrder = parseInt(document.getElementById('idHasilOrder').value);
         let formData = new FormData();
         let image = $("#hasil")[0].files[0];
-        formData.append("file", image);
-        formData.append("folder", "zonart/order/hasil");
-        let errorMsg = "File harus bertipe jpg/jpeg/png";
-        var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-        let validasiGambar = await validateFile(document.getElementById("hasil"), allowedExtensions, errorMsg);
-        let resultUpload = await cloudinary.uploadFile(formData);
-        let hasil = resultUpload.data["secure_url"];
-        let idHasilOrder = parseInt(document.getElementById('idHasilOrder').value);
-        let jsonData = JSON.stringify({
-            idHasilOrder, hasil, 
-        });
+        formData.append('hasil', image);
+        formData.append('payload', JSON.stringify({
+            idHasilOrder,
+        }))
 
-        let result = await order.uploadHasilOrder(idOrder, jsonData);
-        alertSuccess(result.message)
-        document.getElementById("a-hasil").href = hasil.replace('upload/', 'upload/fl_attachment/');
-        $('#hasil-pesanan').text("Menunggu Persetujuan");
-        document.getElementById('hasil').value = "";
+        let result = await order.uploadHasilOrder(idOrder, formData);
+        alertSuccess(result.message);
+        await setTimeout(() => {
+            window.location.reload();
+        }, 4000);
     }
     catch(error) {
+        console.log(error);
         alertFailed(error, false);
+    } finally {
+        $('#btn-upload-hasil').html(originalBtnUploadHasil).prop('disabled', false);
     }
 }
 

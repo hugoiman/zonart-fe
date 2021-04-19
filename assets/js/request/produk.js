@@ -20,26 +20,28 @@ function getDaftarProduk(toko) {
     return result;
 }
 
-function createProduk(toko, jsonData) {
+function createProduk(toko, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/produk/${toko}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });
     return result;
 }
 
-function updateProduk(toko, idProduk, jsonData) {
+function updateProduk(toko, idProduk, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/produk/${toko}/${idProduk}`,
         type: "PUT",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });

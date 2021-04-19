@@ -19,8 +19,8 @@ const loadPengaturanToko = async () => {
         })
         document.getElementById("list-kota").innerHTML = dataKota;
 
-        const slugToko = await getUrlPath(1);
-        const dataToko = await getToko(slugToko);
+        const slug = await getUrlPath(1);
+        const dataToko = await getToko(slug);
         document.getElementsByName("namaToko")[0].value = dataToko.namaToko;
         document.getElementById("logo").src = dataToko.foto;
         document.getElementsByName("linkFoto")[0].value = dataToko.foto;
@@ -142,7 +142,9 @@ const tambahRekening = async () => {
 }
 
 const updateDataToko = async () => {
+    let originalBtnUpdateToko = $('#btn-update-toko').html();
     try {
+        $('#btn-update-toko').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let namaToko = document.getElementsByName("namaToko")[0].value;
         let deskripsi = document.getElementsByName("deskripsi")[0].value;
@@ -156,15 +158,10 @@ const updateDataToko = async () => {
         let slug = document.getElementsByName("slug")[0].value;
         let foto = "";
 
+        let formData = new FormData();
         if(document.getElementById("foto").files.length != 0) {
-            let formData = new FormData();
             let image = $("#foto")[0].files[0];
-            formData.append("file", image);
-            formData.append("folder", "zonart/toko");
-            var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-            await validateFile(document.getElementById("foto"), allowedExtensions);
-            let result = await cloudinary.uploadFile(formData);
-            foto = result.data["secure_url"];
+            formData.append("foto", image);
         } else {
             foto = document.getElementsByName("linkFoto")[0].value;
         }
@@ -194,13 +191,17 @@ const updateDataToko = async () => {
         let jsonData = JSON.stringify({
             namaToko, foto, deskripsi, alamat, kota, telp, whatsapp, emailToko, website, instagram, slug, jasaPengirimanToko, rekening,
         });
-        let result = await updateToko(idToko, jsonData);
-        alertSuccess(result.message, 3000)
-        setTimeout(() => {
-            window.location.reload();
-        }, 3000)
+        formData.append('payload', jsonData);
+        let result = await updateToko(idToko, formData);
+        alertSuccess(result.message)
+
+        await setTimeout(() => {
+            window.location.href = `/${slug}/pengaturan`
+        }, 4000);
     } catch(error) {
         alertFailed(error.responseText, false);
+    } finally {
+        $('#btn-update-toko').html(originalBtnUpdateToko).prop('disabled', false)
     }
 }
 

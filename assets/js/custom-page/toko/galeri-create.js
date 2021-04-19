@@ -23,49 +23,63 @@ loadFormGaleri();
 
 var dropzone = new Dropzone("#mydropzone", {
     autoProcessQueue: false,
-    maxFilesize: 5,
-    maxFiles: 10,
-    parallelUploads: 10,
+    // maxFilesize: 2,
+    // maxFiles: 10,
+    // parallelUploads: 10,
     acceptedFiles: "image/*",
-    url: cloudinary.CLOUDINARY_URL,
+    // url: cloudinary.CLOUDINARY_URL,
 });
   
 dropzone.on('sending', function (file, xhr, formData) {
-    formData.append("folder", "zonart/galeri");
-    formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
+    formData.append('gambar', file);
+    // formData.append("folder", "zonart/galeri");
+    // formData.append('upload_preset', cloudinary.CLOUDINARY_UPLOAD_PRESET);
 });
 
-dropzone.on('success', async function (file, response) {
-    try {
-        let idToko = document.getElementById("idToko").value;
-        let idProduk = parseInt(document.getElementById("kategori").value);
-        let gambar = response.secure_url;
-        let jsonData = JSON.stringify({
-            idProduk, gambar,
-        });
-        let result = await createGaleri(idToko, jsonData);
-        alertSuccess(result.message);
-    } catch(error) {
-        alertFailed(error, false)
-    }
-});
+// dropzone.on('success', async function (file, response) {
+//     try {
+//         let idToko = document.getElementById("idToko").value;
+//         let idProduk = parseInt(document.getElementById("kategori").value);
+//         let gambar = response.secure_url
+//         let result = await createGaleri(idToko, jsonData);
+//         alertSuccess(result.message);
+//     } catch(error) {
+//         alertFailed(error, false)
+//     }
+// });
 
-dropzone.on('error', function (file, response) {
-    $(file.previewElement).find('.dz-error-message').text(response);
-    alertFailed(response);
-});
+// dropzone.on('error', function (file, response) {
+//     $(file.previewElement).find('.dz-error-message').text(response);
+//     // dropzone.removeFile(file);
+//     alertFailed(response, false);
+// });
+
+// dropzone.on('complete',  function (file) {
+//     if (dropzone.getUploadingFiles().length === 0 && dropzone.getQueuedFiles().length === 0) {
+//     }
+// });
 
 const addGaleri = async () => {
+    let originalBtn = $('#btn-create-galeri').html();
     try {
+        // add spinner to button
+        $('#btn-create-galeri').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idProduk = parseInt(document.getElementById("kategori").value);
-        if (isNaN(idProduk)) {
-            throw "Silahkan pilih kategori produk.";
-        } else if (dropzone.files.length === 0) {
-            throw "Silahkan masukan gambar.";
+        let idToko = document.getElementById("idToko").value;
+        // dropzone.processQueue();
+        let formData = new FormData();
+        formData.append('payload', JSON.stringify({"idProduk":idProduk}))
+        var images = dropzone.files.length;
+        for (var i = 0; i < images; i++) {
+            formData.append("gambar", dropzone.files[i]);
         }
-        dropzone.processQueue();
+        let resp = await createGaleri(idToko, formData)
+        alertSuccess(resp.message)
     } catch (error) {
         alertFailed(error, false)
+    } finally {
+        dropzone.removeAllFiles(true)
+        $('#btn-create-galeri').html(originalBtn).prop('disabled', false)
     }
 }
 

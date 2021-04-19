@@ -303,22 +303,18 @@ function modalAddRevisi(idOrder) {
 }
 
 const sendPembayaran = async (idOrder) => {
+  let originalBtnPembayaran = $('#btn-send-pembayaran').html();
   try {
+    $('#btn-send-pembayaran').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
+    let nominal = parseInt(document.getElementById('nominal').value.replaceAll(".", ""));
     let formData = new FormData();
     let image = $("#bukti")[0].files[0];
-    formData.append("file", image);
-    formData.append("folder", "zonart/order/pembayaran");
-    var allowedExtensions =  /(\.jpg|\.jpeg|\.png)$/i;
-    let errorMsg = "File harus bertipe jpg/jpeg/png";
-    let validasiGambar = await validateFile(document.getElementById("bukti"), allowedExtensions, errorMsg);
-    let resultUpload = await cloudinary.uploadFile(formData);
-    let bukti = resultUpload.data["secure_url"];
-    let nominal = parseInt(document.getElementById('nominal').value.replaceAll(".", ""));
-    let jsonData = JSON.stringify({
-        bukti, nominal,
-    });
-
-    let result = await pembayaran.createPembayaran(idOrder, jsonData);
+    formData.append('bukti', image);
+    formData.append('payload', JSON.stringify({
+      nominal,
+    }))
+    
+    let result = await pembayaran.createPembayaran(idOrder, formData);
     alertSuccess(result.message)
     document.getElementById('bukti').value = "";
     let tbody = `<tr>
@@ -337,6 +333,9 @@ const sendPembayaran = async (idOrder) => {
   }
   catch(error) {
     alertFailed(error, false);
+  }
+  finally {
+    $('#btn-send-pembayaran').html(originalBtnPembayaran).prop('disabled', false)
   }
 }
 function modalPembayaran(idOrder) {
@@ -359,13 +358,13 @@ function modalPembayaran(idOrder) {
               </div>
               <div class="form-group col-12">
                 <label class="col-form-label text-md-right">Bukti Pembayaran</label>
-                <input type="file" class="form-control" id="bukti" />
+                <input type="file" class="form-control" id="bukti" accept="image/*"/>
               </div>
             </div>
           </div>
           <div class="modal-footer bg-whitesmoke br">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            <button type="button" class="btn btn-primary" onclick="sendPembayaran('${idOrder}')">Kirim</button>
+            <button type="button" class="btn btn-primary" onclick="sendPembayaran('${idOrder}')" id="btn-send-pembayaran">Kirim</button>
           </div>
         </div>
       </form>

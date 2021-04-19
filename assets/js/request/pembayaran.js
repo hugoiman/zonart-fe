@@ -1,12 +1,13 @@
 import {baseURL, token} from "../general/env.js";
 
-function createPembayaran(idOrder, jsonData) {
+function createPembayaran(idOrder, formData) {
     let result = $.ajax({
         url: `${baseURL}/api/pembayaran/${idOrder}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
-        data: jsonData,
-        contentType: "application/json",
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function (resp) {},
         error: function (error) {},
     });

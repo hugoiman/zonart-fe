@@ -44,36 +44,18 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Nama Toko *</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="namaToko"
-                          />
+                          <label class="col-form-label text-md-right">Nama Toko *</label>
+                          <input type="text" class="form-control" name="namaToko"/>
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Foto Profil Toko</label
-                          >
+                          <label class="col-form-label text-md-right">Foto Profil Toko</label>
                           <div class="form-group row">
                             <img alt="image" class="col-sm-3 col-md-3 col-6 rounded-circle col-form-label" id="logo">
                             <div class="col-sm-9 col-md-9 col-12">
-                              <input
-                                type="text"
-                                class="form-control"
-                                name="linkFoto"
-                                hidden
-                              />
-                              <input
-                                type="file"
-                                class="form-control"
-                                id="foto"
-                                name="foto"
-                              />
+                              <input type="text" class="form-control" name="linkFoto" hidden />
+                              <input type="file" class="form-control" id="foto" name="foto" />
                             </div>
                           </div>
                         </div>
@@ -86,21 +68,14 @@
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Alamat</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="alamat"
+                          <label class="col-form-label text-md-right">Alamat</label>
+                          <input type="text" class="form-control" name="alamat"
                           />
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Kota *</label
-                          >
+                          <label class="col-form-label text-md-right" >Kota *</label>
                           <select class="form-control select2" id="list-kota" name="kota">
                             
                           </select>
@@ -108,71 +83,41 @@
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >No Telp</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="telp"
-                          />
+                          <label class="col-form-label text-md-right">No Telp</label>
+                          <input type="text" class="form-control" name="telp"/>
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Whatsapp</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="whatsapp"
-                          />
+                          <label class="col-form-label text-md-right" >Whatsapp</label>
+                          <input type="text" class="form-control" name="whatsapp" />
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Email Toko *</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="emailToko"
-                          />
+                          <label class="col-form-label text-md-right" >Email Toko *</label>
+                          <input type="text" class="form-control" name="emailToko" />
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Website</label
-                          >
-                          <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                              <div class="input-group-text">www.</div>
+                          <label class="col-form-label text-md-right" >Website</label>
+                          <div class="input-group mb-2"> 
+                            <div class="input-group-prepend">   
+                              <div class="input-group-text">www.</div> 
                             </div>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="website"
-                            />
+                            <input type="text" class="form-control" name="website"/>
                           </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Instagram</label
-                          >
+                          <label class="col-form-label text-md-right">Instagram</label>
                           <div class="input-group mb-2">
                             <div class="input-group-prepend">
                               <div class="input-group-text">@</div>
                             </div>
-                            <input
-                              type="text"
-                              class="form-control"
-                              name="instagram"
-                            />
+                            <input type="text" class="form-control" name="instagram"/>
                           </div>
                         </div>
                       </div>
@@ -201,9 +146,7 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Kurir</label
-                          >
+                          <label class="col-form-label text-md-right">Kurir</label>
                           <div id="list-kurir"></div>
                         </div>
                       </div>
@@ -235,7 +178,7 @@
                 </div>
               </div>
               <div class="text-right">
-                <button type="button" class="btn btn-primary col-sm-12 col-md-12" onclick="updateDataToko()">Simpan</button>
+                <button type="button" class="btn btn-block btn-primary" id="btn-update-toko" onclick="updateDataToko()">Simpan</button>
               </div>
             </div>
           </form>
