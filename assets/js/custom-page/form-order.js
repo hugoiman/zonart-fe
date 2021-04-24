@@ -112,7 +112,7 @@ function rencanaPakai() {
 function fotoUser() {
     let element =   `<div class="row">
                         <div class="form-group col-md-12 col-12">
-                            <label class="col-form-label text-md-right">Upload Foto Wajah</label>
+                            <label class="col-form-label text-md-right">Upload Foto Wajah <small><sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="disarankan foto wajah terlihat jelas, resolusi tinggi dan tidak blur"><i class="fas fa-info-circle"></i></a></sup></label>
                             <form action="#" class="dropzone" id="mydropzone">
                                 <div class="fallback">
                                     <input name="file" type="file" id="foto" multiple />
@@ -126,7 +126,7 @@ function fotoUser() {
 function catatan() {
     let element =   `<div class="row">
                         <div class="form-group col-md-12 col-12">
-                            <label class="col-form-label text-md-right">Catatan untuk penjual</label>
+                            <label class="col-form-label text-md-right">Catatan untuk penjual <small>(opsional)</small></label>
                             <input type="text" class="form-control" id="catatan-penjual">
                         </div>
                     </div>`;
@@ -136,7 +136,7 @@ function catatan() {
 function contohGambar(dataGaleri) {
     let element = `<div class="row" ${(dataGaleri.length == 0 ? 'hidden' : '')}>
                         <div class="form-group col-md-12 col-12">
-                            <label class="col-form-label text-md-right">Contoh Gambar <small>(jika ada)</small></label>
+                            <label class="col-form-label text-md-right">Contoh Gambar <small>(opsional)</small></label>
                             <div id="display-contoh-gambar"></div>
                             <a href="#" class="btn btn-block btn-outline-info" data-toggle="modal" data-target="#modal-contoh-gambar">Pilih Gambar</a>
                             <input type="text" class="form-control" id="contoh-gambar" hidden/>
