@@ -63,7 +63,8 @@ function displayOrders(id, dataJson) {
                     return (status == "menunggu konfirmasi" ? '<span class="badge badge-warning">Menunggu</span>' :
                             status == "diproses" ? '<div class="badge badge-primary">Diproses</div>' :
                             status == "selesai" ? '<div class="badge badge-success">Selesai</div>' :
-                            '<div class="badge badge-secondary">Dibatalkan</div>');
+                            status == "dibatalkan" ? '<div class="badge badge-secondary">Dibatalkan</div>' :
+                            '<div class="badge badge-secondary">Ditolak</div>');
                 }
             },
             { data: function (data, type, dataToSet) {

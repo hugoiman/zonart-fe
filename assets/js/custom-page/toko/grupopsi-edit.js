@@ -28,9 +28,7 @@ const displayContent = async () => {
     try {
         let idToko = await document.getElementById("idToko").value;
         let idGrupOpsi = await getUrlPath(3);
-        let result = await grupOpsi.getGrupOpsi(idToko, idGrupOpsi)
-        console.log(result);
-        document.getElementById("idToko").value = result.idToko;
+        let result = await grupOpsi.getGrupOpsi(idToko, idGrupOpsi);
         document.getElementById("idGrupOpsi").value = result.idGrupOpsi;
         document.getElementById("namaGrup").value = result.namaGrup;
         document.getElementById("deskripsi").value = result.deskripsi;

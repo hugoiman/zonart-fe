@@ -43,7 +43,7 @@ const loadPage = async () => {
     let kategori = _.uniqBy(result.galeri, 'kategori');
     let htmlKategori = `<option selected="selected" value="semua">Semua</option>`;
     kategori.forEach(v => {
-        htmlKategori += `<option value="${v.idProduk}">${v.kategori}</option>`;
+        htmlKategori += `<option value="${v.idKategori}">${v.kategori}</option>`;
     })
     document.getElementById("select-kategori").innerHTML = htmlKategori;
     await displayGaleri();
@@ -88,11 +88,11 @@ const displayGaleri = async () => {
         let htmlGaleri = ``;
         let el = document.getElementById('animated-thumbnials');
         galeri.galeri.forEach(v => {
-            if (v.idProduk == kategori || kategori == "semua") {
+            if (v.idKategori == kategori || kategori == "semua") {
                 htmlGaleri +=   `<a href="${v.gambar.replace('upload/', 'upload/fl_attachment/')}" class="lightgallery-image"  data-sub-html="${v.kategori}">
                                     <img src="${v.gambar}" class="mb-2 col-6 col-md-3 col-lg-2" style="margin-right:-5px;"/>
                                 </a>`;
-            } else if (v.idProduk !== kategori) {
+            } else if (v.idKategori !== kategori) {
                 return;
             } 
         });

@@ -11,9 +11,9 @@ function getDaftarGaji(idToko) {
     return result;
 }
 
-function createGaji(idToko, jsonData) {
+function createGaji(idToko, idKaryawan, jsonData) {
     let result = $.ajax({
-        url: `${baseURL}/api/gaji/${idToko}`,
+        url: `${baseURL}/api/gaji/${idToko}/${idKaryawan}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
         data: jsonData,

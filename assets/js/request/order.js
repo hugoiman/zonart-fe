@@ -55,6 +55,19 @@ function prosesPesanan(idToko, idOrder) {
     return result;
 }
 
+function tolakPesanan(idToko, idOrder, jsonData) {
+    let result = $.ajax({
+        url: `${baseURL}/api/order-tolak/${idToko}/${idOrder}`,
+        type: "POST",
+        headers: { Authorization: `Bearer ${token}`},
+        data: jsonData,
+        contentType: "application/json",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+    return result;
+}
+
 function selesaikanPesanan(idToko, idOrder) {
     let result = $.ajax({
         url: `${baseURL}/api/order-selesai/${idToko}/${idOrder}`,
@@ -90,9 +103,9 @@ function setWaktuPengerjaan(idToko, idOrder, jsonData) {
     return result;
 }
 
-function uploadHasilOrder(idOrder, formData) {
+function uploadHasilOrder(idToko, idOrder, formData) {
     let result = $.ajax({
-        url: `${baseURL}/api/order-hasil/${idOrder}`,
+        url: `${baseURL}/api/order-hasil/${idToko}/${idOrder}`,
         type: "POST",
         headers: { Authorization: `Bearer ${token}`},
         data: formData,
@@ -180,7 +193,7 @@ function createOrder(idToko, idProduk, formData) {
 }
 
 const order = {
-    getOrder, getOrders, getOrderToko, getOrdersToko, prosesPesanan, selesaikanPesanan, setujuiHasilOrder, setWaktuPengerjaan, 
+    getOrder, getOrders, getOrderToko, getOrdersToko, prosesPesanan, tolakPesanan, selesaikanPesanan, setujuiHasilOrder, setWaktuPengerjaan, 
     uploadHasilOrder, setPenanganOrder, sendRevisi, konfirmasiPembayaranOrder, cancelOrder, inputResi, createOrder,
 }
 

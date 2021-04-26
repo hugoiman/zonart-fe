@@ -13,8 +13,8 @@ const loadUndangan = async () => {
         let dataUndangan = await getDaftarUndangan(idToko);
         let dataGaji = await gaji.getDaftarGaji(idToko);
         displayDataKaryawan(dataKaryawan);
-        displayDataUndangan(dataUndangan);
-        displayDataGaji(dataGaji);
+        displayDataUndangan(idToko, dataUndangan);
+        displayDataGaji(idToko, dataGaji);
 
         let htmlOptionKaryawan = ``;
         dataKaryawan.karyawan.forEach(v => {
@@ -72,7 +72,7 @@ function displayDataKaryawan(dataJson) {
     });
 }
 
-function displayDataUndangan(dataJson) {
+function displayDataUndangan(idToko, dataJson) {
     $("#table-undangan").dataTable({
         autoWidth: false,
         data: dataJson.undangan,
@@ -98,7 +98,7 @@ function displayDataUndangan(dataJson) {
                 }
             },
             { data: function (data, type, dataToSet) {
-                return (data.status == "menunggu" ? `<a href="#" class="btn btn-secondary" onclick="cancelUndangan(${data.idToko}, ${data.idUndangan})">Batalkan</a>`
+                return (data.status == "menunggu" ? `<a href="#" class="btn btn-secondary" onclick="cancelUndangan('${idToko}', '${data.idUndangan}')">Batalkan</a>`
                 :``);
                 }
             }        
@@ -106,7 +106,7 @@ function displayDataUndangan(dataJson) {
     });
 }
 
-function displayDataGaji(dataJson) {
+function displayDataGaji(idToko, dataJson) {
     $("#table-gaji").dataTable({
         autoWidth: false,
         data: dataJson.penggajian,
@@ -120,7 +120,7 @@ function displayDataGaji(dataJson) {
             { data: "nominal", className: "currency"},
             { data: "tglTransaksi"},
             { data: function (data, type, dataToSet) {
-                    return `<a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusGaji(${data.idToko}, ${data.idPenggajian})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>`;
+                    return `<a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusGaji('${idToko}', '${data.idPenggajian}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>`;
                 }
             },      
         ],
@@ -167,14 +167,14 @@ const cancelUndangan = async (idToko, idUndangan) => {
 const tambahGaji = async () => {
     try {
         let idToko = document.getElementById("idToko").value;
-        let idKaryawan = parseInt(document.getElementById("daftar-karyawan").value);
+        let idKaryawan = document.getElementById("daftar-karyawan").value;
         let nominal = parseInt(document.getElementById("nominal").value.replaceAll(".", ""));
         let tglTransaksi = document.getElementById("tglTransaksi").value;
         let jsonData = JSON.stringify({
-            idKaryawan, nominal, tglTransaksi,
+            nominal, tglTransaksi,
         });
 
-        let result = await gaji.createGaji(idToko, jsonData);
+        let result = await gaji.createGaji(idToko, idKaryawan, jsonData);
         await alertSuccess(result.message);
         $('#tambahPenggajian').modal('hide');
     } catch(error) {

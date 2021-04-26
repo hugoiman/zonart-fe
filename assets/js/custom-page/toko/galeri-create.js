@@ -68,7 +68,7 @@ const addGaleri = async () => {
         let idToko = document.getElementById("idToko").value;
         // dropzone.processQueue();
         let formData = new FormData();
-        formData.append('payload', JSON.stringify({"idProduk":idProduk}))
+        formData.append('payload', JSON.stringify({"idKategori":idProduk}))
         var images = dropzone.files.length;
         for (var i = 0; i < images; i++) {
             formData.append("gambar", dropzone.files[i]);

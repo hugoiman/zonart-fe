@@ -21,13 +21,13 @@ const loadGaleri = async () => {
 
         let htmlKategori = `<option selected="selected" value="semua">Semua</option>`;
         kategori.forEach(v => {
-            htmlKategori += `<option value="${v.idProduk}">${v.kategori}</option>`;
+            htmlKategori += `<option value="${v.idKategori}">${v.kategori}</option>`;
         })
         document.getElementById("select-kategori").innerHTML = htmlKategori;
         await displayGaleri();
         
         // result.galeri.forEach(v => {
-        //     htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
+        //     htmlGaleri += `<div class="col-6 col-md-2 col-sm-2 kategori kategori-${v.idKategori}" id="galeri-${v.idGaleri}">
         //         <label class="imagecheck mb-4">
         //             <input name="imagecheck" type="checkbox" value="${v.idGaleri}" class="imagecheck-input" onclick="isChecked()"/>
         //             <figure class="imagecheck-figure">
@@ -51,8 +51,8 @@ function displayGaleri() {
         return;
     }
     galeri.galeri.forEach(v => {
-        if (v.idProduk == kategori || kategori == "semua") {
-            htmlGaleri += `<div class="col-4 col-md-3 col-sm-2 kategori kategori-${v.idProduk}" id="galeri-${v.idGaleri}">
+        if (v.idKategori == kategori || kategori == "semua") {
+            htmlGaleri += `<div class="col-4 col-md-3 col-sm-2 kategori kategori-${v.idKategori}" id="galeri-${v.idGaleri}">
                 <label class="imagecheck mb-2">
                     <input name="imagecheck" type="checkbox" value="${v.idGaleri}" class="imagecheck-input" onclick="isChecked()"/>
                     <figure class="imagecheck-figure">
@@ -60,7 +60,7 @@ function displayGaleri() {
                     </figure>
                 </label>
             </div>`;
-        } else if (v.idProduk !== kategori) {
+        } else if (v.idKategori !== kategori) {
             return;
         } 
     });

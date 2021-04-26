@@ -13,7 +13,7 @@ const loadGrupOpsi = async () => {
         document.getElementById('btn-form-grupOpsi').href = `/${slugToko}/form-grup-opsi`;
         let idToko = await document.getElementById("idToko").value;
         let dataGrupOpsi = await grupOpsi.getDaftarGrupOpsi(idToko);
-        displayGrupOpsi(slugToko, dataGrupOpsi);
+        displayGrupOpsi(idToko, slugToko, dataGrupOpsi);
         let dataProduk = await getDaftarProduk(idToko);
         let htmlProduk = ``;
         dataProduk.produk.forEach(v => {
@@ -27,7 +27,7 @@ const loadGrupOpsi = async () => {
 loadGrupOpsi();
 
 
-function displayGrupOpsi(slugToko, dataJson) {
+function displayGrupOpsi(idToko, slugToko, dataJson) {
     $("#table-grupopsi").dataTable({
         autoWidth: false,
         data: dataJson.grupopsi,
@@ -48,9 +48,9 @@ function displayGrupOpsi(slugToko, dataJson) {
             },  
             { data: function (data, type, dataToSet) {
                 return `<buttons>
-                            <a href="#" class="btn btn-sm btn-icon btn-outline-info" onclick="showKoneksi(${data.idGrupOpsi}, '${data.namaGrup}')" data-toggle="tooltip" data-placement="top" title="Koneksi"><i class="fas fa-sitemap"></i></a>
+                            <a href="#" class="btn btn-sm btn-icon btn-outline-info" onclick="showKoneksi('${idToko}', '${data.idGrupOpsi}', '${data.namaGrup}')" data-toggle="tooltip" data-placement="top" title="Koneksi"><i class="fas fa-sitemap"></i></a>
                             <a href="/${slugToko}/grup-opsi/${data.idGrupOpsi}" class="btn btn-sm btn-icon btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Edit"><i class="far fa-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusGrupOpsi(${data.idToko},${data.idGrupOpsi})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
+                            <a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusGrupOpsi(${idToko},${data.idGrupOpsi})" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>
                         </buttons>`;
                 }
             },  
@@ -58,9 +58,8 @@ function displayGrupOpsi(slugToko, dataJson) {
     });
 }
 
-const showKoneksi = async (idGrupOpsi, namaGrup) => {
+const showKoneksi = async (idToko, idGrupOpsi, namaGrup) => {
     try {
-        let idToko = await document.getElementById("idToko").value;
         $('#idGrupOpsi').val(idGrupOpsi);
         $('#namaGrup').text(namaGrup);
 

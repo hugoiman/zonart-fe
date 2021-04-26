@@ -2,8 +2,6 @@ import loadMainStore from "../../general/mainStore.js";
 import {alertSuccess, alertFailed, alertConfirm} from "../../general/swalert.js";
 import {getUrlPath, formatRupiah, capitalFirst} from "../../general/general.js";
 import order from "../../request/order.js";
-import cloudinary from "../../request/cloudinary.js";
-import validateFile from "../../general/validateFile.js";
 import {getDaftarKaryawan} from "../../request/karyawan.js";
 import bt from "../../request/biayaTambahan.js";
 
@@ -16,20 +14,21 @@ const loadPage = async () => {
 
         const idOrder = await getUrlPath(3);
         const dataOrder = await order.getOrderToko(idToko, idOrder);
-        displayInvoice(dataOrder);
+        displayInvoice(idToko, dataOrder);
         displayHasilOrder(dataOrder);
         displayDaftarProduk(dataOrder);
         displayRingkasanPembelian(dataOrder);
-        modalBiayaTambahan(idOrder);
-        displayBiayaTambahan(dataOrder);
+        modalBiayaTambahan(idToko, idOrder);
+        displayBiayaTambahan(idToko, dataOrder);
         displayPengiriman(dataOrder);
         displayTotal(dataOrder);
         modalResi(idToko, idOrder);
-        displayPembayaran(dataOrder.pembayaran);
+        displayPembayaran(dataOrder);
         modalStatusPesanan(dataOrder);
         modalWaktuPengerjaan(dataOrder);
-        modalPenangan(dataOrder);
+        modalPenangan(idToko, dataOrder);
         modalListRevisi(dataOrder.revisi);
+        modalTolakOrder(idToko, idOrder);
 
         if (dataOrder.invoice.statusPesanan === "selesai") {
             $('.el-show').hide();
@@ -55,12 +54,14 @@ const loadPage = async () => {
 
 loadPage();
 
-function displayInvoice(data) {
+function displayInvoice(idToko, data) {
     let htmlInv =  `<address>
-                        <strong>Nomor Invoice: ${data.idInvoice}</strong><br>
+                        <strong>Nomor Invoice: ${data.invoice.idInvoice}</strong><br>
                         <strong>Status Pesanan: ${data.invoice.statusPesanan.charAt(0).toUpperCase() + data.invoice.statusPesanan.slice(1)}</strong>
                         <a class="el-show" href="#" data-toggle="modal" data-target="#modal-status-pesanan"> <i class="far fa-edit"></i></a><br><br>
                         
+                        <strong>Pemesan: </strong>${data.invoice.pembeli}<br>
+                        <strong>Jenis Pesanan: </strong>${data.jenisPesanan}<br>
                         <strong>Tanggal Pemesanan: </strong>${data.tglOrder}<br>
                         <strong>Rencana Pakai: </strong>${data.rencanaPakai}<br>
                         <strong>Waktu Pengerjaan: </strong><span id="waktu-pengerjaan">${data.waktuPengerjaan}</span>
@@ -147,7 +148,7 @@ function displayDaftarProduk(data) {
         ${fotoUser}
       </div>
       <div class="buttons text-center">
-        <a href="#" class="btn btn-sm btn-secondary" onclick="downloadFileUser('${data.idInvoice}')">Download Semua File</a>
+        <a href="#" class="btn btn-sm btn-secondary" onclick="downloadFileUser('${data.invoice.idInvoice}')">Download Semua File</a>
       </div>
     </div>
   </li>`;
@@ -226,17 +227,14 @@ function displayTotal(data) {
 }
 
 function displayPengiriman(data) {
-    if(data.jenisPesanan !== "cetak") {
-        return;
-    }
     const htmlPengiriman = `<div class="section-title">Pengiriman</div>
     <div class="row">
       <div class="col-md-12">
         <address>
-          <strong>${data.pengiriman.kurir} - ${data.pengiriman.service}</strong><br>
+          `+(data.jenisPesanan === "cetak" && data.pengiriman.kodeKurir != "cod" ? `<strong>${data.pengiriman.kurir} - ${data.pengiriman.service}</strong><br>
           No. Resi: <span id="no-resi">${data.pengiriman.resi} </span>
-          <a class="el-show" href="#" data-toggle="modal" data-target="#modal-resi"> <i class="far fa-edit"></i></a><br>
-          Dikirim kepada <strong>${data.pengiriman.penerima}</strong><br>
+          <a class="el-show" href="#" data-toggle="modal" data-target="#modal-resi"> <i class="far fa-edit"></i></a><br>`: '')+
+          `Dikirim kepada <strong>${data.pengiriman.penerima}</strong><br>
           ${data.pengiriman.alamat}<br>
           ${data.pengiriman.kota}<br>
           ${data.pengiriman.telp}
@@ -246,7 +244,7 @@ function displayPengiriman(data) {
   document.getElementById("info-pengiriman").innerHTML = htmlPengiriman;
 }
 
-function displayBiayaTambahan(data) {
+function displayBiayaTambahan(idToko, data) {
     if(data.biayaTambahan == null) {
         return;
     }
@@ -258,7 +256,7 @@ function displayBiayaTambahan(data) {
                     <td>${v.item}</td>
                     <td class="text-center ` + (v.berat == 0 ? `` : `rupiah rupiah-update`) + `">` + (v.berat == 0 ? `-` : `${v.berat}`) + `</td>
                     <td class="text-right rupiah rupiah-update">Rp ${v.total}</td>
-                    <td class="text-right"><a href="#" class="btn btn-sm btn-icon btn-outline-danger el-show" onclick="hapusBiayaTambahan('${data.idToko}', '${v.idOrder}', '${v.idBiayaTambahan}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a></td>
+                    <td class="text-right"><a href="#" class="btn btn-sm btn-icon btn-outline-danger el-show" onclick="hapusBiayaTambahan('${idToko}', '${data.idOrder}', '${v.idBiayaTambahan}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a></td>
                 </tr>`;
                 count++;
     });
@@ -276,8 +274,10 @@ const prosesStatus = async (idOrder) => {
             await setTimeout(() => {
                 window.location.reload();
             }, 4000);
+        } else if (statusPesanan == 'ditolak') {
+            $('#modal-tolak-order').modal('show');
         } else if (statusPesanan == 'selesai') {
-            let result = await order.selesaikanPesanan(idToko, idOrder)
+            let result = await order.tolakPesanan(idToko, idOrder)
             alertSuccess(result.message);
             await setTimeout(() => {
                 window.location.reload();
@@ -286,6 +286,8 @@ const prosesStatus = async (idOrder) => {
     }
     catch(error) {
         alertFailed(error, false);
+    } finally {
+        $('#modal-status-pesanan').modal('hide');
     }
 }
 
@@ -316,6 +318,7 @@ const uploadHasil = async (idOrder) => {
     try {
         $('#btn-upload-hasil').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading...`).prop("disabled", true);
         let idHasilOrder = parseInt(document.getElementById('idHasilOrder').value);
+        let idToko = document.getElementById('idToko').value;
         let formData = new FormData();
         let image = $("#hasil")[0].files[0];
         formData.append('hasil', image);
@@ -323,7 +326,7 @@ const uploadHasil = async (idOrder) => {
             idHasilOrder,
         }))
 
-        let result = await order.uploadHasilOrder(idOrder, formData);
+        let result = await order.uploadHasilOrder(idToko, idOrder, formData);
         alertSuccess(result.message);
         await setTimeout(() => {
             window.location.reload();
@@ -356,11 +359,11 @@ const setPenangan = async (idOrder) => {
 }
 
 function displayPembayaran(data) {
-    if(data == null) {
+    if(data.pembayaran == null) {
         return;
     }
     let tbody = ``;
-    data.forEach(v => {
+    data.pembayaran.forEach(v => {
         tbody += `<tr>
                     <td>${v.createdAt}</td>
                     <td class="text-center rupiah">${v.nominal}</td>
@@ -371,7 +374,7 @@ function displayPembayaran(data) {
                     </td>
                     <td class="text-center">${v.status}</td>
                     <td class="text-right">` + 
-                        (v.status == 'Menunggu Konfirmasi' ? `<a href="#" class="btn btn-sm btn-icon btn-outline-primary" onclick="konfirmasiPembayaran('${v.idOrder}','${v.idPembayaran}')" data-toggle="tooltip" data-placement="top" title="Terima Pembayaran">Terima</a>` : ``) +
+                        (v.status == 'Menunggu Konfirmasi' ? `<a href="#" class="btn btn-sm btn-icon btn-outline-primary" onclick="konfirmasiPembayaran('${data.idOrder}','${v.idPembayaran}')" data-toggle="tooltip" data-placement="top" title="Terima Pembayaran">Terima</a>` : ``) +
                     `</td>
                   </tr>`;
     });
@@ -396,8 +399,7 @@ const konfirmasiPembayaran = async (idOrder, idPembayaran) => {
     }
 }
 
-function modalBiayaTambahan(idOrder) {
-    let idToko = document.getElementById("idToko").value;
+function modalBiayaTambahan(idToko, idOrder) {
     let modal = `
     <div class="modal fade" tabindex="-1" role="dialog" id="modal-tambahan">
       <div class="modal-dialog" role="document">
@@ -462,7 +464,7 @@ const buatBiayaTambahan = async (idToko, idOrder) => {
 const updateBiayaTambahan = async (idToko, idOrder) => {
     try {
         const dataOrder = await order.getOrderToko(idToko, idOrder);
-        displayBiayaTambahan(dataOrder);
+        displayBiayaTambahan(idToko, dataOrder);
         
         $(".total-pembelian").text(formatRupiah(dataOrder.invoice.totalPembelian));
         $(".total-berat").text(formatRupiah(dataOrder.pengiriman.berat));
@@ -538,7 +540,8 @@ function modalStatusPesanan(data) {
     let optionStatus = ``;
     if (data.invoice.statusPesanan == "menunggu konfirmasi") {
         optionStatus = `<option selected disabled>Menunggu Konfirmasi</option>
-                        <option value="diproses">Diproses</option>`;
+                        <option value="diproses">Diproses</option>
+                        <option value="ditolak">Tolak Pesanan</option>`;
     } else if (data.invoice.statusPesanan == "diproses") {
         optionStatus = `<option selected disabled>Diproses</option>
                         <option value="selesai">Selesai</option>`;
@@ -605,9 +608,9 @@ function modalWaktuPengerjaan(data) {
     $('body').append(modal);
 }
 
-const modalPenangan = async (data) => {
+const modalPenangan = async (idToko, data) => {
     try {
-        let result = await getDaftarKaryawan(data.invoice.idToko);
+        let result = await getDaftarKaryawan(idToko);
         let listKaryawan = `<option value=""></option>`;
         result.karyawan.forEach(v => {
             if (v.posisi != 'editor' || v.status != 'aktif') {} 
@@ -692,6 +695,51 @@ function modalListRevisi(data) {
     $('body').append(modal);
 }
 
+function modalTolakOrder(idToko, idOrder) {
+    let modal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-tolak-order">
+      <div class="modal-dialog" role="document">
+        <form>
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-12">
+                  <label class="col-form-label text-md-right">Alasan penolakan</label>
+                    <input type="text" class="form-control" id="keterangan">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" onclick="tolakOrder('${idToko}','${idOrder}')">Kirim</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('body').append(modal);
+}
+
+const tolakOrder = async (idToko, idOrder) => { 
+    try {
+        let keterangan = document.getElementById('keterangan').value;
+        let jsonData = JSON.stringify({
+            keterangan,
+        });
+        let result = await order.tolakPesanan(idToko, idOrder, jsonData);
+
+        alertSuccess(result.message);
+        await setTimeout(() => {
+            window.location.reload();
+        }, 4000);
+    } catch(error) {
+        alertFailed(error, false);
+    } finally {
+        document.getElementById('keterangan').value = "";
+        $('#modal-tolak-order').modal('hide');
+    }
+}
+
 function downloadFileUser(idInvoice) {
     var zip = new JSZip();
     var count = 1;
@@ -734,3 +782,4 @@ window.hapusBiayaTambahan = hapusBiayaTambahan;
 window.updateBiayaTambahan = updateBiayaTambahan;
 window.inputResi = inputResi;
 window.downloadFileUser = downloadFileUser;
+window.tolakOrder = tolakOrder;

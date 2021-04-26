@@ -225,7 +225,7 @@ function opsi(data) {
     if (data.opsi != null) {
         data.opsi.forEach(v => {
             opsi += `<div class="form-check">
-                        <input class="form-check-input" id="opsi-${v.idOpsi}" type="checkbox" name="opsi-${v.idGrupOpsi}" value="${v.opsi}" onclick="validateMaxOpsi('${v.idGrupOpsi}', '${data.max}')">
+                        <input class="form-check-input" id="opsi-${v.idOpsi}" type="checkbox" name="opsi-${data.idGrupOpsi}" value="${v.opsi}" onclick="validateMaxOpsi('${data.idGrupOpsi}', '${data.max}')">
                         <label class="form-check-label">${v.opsi} <small class="text-right">${(v.harga != 0 ? `- Rp <span class="rupiah">${v.harga}</span>` : '')}${(v.perProduk ? `/pcs` : '')}</small> ${(v.berat != 0 ? `<sup><a class="btn btn-icon btn-sm btn-default" data-toggle="tooltip" data-placement="top" title="${v.berat} gr${(v.perProduk ? '/pcs':'')}"><i class="fas fa-info-circle"></i></a></sup>`:'')}</label>
                     </div>`;
         });

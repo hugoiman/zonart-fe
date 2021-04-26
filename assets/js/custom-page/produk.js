@@ -26,7 +26,7 @@ const loadPage = async () => {
 
     displayProduk(dataProduk);
     const dataGaleri = await getDaftarGaleri(dataToko.idToko)
-    let galeriProduk = dataGaleri.galeri.filter(v => v.idProduk == dataProduk.idProduk);
+    let galeriProduk = dataGaleri.galeri.filter(v => v.idKategori == dataProduk.idProduk);
     displayGaleriProduk(galeriProduk);
     addFormPemesanan(dataProduk, galeriProduk);
 
@@ -370,8 +370,10 @@ const checkout = async () => {
                 if(opsi.is(":checked")){
                     if(v.idOpsi == 0) {
                         opsi = $(`.spesific-request-${data.idGrupOpsi}`);
+                    } else {
+                        opsi.val()
                     }
-                    opsiOrder.push({idGrupOpsi: data.idGrupOpsi, idOpsi: v.idOpsi, opsi: opsi.val()})
+                    opsiOrder.push({namaGrup: data.idGrupOpsi, opsi: opsi})
                 }
             })
         });

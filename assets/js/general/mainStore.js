@@ -21,7 +21,7 @@ const loadMainStore = async () => {
         const menu = menues(slugToko);
         let userPosition;
         // cek if owner
-        if (dataToko.idOwner == dataCustomer.idCustomer) {
+        if (dataToko.owner == dataCustomer.idCustomer) {
             userPosition = "owner";
             document.getElementById("sidebar-menu").innerHTML = menu.dashboard + menu.pesanan + menu.produk + 
             menu.grupOpsi + menu.pengaturan + menu.galeri + menu.faq + menu.karyawan;

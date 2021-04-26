@@ -44,7 +44,7 @@ const loadFaq = async () => {
         result.faq.forEach(val => {
             let contentFaq = document.createElement('div');
             contentFaq.innerHTML =  `<div class="accordion-header content-faq-${val.idFaq}" role="button" data-toggle="collapse" data-target="#panel-body-${val.idFaq}" aria-expanded="false">
-                                        <h4><a href="#" class="btn btn-sm btn-default comp-select" onclick="hapusFaq(${val.idFaq})"><i class="far fa-trash-alt"></i></a>${val.pertanyaan}</h4>
+                                        <h4><a href="#" class="btn btn-sm btn-default comp-select" onclick="hapusFaq('${idToko}', '${val.idFaq}')"><i class="far fa-trash-alt"></i></a>${val.pertanyaan}</h4>
                                     </div>
                                     <div class="accordion-body collapse content-faq-${val.idFaq}" id="panel-body-${val.idFaq}" data-parent="#${val.kategori}">
                                         ${val.jawaban}
@@ -58,11 +58,10 @@ const loadFaq = async () => {
 }
 loadFaq();
 
-const hapusFaq = async (idFaq) => {
+const hapusFaq = async (idToko, idFaq) => {
     try {
         let confirm = await alertConfirm('Ingin menghapus FAQ ini?');
         if (confirm) {
-            let idToko = document.getElementById("idToko").value;
             let result = await deleteFaq(idToko, idFaq);
             alertSuccess(result.message);
             $(`.content-faq-${idFaq}`).fadeOut(1000);
