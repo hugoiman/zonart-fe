@@ -19,7 +19,7 @@ const gantiPassword = async (oldPassword, newPassword) => {
         document.getElementsByName("confirmPassword")[0].value = "";
         alertSuccess(result.message);
     } catch(error) {
-        alertFailed(error);
+        alertFailed(error, false);
     }
 }
 

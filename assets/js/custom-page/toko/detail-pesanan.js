@@ -277,7 +277,7 @@ const prosesStatus = async (idOrder) => {
         } else if (statusPesanan == 'ditolak') {
             $('#modal-tolak-order').modal('show');
         } else if (statusPesanan == 'selesai') {
-            let result = await order.tolakPesanan(idToko, idOrder)
+            let result = await order.selesaikanPesanan(idToko, idOrder)
             alertSuccess(result.message);
             await setTimeout(() => {
                 window.location.reload();
@@ -300,7 +300,7 @@ const setWaktuPengerjaan = async (idOrder) => {
         });
         let result = await order.setWaktuPengerjaan(idToko, idOrder, jsonData);
         $("#waktu-pengerjaan").text(waktuPengerjaan);
-        $('#modal-tambahan').modal('modal-waktu-pengerjaan');
+        $('#modal-waktu-pengerjaan').modal('hide');
         alertSuccess(result.message);
     }
     catch(error) {
@@ -341,21 +341,21 @@ const uploadHasil = async (idOrder) => {
 }
 
 const setPenangan = async (idOrder) => {
-    try {
-        let idKaryawan = parseInt(document.getElementById('karyawan').value);
-        let idToko = document.getElementById('idToko').value;
-        let jsonData = JSON.stringify({
-            idKaryawan,
-        });
-        let result = await order.setPenanganOrder(idToko, idOrder, jsonData);
-        alertSuccess(result.message);
-        await setTimeout(() => {
-            window.location.reload();
-        }, 4000);
-    }
-    catch(error) {
-        alertFailed(error, false);
-    }
+  try {
+    let idKaryawan = parseInt(document.getElementById('karyawan').value);
+    let idToko = document.getElementById('idToko').value;
+    let jsonData = JSON.stringify({
+        idKaryawan,
+    });
+    let result = await order.setPenanganOrder(idToko, idOrder, jsonData);
+    alertSuccess(result.message);
+    await setTimeout(() => {
+        window.location.reload();
+    }, 4000);
+  }
+  catch(error) {
+    alertFailed(error, false);
+  }
 }
 
 function displayPembayaran(data) {

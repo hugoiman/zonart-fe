@@ -12,7 +12,7 @@ const registerCustomer = async (username, email, nama, password) => {
         alertSuccess(result.message, 3000);
         window.location.href = "/login";
     } catch(error) {
-        alertFailed(error);
+        alertFailed(error, false);
     }
 }
 
@@ -24,7 +24,7 @@ document.getElementById("register").onsubmit = function(event) {
     let password2 = document.getElementsByName("password2")[0].value;
 
     if (password !== password2) {
-        alertFailed("Konfirmasi password tidak sama. Mohon ulangi.")
+        alertFailed("Konfirmasi password tidak sesuai. Mohon ulangi")
     } else {
         registerCustomer(username, email, nama, password);
     }

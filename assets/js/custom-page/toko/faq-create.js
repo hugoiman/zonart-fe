@@ -25,7 +25,9 @@ function displaySelect() {
 }
 
 const addFaq = async () => {
+    let originalBtn = $('#btn-create-faq').html();
     try {
+        $('#btn-create-faq').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let kategori = document.getElementsByName("kategori")[0].value;
         if (kategori == "") {
@@ -45,6 +47,8 @@ const addFaq = async () => {
         
     } catch(error) {
         alertFailed(error, false);
+    } finally {
+        $('#btn-create-faq').html(originalBtn).prop('disabled', false)
     }
 }
 

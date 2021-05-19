@@ -4,20 +4,20 @@ import {formatRupiah, getUrlPath} from "../general/general.js";
 import {getToko} from "../request/toko.js";
 import { getProduk } from "../request/produk.js";
 import { getDaftarGaleri } from "../request/galeri.js";
-import cloudinary from "../request/cloudinary.js";
 import rajaOngkir from "../request/rajaOngkir.js";
 import order from "../request/order.js";
-import { getCustomer } from "../request/customer.js";
 
 let dataToko;
 let dataProduk;
 let listKota;
+let idToko;
 
 const loadPage = async () => {
     const loadmain = await loadMain();
     const slugToko = await getUrlPath(1);
     const slugProduk = await getUrlPath(2);
     dataToko = await getToko(slugToko);
+    idToko = dataToko.idToko;
     document.getElementById('logo').src = dataToko.foto;
     document.getElementsByClassName('namaToko')[0].innerHTML = `<a href="/${dataToko.slug}">${dataToko.namaToko}</a>`
 
@@ -59,9 +59,8 @@ function displayProduk(dataProduk) {
                                 <h4>${dataProduk.namaProduk}</h4>
                             </div>
                             <div class="row">
-                                <h3><i class="fa fa-inr" aria-hidden="true"></i>` + 
-                                (dataProduk.jenisPemesanan[1].harga < dataProduk.jenisPemesanan[0].harga ? (dataProduk.jenisPemesanan[1].status == true ? `Rp <span class="nominal">${dataProduk.jenisPemesanan[1].harga}</span>` : ``) + `` + (dataProduk.jenisPemesanan[0].status == true ? ` - <span class="nominal">${dataProduk.jenisPemesanan[0].harga}</span>` : ``) :
-                                (dataProduk.jenisPemesanan[0].status == true ? `Rp <span class="nominal">${dataProduk.jenisPemesanan[0].harga}</span>` : ``) + `` + (dataProduk.jenisPemesanan[1].status == true ? ` - <span class="nominal">${dataProduk.jenisPemesanan[1].harga}</span>` : ``) )+ `
+                                <h3><i class="fa fa-inr" aria-hidden="true"></i>${(dataProduk.jenisPemesanan[1].status == true ? `Rp <span class="nominal">${dataProduk.jenisPemesanan[1].harga}</span>` : ``)}
+                                ${(dataProduk.jenisPemesanan[0].status == true ? (dataProduk.jenisPemesanan[1].status == true ? ` - Rp <span class="nominal">${dataProduk.jenisPemesanan[0].harga}</span>` : `Rp <span class="nominal">${dataProduk.jenisPemesanan[0].harga}</span>`) : ``)}
                                 </h3>
                             </div>
                             <div class="row">
@@ -333,7 +332,6 @@ const checkout = async () => {
     let originalBtnCheckout = $('#btn-checkout').html();
     try {
         $('#btn-checkout').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Tunggu, pesanan sedang diproses...`).prop("disabled", true);
-        let idToko = document.getElementById('idToko').value;
         let idProduk = document.getElementById('idProduk').value;
         let jenisPesanan = $("input[name='jenis-pesanan']:checked").val();
         let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
@@ -362,22 +360,25 @@ const checkout = async () => {
             if (data.opsi == null) {
                 data.opsi = []
             }
+            let id = '0'+data.idGrupOpsi;
+            let idInt = parseInt(id);
             if (data.spesificRequest) {
-                data.opsi.push({idOpsi:0});
+                data.opsi.push({idOpsi:idInt});
             }
             data.opsi.forEach(v => {
                 let opsi = $(`#opsi-${v.idOpsi}`);
                 if(opsi.is(":checked")){
-                    if(v.idOpsi == 0) {
+                    if(v.idOpsi == idInt) {
                         opsi = $(`.spesific-request-${data.idGrupOpsi}`);
-                    } else {
-                        opsi.val()
                     }
-                    opsiOrder.push({namaGrup: data.idGrupOpsi, opsi: opsi})
+                    opsiOrder.push({idGrupOpsi: data.idGrupOpsi, idOpsiOrder: v.idOpsi, opsi: opsi.val()})
                 }
             })
+            if (data.spesificRequest) {
+                data.opsi.pop();
+            }
         });
-
+            
         let jsonData = JSON.stringify({
             jenisPesanan, tambahanWajah, catatan, pcs, rencanaPakai, contohGambar, opsiOrder, pengiriman,
         }) 
@@ -389,7 +390,7 @@ const checkout = async () => {
             formData.append("fileOrder", dropzone.files[i]);
         }
         let result = await order.createOrder(idToko, idProduk, formData);
-        alertSuccess(result.message);
+        window.location.href = `/order?id=${result.idOrder}`;
         
         // if (dropzone.files.length === 0) {
         //     throw "Silahkan masukan gambar.";

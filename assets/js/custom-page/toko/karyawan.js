@@ -168,7 +168,7 @@ const tambahGaji = async () => {
     try {
         let idToko = document.getElementById("idToko").value;
         let idKaryawan = document.getElementById("daftar-karyawan").value;
-        let nominal = parseInt(document.getElementById("nominal").value.replaceAll(".", ""));
+        let nominal = parseInt(document.getElementById("nominal-gaji").value.replaceAll(".", ""));
         let tglTransaksi = document.getElementById("tglTransaksi").value;
         let jsonData = JSON.stringify({
             nominal, tglTransaksi,

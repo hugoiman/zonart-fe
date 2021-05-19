@@ -1,8 +1,6 @@
 import loadMainStore from "../../general/mainStore.js";
 import {alertSuccess, alertFailed} from "../../general/swalert.js";
 import {getProduk, updateProduk} from "../../request/produk.js";
-import cloudinary from "../../request/cloudinary.js";
-import validateFile from "../../general/validateFile.js";
 import {getUrlPath} from "../../general/general.js";
 
 const loadForm = async () => {
@@ -44,6 +42,7 @@ const loadForm = async () => {
             })
         });
     } catch(error) {
+        console.log(error);
         alertFailed(error, false);
     }
 }

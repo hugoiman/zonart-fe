@@ -66,8 +66,9 @@ const displayProduk = async (idToko, slugToko) => {
                 <div class="article-title">
                     <h2><a href="/${slugToko}/${v.slug}">${v.namaProduk}</a></h2>
                 </div>
-                <p><b> Rp ` + (v.jenisPemesanan[1].harga < v.jenisPemesanan[0].harga ? (v.jenisPemesanan[1].status == true ? `<span class="nominal">${v.jenisPemesanan[1].harga}</span>` : ``) + `` + (v.jenisPemesanan[0].status == true ? ` - <span class="nominal">${v.jenisPemesanan[0].harga}</span>` : ``) :
-                                                                                       (v.jenisPemesanan[0].status == true ? `<span class="nominal">${v.jenisPemesanan[0].harga}</span>` : ``) + `` + (v.jenisPemesanan[1].status == true ? ` - <span class="nominal">${v.jenisPemesanan[1].harga}</span>` : ``) )+ `</b></p>
+                <p><b>  ${(v.jenisPemesanan[1].status == true ? `Rp <span class="nominal">${v.jenisPemesanan[1].harga}</span>` : ``)}
+                        ${(v.jenisPemesanan[0].status == true ? (v.jenisPemesanan[1].status == true ? ` - Rp <span class="nominal">${v.jenisPemesanan[0].harga}</span>` : `Rp <span class="nominal">${v.jenisPemesanan[0].harga}</span>`) : ``)}
+                </b></p>
               </div>
             </article>
           </div>`;

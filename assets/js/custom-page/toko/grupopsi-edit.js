@@ -152,7 +152,9 @@ const hapusOpsi = async (idOpsi) => {
 }
 
 const ubahGrupOpsi = async () => {
+    let originalBtn = $('#btn-update-grup').html();
     try {
+        $('#btn-update-grup').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let idGrupOpsi = document.getElementById("idGrupOpsi").value;
         let namaGrup = document.getElementById("namaGrup").value;
@@ -186,6 +188,8 @@ const ubahGrupOpsi = async () => {
         alertSuccess(result.message);
     } catch(error) {
         alertFailed(error, false)
+    } finally {
+        $('#btn-update-grup').html(originalBtn).prop('disabled', false)
     }
 }
 

@@ -14,6 +14,7 @@ app.get('/reset-password', function(req, res) { res.sendFile('./pages/reset-pass
 app.get('/verifikasi-reset-password', function(req, res) { res.sendFile('./pages/verifikasi-reset-password.html', { root: __dirname });})
 
 // customer
+app.get('/beranda', function(req, res) { res.sendFile('./pages/home-page.html', { root: __dirname });})
 app.get('/pengaturan', function(req, res) { res.sendFile('./pages/pengaturan.html', { root: __dirname });})
 app.get('/profil', function(req, res) { res.sendFile('./pages/profil.html', { root: __dirname });})
 app.get('/password', function(req, res) { res.sendFile('./pages/password.html', { root: __dirname });})

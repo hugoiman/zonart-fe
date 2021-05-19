@@ -77,7 +77,9 @@ const hapusOpsi = async (idOpsi) => {
 }
 
 const buatGrupOpsi = async () => {
+    let originalBtn = $('#btn-create-grup').html();
     try {
+        $('#btn-create-grup').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let namaGrup = document.getElementById("namaGrup").value;
         let deskripsi = document.getElementById("deskripsi").value;
@@ -113,6 +115,8 @@ const buatGrupOpsi = async () => {
         }, 4000);
     } catch(error) {
         alertFailed(error, false)
+    } finally {
+        $('#btn-create-grup').html(originalBtn).prop('disabled', false)
     }
 }
 

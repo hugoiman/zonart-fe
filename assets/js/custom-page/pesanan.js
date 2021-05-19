@@ -12,7 +12,7 @@ const loadPage = async () => {
         const loadmain = await loadMain();
         const idOrder = await getUrlParameter('id');
         const dataOrder = await order.getOrder(idOrder);
-        const dataProduk = await getProduk(dataOrder.idToko, dataOrder.idProduk);
+        const dataProduk = await getProduk(dataOrder.invoice.slugToko, dataOrder.produkOrder.slugProduk);
         displayInvoice(dataOrder);
         displayHasilOrder(dataOrder);
         displayDaftarProduk(dataOrder, dataProduk);
@@ -53,7 +53,7 @@ loadPage();
 
 function displayInvoice(data) {
     let htmlInv =  `<address>
-                        <strong>Nomor Invoice: <a href="/invoice?id=${data.idInvoice}">${data.idInvoice}</a></strong><br>
+                        <strong>Nomor Invoice: <a href="/invoice?id=${data.invoice.idInvoice}">${data.invoice.idInvoice}</a></strong><br>
                         <strong>Status Pesanan: ${capitalFirst(data.invoice.statusPesanan)}</strong><br><br>
                         <strong>Penjual: </strong>${data.invoice.namaToko}<br>
                         <strong>Tanggal Pemesanan: </strong>${data.tglOrder}<br>

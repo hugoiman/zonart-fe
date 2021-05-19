@@ -233,7 +233,7 @@ function opsi(data) {
     
     if(data.spesificRequest) {
         opsi += `<div class="form-check">
-                    <input class="form-check-input spesific-request-${data.idGrupOpsi}" id="opsi-0" type="checkbox" name="opsi-${data.idGrupOpsi}" onclick="validateMaxOpsi('${data.idGrupOpsi}', '${data.max}')">
+                    <input class="form-check-input spesific-request-${data.idGrupOpsi}" id="opsi-0${data.idGrupOpsi}" type="checkbox" name="opsi-${data.idGrupOpsi}" onclick="validateMaxOpsi('${data.idGrupOpsi}', '${data.max}')">
                     <input type="text" class="form-control form-control-sm col-12" id="input-request-${data.idGrupOpsi}" placeholder="${(data.opsi != null ? 'Punya pilihan lain? isi disini ya...': 'Ketik disini...')}" onchange="setSpesificRequest('${data.idGrupOpsi}')">
                 </div>`;
     }

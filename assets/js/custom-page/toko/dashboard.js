@@ -2,6 +2,7 @@ import loadMainStore from "../../general/mainStore.js";
 import {alertSuccess, alertFailed, alertConfirm} from "../../general/swalert.js";
 import {getUrlPath} from "../../general/general.js";
 import pembukuan from "../../request/pembukuan.js";
+import order from "../../request/order.js";
 
 let dataPembukuan;
 const loadPage = async () => {
@@ -12,8 +13,11 @@ const loadPage = async () => {
         let idToko = document.getElementById("idToko").value;
         let result = await pembukuan.getDaftarPembukuan(idToko)
         dataPembukuan = result;
+        const dataOrder = await order.getOrdersToko(idToko);
         let a = document.getElementById('user-position').value;
-        console.log(a);
+        
+        displayPembukuan();
+        displayInfoTotalOrder(dataOrder);
 
         $(".datepicker").val(moment().format("MMM YYYY"));
         $(".datepicker").datepicker({
@@ -22,8 +26,6 @@ const loadPage = async () => {
             viewMode: "months",
             minViewMode: "months"
         });
-
-        displayPembukuan();
         
         $("#tglTransaksi").val(moment().format("DD-MM-YYYY"));
         $("#tglTransaksi").datepicker();
@@ -41,6 +43,7 @@ const loadPage = async () => {
 loadPage();
 
 function displayPembukuan() {
+    let idToko = document.getElementById('idToko').value;
     let periode = $('#periode').val();
     let periodePembukuan = [];
     let pemasukan = 0;
@@ -100,7 +103,7 @@ function displayPembukuan() {
                 }, className: "text-center nominal"
             },
             { data: function (data, type, dataToSet) {
-                    return `<a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusPembukuan('${data.idToko}', '${data.idPembukuan}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>`;
+                    return `<a href="#" class="btn btn-sm btn-icon btn-outline-danger" onclick="hapusPembukuan('${idToko}', '${data.idPembukuan}')" data-toggle="tooltip" data-placement="top" title="Hapus"><i class="far fa-trash-alt"></i></a>`;
                 }
             },      
         ],
@@ -112,8 +115,22 @@ function displayPembukuan() {
     // formatRupiah();
 }
 
+function displayInfoTotalOrder(dataOrder) {
+    let order_total = dataOrder.order.length;
+    let order_proses = dataOrder.order.filter(({invoice}) => invoice.statusPesanan === 'diproses').length;
+    let order_antrian = dataOrder.order.filter(({invoice}) => invoice.statusPesanan === 'menunggu konfirmasi').length;
+    let order_selesai = dataOrder.order.filter(({invoice}) => invoice.statusPesanan === 'selesai').length;
+
+    document.getElementById('total-pesanan').textContent = order_total;
+    document.getElementById('antrian-pesanan').textContent = order_proses;
+    document.getElementById('pesanan-diproses').textContent = order_antrian;
+    document.getElementById('pesanan-selesai').textContent = order_selesai;
+}
+
 const tambahPembukuan = async () => {
+    let originalBtn = $('#btn-create-pembukuan').html();
     try {
+        $('#btn-create-pembukuan').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`).prop("disabled", true);
         let idToko = document.getElementById("idToko").value;
         let keterangan = $('#keterangan').val();
         let jenis = $('#jenis').val();
@@ -131,6 +148,8 @@ const tambahPembukuan = async () => {
         }, 4000);
     } catch(error) {
         alertFailed(error, false);
+    } finally {
+        $('#btn-create-pembukuan').html(originalBtn).prop('disabled', false)
     }
 }
 

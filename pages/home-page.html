@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Profil &mdash; Stisla</title>
+  <title>Beranda &mdash; ZonArt</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -25,55 +25,18 @@
       <!-- Main Content -->
       <div class="main-content">
         <section class="section">
-          <div class="section-header">
-            <h1>Profil</h1>
-          </div>
 
           <div class="section-body">
-            <div class="row justify-content-md-center">
-              <div class="col-12 col-md-8 col-sm-12">
-                <div class="card">
-                  <form id="update-profil">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="form-group col-md-6 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Nama</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control nama"
-                            name="nama"
-                          />
-                        </div>
-                        <div class="form-group col-md-6 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Username</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control username"
-                            name="username"
-                          />
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="form-group col-md-12 col-12">
-                          <label class="col-form-label text-md-right"
-                            >Email</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control email"
-                            name="email"
-                          />
-                        </div>
-                      </div>
+            <div class="row">
+              <div class="col-12 mb-4">
+                <div class="hero bg-primary text-white">
+                  <div class="hero-inner">
+                    <h2>Selamat datang, <span class="nama-user"></span>!</h2>
+                    <p class="lead">Belum punya toko? Yuk daftarkan tokomu <a href="/form-buka-toko">disini</a></p>
+                    <div class="mt-4">
+                      <a href="#" class="btn btn-outline-white btn-lg btn-icon icon-left"><i class="far fa-user"></i> Pengaturan akun</a>
                     </div>
-                    <div class="card-footer text-right">
-                      <button class="btn btn-primary" id="btn-update">Simpan</button>
-                    </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -91,14 +54,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="/assets/js/stisla.js"></script>
-  <script src="/assets/js/general/main.js" type="module"></script>
 
   <!-- JS Libraies -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <!-- Page Specific JS File -->
-  <script src="/assets/js/custom-page/profil.js" type="module"></script>
+  <script src="/assets/js/custom-page/home-page.js" type="module"></script>
 
   <!-- Template JS File -->
   <script src="/assets/js/scripts.js"></script>

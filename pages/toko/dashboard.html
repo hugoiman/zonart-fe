@@ -45,10 +45,10 @@
                   </div>
                   <div class="card-wrap">
                     <div class="card-header">
-                      <h4>Semua Pesanan</h4>
+                      <h4>Total Pesanan</h4>
                     </div>
-                    <div class="card-body">
-                      21
+                    <div class="card-body" id="total-pesanan">
+                      -
                     </div>
                   </div>
                 </div>
@@ -62,8 +62,8 @@
                     <div class="card-header">
                       <h4>Antrian Pesanan</h4>
                     </div>
-                    <div class="card-body">
-                      2
+                    <div class="card-body" id="antrian-pesanan">
+                      -
                     </div>
                   </div>
                 </div>
@@ -77,8 +77,8 @@
                     <div class="card-header">
                       <h4>Pesanan Diproses</h4>
                     </div>
-                    <div class="card-body">
-                      7
+                    <div class="card-body" id="pesanan-diproses">
+                      -
                     </div>
                   </div>
                 </div>
@@ -92,8 +92,8 @@
                     <div class="card-header">
                       <h4>Pesanan Selesai</h4>
                     </div>
-                    <div class="card-body">
-                      10
+                    <div class="card-body" id="pesanan-selesai">
+                      -
                     </div>
                   </div>
                 </div>
@@ -187,7 +187,7 @@
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="button" class="btn btn-primary" onclick="tambahPembukuan()">OK</button>
+                  <button type="button" class="btn btn-primary" id="btn-create-pembukuan" onclick="tambahPembukuan()">OK</button>
                 </div>
               </div>
             </form>

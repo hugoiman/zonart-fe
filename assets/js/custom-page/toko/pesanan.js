@@ -16,6 +16,7 @@ const loadPage = async () => {
         displayOrders("order-selesai", data.order.filter(v => v.invoice.statusPesanan === "selesai"));
         displayOrders("order-menunggu", data.order.filter(v => v.invoice.statusPesanan === "menunggu konfirmasi"));
         displayOrders("order-batal", data.order.filter(v => v.invoice.statusPesanan === "dibatalkan"));
+        displayOrders("order-tolak", data.order.filter(v => v.invoice.statusPesanan === "ditolak"));
 
         if(position === "editor") {
             $('.hide').remove();

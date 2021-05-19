@@ -6,10 +6,10 @@ class AsideStoreElement extends HTMLElement {
     render() {
         this.innerHTML = `
         <div class="sidebar-brand">
-            <a href="index.html">ZonArt</a>
+            <a href="/beranda">ZonArt</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">ZA</a>
+            <a href="/beranda">ZA</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Menu</li>
