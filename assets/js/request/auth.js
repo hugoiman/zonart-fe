@@ -13,6 +13,17 @@ function login(jsonData) {
     return result;
 }
 
+function logout() {
+    let result = $.ajax({
+        url: `${baseURL}/api/logout`,
+        type: "POST",
+        success: function (resp) {},
+        error: function (error) {},
+    });
+
+    return result;
+}
+
 function register(username, email, nama, password) {
     let jsonData = JSON.stringify({
         username,
@@ -62,4 +73,4 @@ function verificationResetPassword(token) {
     return result;
 }
 
-export {login, register, resetPassword, verificationResetPassword};
+export {login, logout, register, resetPassword, verificationResetPassword};

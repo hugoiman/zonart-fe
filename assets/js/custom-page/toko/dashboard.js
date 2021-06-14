@@ -50,6 +50,9 @@ function displayPembukuan() {
     let pengeluaran = 0;
     let laba = 0;
 
+    if (dataPembukuan.pembukuan == null) {
+        return;
+    }
     dataPembukuan.pembukuan.forEach(v => {
         if(_.includes(v.tglTransaksi, periode)) {
             periodePembukuan.push(v);
@@ -116,6 +119,10 @@ function displayPembukuan() {
 }
 
 function displayInfoTotalOrder(dataOrder) {
+    if (dataOrder.order == null) {
+        return ;
+    }
+
     let order_total = dataOrder.order.length;
     let order_proses = dataOrder.order.filter(({invoice}) => invoice.statusPesanan === 'diproses').length;
     let order_antrian = dataOrder.order.filter(({invoice}) => invoice.statusPesanan === 'menunggu konfirmasi').length;

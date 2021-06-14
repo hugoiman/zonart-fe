@@ -1,6 +1,15 @@
-function logout() {
+import {logout as signout} from "../request/auth.js";
+
+const logout = async() => {
+  try {
+    let x = await signout();
+    console.log(x.message);
+  } catch(error) {
+    console.log(error);
+  } finally {
     Cookies.remove("token", { path: "/" });
     window.location.href = "/login";
+  }
 }
 
 const getUrlParameter = function getUrlParameter(sParam) {

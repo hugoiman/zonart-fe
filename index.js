@@ -59,6 +59,7 @@ app.get('/:toko/form-faq', function(req, res) { res.sendFile('./pages/toko/faq-c
 // last
 app.get('/:toko/:produk', function(req, res) { res.sendFile('./pages/produk.html', { root: __dirname });})
 
-app.listen(3000, () => {
-    console.log('Server connected at:', 3000);
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+    console.log('Server connected at:', port);
 })
