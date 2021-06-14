@@ -72,6 +72,7 @@
     "stisla-start": "yarn install --production=false",
     "stisla-dev": "yarn install --prod",
     "dist": "gulp dist",
-    "dev": "gulp"
+    "dev": "gulp",
+    "start": "node index.js"
   }
 }
