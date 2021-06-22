@@ -170,7 +170,8 @@ function displayRingkasanPembelian(data) {
                 </tr>`;
 
     let count = 3;
-    data.opsiOrder.forEach(v => {
+    if (data.opsiOrder != null) {
+      data.opsiOrder.forEach(v => {
         tbody += `<tr>
                     <td>${count}</td>
                     <td>${v.namaGrup}: ${v.opsi}</td>
@@ -180,7 +181,8 @@ function displayRingkasanPembelian(data) {
                     <td class="text-right">Rp <span class="rupiah">` + (v.perProduk ? `${v.harga * data.pcs}` : `${v.harga}`) + `</span></td>
                 </tr>`;
         count++;
-    });
+      });
+    }
 
     document.getElementById("info-ringkasan").innerHTML = tbody;
 }

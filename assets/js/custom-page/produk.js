@@ -152,7 +152,7 @@ function addFormPemesanan(dataProduk, dataGaleri) {
             </div>
             <div class="card-body">
                 ${jenisPesanan(dataProduk)}
-                ${jumlahCetak(dataProduk)}
+                ${jumlahCetak()}
                 ${tambahanWajah(dataProduk)}
                 ${rencanaPakai()}
                 ${fotoUser()}
@@ -193,6 +193,11 @@ let dropzone;
 let showForm = async () => {
     $('#form-pemesanan').fadeIn("slow");
     $('#form-pengiriman').fadeIn("slow");
+    if (dataProduk.jenisPemesanan[0].status) {
+        toggleJenisPesanan('cetak');
+    } else {
+        toggleJenisPesanan('soft copy');
+    }
     hitungTotalPembelian();
     $('#card-total-payment').fadeIn("slow");
     setTimeout(() => {
@@ -240,37 +245,41 @@ function setSpesificRequest(idGrupOpsi) {
 
 let berat = 0;
 function hitungTotalPembelian() {
-    let jenisPesanan = $("input[name='jenis-pesanan']:checked").val(); // cetak/soft copy
-    let hargaProduk = dataProduk.jenisPemesanan.find(item => item.jenis === jenisPesanan).harga;
-    let pcs = parseInt(document.getElementById('pcs').value);
-    let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
-    let total = (hargaProduk * pcs) + (tambahanWajah * dataProduk.hargaWajah);
-    berat = dataProduk.berat * pcs;
+    try{
+        let jenisPesanan = $("input[name='jenis-pesanan']:checked").val(); // cetak/soft copy
+        let hargaProduk = dataProduk.jenisPemesanan.find(item => item.jenis === jenisPesanan).harga;
+        let pcs = parseInt(document.getElementById('pcs').value);
+        let tambahanWajah = parseInt(document.getElementById('tambahan-wajah').value);
+        let total = (hargaProduk * pcs) + (tambahanWajah * dataProduk.hargaWajah);
+        berat = dataProduk.berat * pcs;
 
-    $.each(dataProduk.grupOpsi, function(idx, data) {
-        if (data.opsi != null) {
-            data.opsi.forEach(v => {
-                let opsi = $(`#opsi-${v.idOpsi}`);
-                if(opsi.is(":checked")){
-                    let hargaItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).harga;
-                    let beratItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).berat;
-                    if(v.perProduk){
-                        total += hargaItem * pcs;
-                        berat += beratItem * pcs;
-                    } else {
-                        total += hargaItem;
-                        berat += beratItem;
+        $.each(dataProduk.grupOpsi, function(idx, data) {
+            if (data.opsi != null) {
+                data.opsi.forEach(v => {
+                    let opsi = $(`#opsi-${v.idOpsi}`);
+                    if(opsi.is(":checked")){
+                        let hargaItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).harga;
+                        let beratItem = dataProduk.grupOpsi[idx].opsi.find(item => item.idOpsi === v.idOpsi).berat;
+                        if(v.perProduk){
+                            total += hargaItem * pcs;
+                            berat += beratItem * pcs;
+                        } else {
+                            total += hargaItem;
+                            berat += beratItem;
+                        }
                     }
-                }
-            })
-        }
-    });
+                })
+            }
+        });
 
-    let pengiriman = hitungCostPengiriman();
-    total += pengiriman.cost;
+        let pengiriman = hitungCostPengiriman();
+        total += pengiriman.cost;
 
-    $('#total-payment').text(formatRupiah(total));
-    document.getElementById('total-berat').innerHTML = `<small>(${formatRupiah(berat)} gr)</small>`;
+        $('#total-payment').text(formatRupiah(total));
+        document.getElementById('total-berat').innerHTML = `<small>(${formatRupiah(berat)} gr)</small>`;
+    } catch(error) {
+        console.log(error);
+    }
 }
 
 

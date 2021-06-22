@@ -19,8 +19,8 @@ function jenisPesanan(data) {
     return element;
 }
 
-function jumlahCetak(data) {
-    let element =   (data.jenisPemesanan[0].status ? `<div class="row" id="form-jumlah-cetak">
+function jumlahCetak() {
+    let element =   `<div class="row" id="form-jumlah-cetak">
                         <div class="form-group col-md-12 col-sm-12">
                             <label class="col-form-label text-md-right">Jumlah Cetak (Pcs)</label>
                             <div class="input-group mb-3">
@@ -33,7 +33,7 @@ function jumlahCetak(data) {
                                 </div>
                             </div>
                         </div>
-                    </div>` : ``);
+                    </div>`;
     return element;
 }
 
