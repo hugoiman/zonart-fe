@@ -390,8 +390,10 @@ const checkout = async () => {
             formData.append("fileOrder", dropzone.files[i]);
         }
         let result = await order.createOrder(idToko, idProduk, formData);
-        // window.location.href = `/order?id=${result.idOrder}`;
         alertSuccess(result.message, false);
+        await setTimeout(() => {
+            window.location.href = `/order?id=${result.idOrder}`;
+        }, 4000);
         
         // if (dropzone.files.length === 0) {
         //     throw "Silahkan masukan gambar.";
