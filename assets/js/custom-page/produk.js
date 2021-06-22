@@ -360,7 +360,7 @@ const checkout = async () => {
             if (data.opsi == null) {
                 data.opsi = []
             }
-            let id = '0'+data.idGrupOpsi;
+            let id = '1'+data.idGrupOpsi;
             let idInt = parseInt(id);
             if (data.spesificRequest) {
                 data.opsi.push({idOpsi:idInt});
@@ -390,7 +390,8 @@ const checkout = async () => {
             formData.append("fileOrder", dropzone.files[i]);
         }
         let result = await order.createOrder(idToko, idProduk, formData);
-        window.location.href = `/order?id=${result.idOrder}`;
+        // window.location.href = `/order?id=${result.idOrder}`;
+        alertSuccess(result.message, false);
         
         // if (dropzone.files.length === 0) {
         //     throw "Silahkan masukan gambar.";
