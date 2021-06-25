@@ -22,6 +22,7 @@ const loadPage = async () => {
     document.getElementsByClassName('namaToko')[0].innerHTML = `<a href="/${dataToko.slug}">${dataToko.namaToko}</a>`
 
     dataProduk = await getProduk(dataToko.idToko, slugProduk);
+    document.title = `${dataProduk.namaProduk} - ZonArt`;
     $('body').append(`<input type="text" id="idToko" value="${dataProduk.idToko}" hidden/><input type="text" id="idProduk" value="${dataProduk.idProduk}" hidden/>`);
 
     displayProduk(dataProduk);

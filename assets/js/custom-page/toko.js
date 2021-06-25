@@ -15,6 +15,7 @@ const loadPage = async () => {
     dataToko = await getToko(slugToko);
     document.getElementById("logo").src = dataToko.foto;
     $('.namaToko').text(dataToko.namaToko);
+    document.title = `${dataToko.namaToko} - ZonArt`;
     $('.kota').text(dataToko.kota);
 
     let htmlSosmed = ``;
